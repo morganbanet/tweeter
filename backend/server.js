@@ -21,7 +21,9 @@ app.use(cookieParser);
 // Morgan config
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
-// Deployment config route
+// Route mounts
+
+// Deployment config route mount
 app.use(deployment);
 
 // Error Handlers
