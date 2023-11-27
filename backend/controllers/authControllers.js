@@ -41,7 +41,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
 
-  const isMatch = user.matchPassword(password);
+  const isMatch = await user.matchPassword(password);
 
   if (!isMatch) {
     return next(new ErrorResponse('Invalid credentials', 401));
@@ -53,4 +53,59 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
     .status(200)
     .cookie('jwt', token, options)
     .json({ success: true, data: user });
+});
+
+// @desc        Logout user & clear token
+// @route       POST /api/auth/logout
+// @access      Private
+exports.logoutUser = asyncHandler(async (req, res, next) => {
+  res.clearCookie('jwt');
+
+  res.status(200).json({ success: true, data: {} });
+});
+
+// @desc        Get current user
+// @route       POST /api/auth/profile
+// @access      Private
+exports.userProfile = asyncHandler(async (req, res, next) => {
+  const user = req.user;
+
+  res.status(200).json({ success: true, data: user });
+});
+
+// @desc        Update user details
+// @route       POST /api/auth/updatedetails
+// @access      Private
+exports.updateDetails = asyncHandler(async (req, res, next) => {
+  const fieldsToUpdate = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
+  const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+    runValidators: true,
+    new: true,
+  });
+
+  res.status(200).json({ success: true, data: user });
+});
+
+// @desc        Update password
+// @route       POST /api/auth/updatepassword
+// @access      Private
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('+password');
+
+  const isMatch = await user.matchPassword(req.body.currentPassword);
+
+  if (!isMatch) {
+    return next(new ErrorResponse('Password is incorrect', 401));
+  }
+
+  user.password = req.body.newPassword;
+  await user.save();
+
+  const { token, options } = generateToken(user);
+
+  res.status(200).json({ success: true, data: user });
 });
