@@ -12,7 +12,7 @@ const followSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema(
   {
-    username: {
+    name: {
       type: String,
       required: [true, 'Username cannot be blank'],
       maxLength: [36, 'Username cannot exceed 36 characters'],
@@ -25,32 +25,41 @@ const userSchema = new mongoose.Schema(
       maxlength: [254, 'Email cannot exceed 254 characters'],
       match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Invalid email'],
     },
-    password: {
+    role: {
       type: String,
-      required: [true, 'Password cannot be blank'],
-      minlength: [6, 'Password must be a minimum of 6 characters'],
-      select: false,
-      match: [
-        '^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{6,}$',
-        'Password must be a minimum of 6 characters, at least one letter, and one number',
-      ],
-    },
-    isAdmin: {
-      type: Boolean,
-      required: true,
-      default: false,
+      enum: ['user', 'admin'],
+      default: 'user',
     },
     avatar: {
       url: String,
       filename: String,
     },
     following: [followSchema],
+    password: {
+      type: String,
+      required: [true, 'Password cannot be blank'],
+      minlength: [6, 'Password must be a minimum of 6 characters'],
+      select: false,
+      match: [
+        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
+        'Password must be a minimum of 6 characters, at least one letter, and one number',
+      ],
+    },
+    passwordResetToken: String,
+    passwordResetExpire: Date,
     slug: String,
   },
   {
     timestamps: true,
   }
 );
+
+// Create slug from User name
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('name')) next();
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
 
 // Hash passwords
 userSchema.pre('save', async function (next) {
@@ -63,3 +72,5 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
+
+module.exports = mongoose.model('User', userSchema);

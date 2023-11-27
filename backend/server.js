@@ -1,11 +1,12 @@
-require('dotenv').config();
+require('dotenv').config({});
 
 const mongoose = require('mongoose');
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 
-const deployment = require('./routes/deploymentRoutes');
+const authRoutes = require('./routes/authRoutes');
+const deploymentRoutes = require('./routes/deploymentRoutes');
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
@@ -15,16 +16,17 @@ const PORT = process.env.PORT || 5000;
 
 // Body & cookie parsers
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser);
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // Morgan config
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 // Route mounts
+app.use('/api/auth', authRoutes);
 
 // Deployment config route mount
-app.use(deployment);
+app.use(deploymentRoutes);
 
 // Error Handlers
 app.use(notFound);
