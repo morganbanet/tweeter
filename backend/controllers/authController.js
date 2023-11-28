@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const User = require('../models/userModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
@@ -129,7 +130,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('User does not exist with that email', 404));
   }
 
-  // Generate and apply the password reset token to the document
+  // Generate and apply password reset token and expiry to user document
   const resetToken = user.getPasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
@@ -147,7 +148,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
       html: passwordResetHtml(user.email, resetUrl),
     });
   } catch (error) {
-    // Clear password reset tokens on the user document
+    // Clear password reset token and expiry on the user document
     user.passwordResetToken = undefined;
     user.passwordResetExpire = undefined;
     await user.save({ validateBeforeSave: false });
@@ -160,6 +161,38 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 // @desc        Reset password
 // @route       PUT /api/auth/tokenId/resetpassword/:resettoken
 // @access      Private
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  // Hash the token from req.params
+  const passwordResetToken = crypto
+    .createHash('sha256')
+    .update(req.params.resettoken)
+    .digest('hex');
+
+  // Find user document that has the token, ensuring the expiry date
+  // is greater than the current date
+  const user = await User.findOne({
+    passwordResetToken,
+    passwordResetExpire: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(new ErrorResponse('Invalid Token', 400));
+  }
+
+  // Set the new password in user document, clear token and expiry
+  user.password = req.body.password;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpire = undefined;
+  await user.save();
+
+  // Reset JSON web token
+  const { token, options } = generateToken(user);
+
+  res
+    .status(200)
+    .cookie('jwt', token, options)
+    .json({ success: true, data: user });
+});
 
 // @desc        Upload avatar
 // @route       POST /api/auth/avatar
