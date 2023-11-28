@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const generateToken = require('../utils/generateToken');
+const sendEmail = require('../utils/sendEmail');
 
 // @desc        Register user & generate token
 // @route       POST /api/auth/register
@@ -107,5 +108,82 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 
   const { token, options } = generateToken(user);
 
-  res.status(200).json({ success: true, data: user });
+  res
+    .status(200)
+    .cookie('jwt', token, options)
+    .json({ success: true, data: user });
 });
+
+// @desc        Forgot Password
+// @route       PUT /api/auth/forgotpassword
+// @access      Public
+exports.forgotPassword = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return next(new ErrorResponse('User does not exist with that email', 404));
+  }
+
+  const resetToken = user.getPasswordResetToken();
+
+  // Save the document after setting the passwordResetToken &
+  // passwordResetExpire fields, and bypass validation
+  await user.save({ validateBeforeSave: false });
+
+  // Create reset url
+  const resetUrl = `${req.protocol}://${req.get(
+    'host'
+  )}/api/auth/resetpassword/${resetToken}`;
+
+  const message = `You are receiving this email because you (or someone else)
+  have requested to reset your password. Please click on the following link to
+  reset your password. If clicking the link does not work, try copying and 
+  pasting the link into the URL of your web browsers address bar. The link will
+  automatically expire in 10 minutes: \n\n${resetUrl}`;
+
+  // Send the email
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'Password reset token',
+      message,
+    });
+  } catch (error) {
+    // Clear the password reset tokens
+    console.log(error);
+    user.passwordResetToken = undefined;
+    user.passwordResetExpire = undefined;
+
+    await user.save({ validateBeforeSave: false });
+
+    return next(new ErrorResponse('Email could not be sent', 500));
+  }
+
+  return res.status(200).json({ success: true, data: 'Email sent!' });
+});
+
+// @desc        Reset password
+// @route       PUT /api/auth/tokenId/resetpassword/:resettoken
+// @access      Private
+
+// @desc        Upload avatar
+// @route       POST /api/auth/avatar
+// @access      Private
+
+// @desc        Update avatar
+// @route       PUT /api/auth/avatar
+// @access      Private
+
+// @desc        Upload banner
+// @route       POST /api/auth/banner
+// @access      Private
+
+// @desc        Update banner
+// @route       PUT /api/auth/banner
+// @access      Private
+
+// @desc        Delete user
+// @route       DELETE /api/auth/delete
+// @access      Private

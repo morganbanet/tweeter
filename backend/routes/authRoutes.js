@@ -8,7 +8,8 @@ const {
   userProfile,
   updateDetails,
   updatePassword,
-} = require('../controllers/authControllers');
+  forgotPassword,
+} = require('../controllers/authController');
 
 const { protect } = require('../middleware/authMiddleware');
 
@@ -17,6 +18,7 @@ router.route('/login').post(loginUser);
 router.route('/logout').get(protect, logoutUser);
 router.route('/profile').get(protect, userProfile);
 router.route('/updatedetails').patch(protect, updateDetails);
-router.route('/updatePassword').put(protect, updatePassword);
+router.route('/updatepassword').put(protect, updatePassword);
+router.route('/forgotpassword').put(forgotPassword);
 
 module.exports = router;

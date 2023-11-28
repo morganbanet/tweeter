@@ -1,14 +1,7 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 const bcrypt = require('bcryptjs');
-
-const followSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Types.ObjectId,
-    required: true,
-    ref: 'User',
-  },
-});
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema(
   {
@@ -34,7 +27,17 @@ const userSchema = new mongoose.Schema(
       url: String,
       filename: String,
     },
-    following: [followSchema],
+    banner: {
+      url: String,
+      filename: String,
+    },
+    following: [
+      {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'User',
+      },
+    ],
     password: {
       type: String,
       required: [true, 'Password cannot be blank'],
@@ -71,6 +74,23 @@ userSchema.pre('save', async function (next) {
 // Match passwords
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// Generate and hash password reset token with Node crypto module
+userSchema.methods.getPasswordResetToken = function () {
+  // Create token
+  const resetToken = crypto.randomBytes(20).toString('hex');
+
+  // Hash token & set into passwordResetToken field on document
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  // Set the tokens expiry timeframe & set into passwordResetExpire
+  this.passwordResetExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+  return resetToken;
 };
 
 module.exports = mongoose.model('User', userSchema);
