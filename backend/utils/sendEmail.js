@@ -1,4 +1,3 @@
-'use strict';
 const nodemailer = require('nodemailer');
 
 async function sendEmail(options) {
@@ -16,6 +15,7 @@ async function sendEmail(options) {
     to: options.email,
     subject: options.subject,
     text: options.text,
+    html: options.html,
   };
 
   const info = await transporter.sendMail(message);
