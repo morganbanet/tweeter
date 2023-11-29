@@ -198,7 +198,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 });
 
 // @desc        Upload avatar
-// @route       POST /api/auth/avatar
+// @route       POST /api/auth/uploadavatar
 // @access      Private
 exports.uploadAvatar = asyncHandler(async (req, res, next) => {
   const user = req.user;
@@ -207,7 +207,7 @@ exports.uploadAvatar = asyncHandler(async (req, res, next) => {
   // Delete current avatar from bucket
   if (user.avatar.url || user.avatar.filename) {
     const fileRef = bucket.file(user.avatar.filename);
-    const [exists] = await fileRef.exists(); // Returns in an array
+    const [exists] = await fileRef.exists(); // Returns boolean in array
     if (exists) await bucket.file(user.avatar.filename).delete();
 
     user.avatar.url = undefined;
@@ -216,9 +216,9 @@ exports.uploadAvatar = asyncHandler(async (req, res, next) => {
     await user.save();
   }
 
-  // Upload to bucket
-  const [name, extension] = file.name.split('.');
-  const filename = `${name}_${uuid()}.${extension}`;
+  // Upload to bucket & replace filename with unique id
+  const extension = file.name.split('.')[1];
+  const filename = `tweeter_avatars_${uuid()}.${extension}`;
   await bucket.file(`avatars/${filename}`).save(file.data);
 
   // Get file URL & filename
@@ -232,12 +232,32 @@ exports.uploadAvatar = asyncHandler(async (req, res, next) => {
   await user.save();
 
   // send response
-  res.status(200).json({ success: true, data: user });
+  res.status(200).json({ success: true, data: user.avatar });
 });
 
-// @desc        Update avatar
-// @route       PUT /api/auth/avatar
+// @desc        Remove avatar & delete from bucket
+// @route       Put /api/auth/removeavatar
 // @access      Private
+exports.removeAvatar = asyncHandler(async (req, res, next) => {
+  const user = req.user;
+  const file = user.avatar.filename;
+
+  if (!file) {
+    return next(new ErrorResponse('No avatar currently exists', 400));
+  }
+
+  // Check file exists and delete from bucket
+  const fileRef = bucket.file(file);
+  const [exists] = await fileRef.exists();
+  if (exists) await bucket.file(file).delete();
+
+  user.avatar.filename = undefined;
+  user.avatar.url = undefined;
+
+  await user.save();
+
+  res.status(200).json({ success: true, data: user });
+});
 
 // @desc        Upload banner
 // @route       POST /api/auth/banner
