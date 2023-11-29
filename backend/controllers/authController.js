@@ -218,14 +218,17 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   }
 
   // Remove user avatar and banner from bucket
-  const avatarRef = bucket.file(user.avatar.filename);
-  const bannerRef = bucket.file(user.banner.filename);
+  if (user.avatar.filename) {
+    const avatarRef = bucket.file(user.avatar.filename);
+    const [exists] = await avatarRef.exists();
+    if (exists) await bucket.file(avatarRef.name).delete();
+  }
 
-  let [exists] = await avatarRef.exists();
-  if (exists) await bucket.file(avatarRef.name).delete();
-
-  [exists] = await bannerRef.exists();
-  if (exists) await bucket.file(bannerRef.name).delete();
+  if (user.banner.filename) {
+    const bannerRef = bucket.file(user.banner.filename);
+    const [exists] = await bannerRef.exists();
+    if (exists) await bucket.file(bannerRef.name).delete();
+  }
 
   await user.deleteOne();
 

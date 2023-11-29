@@ -22,7 +22,7 @@ const { protect } = require('../middleware/authMiddleware');
 // Authentication
 router.route('/register').post(registerUser);
 router.route('/login').post(loginUser);
-router.route('/logout').get(protect, logoutUser);
+router.route('/logout').post(protect, logoutUser);
 router.route('/profile').get(protect, userProfile);
 router.route('/updatedetails').patch(protect, updateDetails);
 router.route('/updatepassword').put(protect, updatePassword);
