@@ -24,8 +24,7 @@ coverage
 *.sln
 *.sw?
 
-# Environment variables
-backend/config/config.env
-backend/config.env
-config.env
+# PRIVATE FILES / SECRET KEYS
 .env
+config.env
+firebaseServiceAccountKey.json

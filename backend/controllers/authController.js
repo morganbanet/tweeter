@@ -4,6 +4,9 @@ const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const generateToken = require('../utils/generateToken');
 const sendEmail = require('../utils/sendEmail');
+const { v4: uuid } = require('uuid');
+const { getDownloadURL } = require('firebase-admin/storage');
+const { bucket } = require('../services/firebaseConfig');
 
 const {
   passwordResetText,
@@ -160,7 +163,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
 // @desc        Reset password
 // @route       PUT /api/auth/tokenId/resetpassword/:resettoken
-// @access      Private
+// @access      Public
 exports.resetPassword = asyncHandler(async (req, res, next) => {
   // Hash the token from req.params
   const passwordResetToken = crypto
@@ -197,6 +200,40 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 // @desc        Upload avatar
 // @route       POST /api/auth/avatar
 // @access      Private
+exports.uploadAvatar = asyncHandler(async (req, res, next) => {
+  const user = req.user;
+  const file = req.files.file;
+
+  // Delete current avatar from bucket
+  if (user.avatar.url || user.avatar.filename) {
+    const fileRef = bucket.file(user.avatar.filename);
+    const [exists] = await fileRef.exists(); // Returns in an array
+    if (exists) await bucket.file(user.avatar.filename).delete();
+
+    user.avatar.url = undefined;
+    user.avatar.filename = undefined;
+
+    await user.save();
+  }
+
+  // Upload to bucket
+  const [name, extension] = file.name.split('.');
+  const filename = `${name}_${uuid()}.${extension}`;
+  await bucket.file(`avatars/${filename}`).save(file.data);
+
+  // Get file URL & filename
+  const fileRef = bucket.file(`avatars/${filename}`);
+  const downloadURL = await getDownloadURL(fileRef);
+  const downloadName = fileRef.name;
+
+  // Save file URL & name to user document
+  user.avatar.url = downloadURL;
+  user.avatar.filename = downloadName;
+  await user.save();
+
+  // send response
+  res.status(200).json({ success: true, data: user });
+});
 
 // @desc        Update avatar
 // @route       PUT /api/auth/avatar

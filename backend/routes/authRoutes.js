@@ -10,6 +10,7 @@ const {
   updatePassword,
   forgotPassword,
   resetPassword,
+  uploadAvatar,
 } = require('../controllers/authController');
 
 const { protect } = require('../middleware/authMiddleware');
@@ -22,5 +23,6 @@ router.route('/updatedetails').patch(protect, updateDetails);
 router.route('/updatepassword').put(protect, updatePassword);
 router.route('/forgotpassword').put(forgotPassword);
 router.route('/resetpassword/:resettoken').put(resetPassword);
+router.route('/uploadavatar').post(protect, uploadAvatar);
 
 module.exports = router;
