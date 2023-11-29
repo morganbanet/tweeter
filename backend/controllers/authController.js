@@ -106,6 +106,10 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
 exports.updatePassword = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('+password');
 
+  if (!req.body.currentPassword) {
+    return next(new ErrorResponse('Password is incorrect', 401));
+  }
+
   const isMatch = await user.matchPassword(req.body.currentPassword);
 
   if (!isMatch) {
@@ -197,8 +201,39 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     .json({ success: true, data: user });
 });
 
-// @desc        Upload avatar
-// @route       POST /api/auth/uploadavatar
+// @desc        Delete user
+// @route       DELETE /api/auth/delete
+// @access      Private
+exports.deleteUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('+password');
+
+  if (!req.body.password) {
+    return next(new ErrorResponse('Password is incorrect', 401));
+  }
+
+  const isMatch = await user.matchPassword(req.body.password);
+
+  if (!isMatch) {
+    return next(new ErrorResponse('Password is incorrect', 401));
+  }
+
+  // Remove user avatar and banner from bucket
+  const avatarRef = bucket.file(user.avatar.filename);
+  const bannerRef = bucket.file(user.banner.filename);
+
+  let [exists] = await avatarRef.exists();
+  if (exists) await bucket.file(avatarRef.name).delete();
+
+  [exists] = await bannerRef.exists();
+  if (exists) await bucket.file(bannerRef.name).delete();
+
+  await user.deleteOne();
+
+  res.status(200).clearCookie('jwt').json({ success: true, data: {} });
+});
+
+// @desc        Upload avatar & upload to bucket
+// @route       POST /api/auth/avatar
 // @access      Private
 exports.uploadAvatar = asyncHandler(async (req, res, next) => {
   const user = req.user;
@@ -231,19 +266,20 @@ exports.uploadAvatar = asyncHandler(async (req, res, next) => {
   user.avatar.filename = downloadName;
   await user.save();
 
-  // send response
   res.status(200).json({ success: true, data: user.avatar });
 });
 
-// @desc        Remove avatar & delete from bucket
-// @route       Put /api/auth/removeavatar
+// @desc        Delete avatar & delete from bucket
+// @route       DELETE /api/auth/avatar
 // @access      Private
-exports.removeAvatar = asyncHandler(async (req, res, next) => {
+exports.deleteAvatar = asyncHandler(async (req, res, next) => {
   const user = req.user;
   const file = user.avatar.filename;
 
   if (!file) {
-    return next(new ErrorResponse('No avatar currently exists', 400));
+    return next(
+      new ErrorResponse('No avatar currently exists for this user', 400)
+    );
   }
 
   // Check file exists and delete from bucket
@@ -259,14 +295,65 @@ exports.removeAvatar = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: user });
 });
 
-// @desc        Upload banner
+// @desc        Upload banner & upload to bucket
 // @route       POST /api/auth/banner
 // @access      Private
+exports.uploadBanner = asyncHandler(async (req, res, next) => {
+  const user = req.user;
+  const file = req.files.file;
 
-// @desc        Update banner
-// @route       PUT /api/auth/banner
-// @access      Private
+  // Delete current banner from bucket
+  if (user.banner.url || user.banner.filename) {
+    const fileRef = bucket.file(user.banner.filename);
+    const [exists] = await fileRef.exists();
+    if (exists) await bucket.file(user.banner.filename).delete();
 
-// @desc        Delete user
-// @route       DELETE /api/auth/delete
+    user.banner.url = undefined;
+    user.banner.filename = undefined;
+
+    await user.save();
+  }
+
+  // Upload to bucket & replace filename with unique id
+  const extension = file.name.split('.')[1];
+  const filename = `tweeter_banners_${uuid()}.${extension}`;
+  await bucket.file(`banners/${filename}`).save(file.data);
+
+  // Get file URL & filename
+  const fileRef = bucket.file(`banners/${filename}`);
+  const downloadURL = await getDownloadURL(fileRef);
+  const downloadName = fileRef.name;
+
+  // Save file URL & name to user document
+  user.banner.url = downloadURL;
+  user.banner.filename = downloadName;
+  await user.save();
+
+  res.status(200).json({ success: true, data: user.banner });
+});
+
+// @desc        Delete banner & delete from bucket
+// @route       DELETE /api/auth/banner
 // @access      Private
+exports.deleteBanner = asyncHandler(async (req, res, next) => {
+  const user = req.user;
+  const file = user.banner.filename;
+
+  if (!file) {
+    return next(
+      new ErrorResponse('No banner currently exists for this user', 400)
+    );
+  }
+
+  // Check file exists and delete from bucket
+  const fileRef = bucket.file(file);
+  const [exists] = await fileRef.exists();
+  if (exists) await bucket.file(file).delete();
+
+  user.banner.filename = undefined;
+  user.banner.url = undefined;
+
+  await user.save();
+
+  res.status(200).json({ success: true, data: user });
+});
