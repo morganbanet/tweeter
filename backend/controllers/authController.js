@@ -5,6 +5,7 @@ const ErrorResponse = require('../utils/ErrorResponse');
 const generateToken = require('../utils/generateToken');
 const sendEmail = require('../utils/sendEmail');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
+const Tweet = require('../models/tweetModel');
 
 const {
   passwordResetText,
@@ -203,7 +204,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 // @route       DELETE /api/auth/delete
 // @access      Private
 exports.deleteUser = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id).select('+password');
+  let user = await User.findById(req.user.id).select('+password');
 
   if (!req.body.password) {
     return next(new ErrorResponse('Password is incorrect', 401));
@@ -215,10 +216,16 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Password is incorrect', 401));
   }
 
-  // Delete user banner and avatar from bucket
-  await deleteFile(user, 'avatar');
-  await deleteFile(user, 'banner');
+  // Delete tweets & bucket files
+  const tweets = await Tweet.find({ user: req.user.id });
+  tweets.forEach(async (tweet) => await deleteFile(tweet, 'image', false));
+  await Tweet.deleteMany({ user: user.id });
 
+  // Delete user avatar and banner & bucket files
+  await deleteFile(user, 'avatar', false);
+  await deleteFile(user, 'banner', false);
+
+  // Delete user
   await user.deleteOne();
 
   res.status(200).clearCookie('jwt').json({ success: true, data: {} });

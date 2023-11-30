@@ -51,6 +51,7 @@ exports.checkOwnership = (model) =>
         );
       }
 
+      // Compare resource owner to req.user.id
       if (resource.user.toString() !== req.user.id) {
         return next(
           new ErrorResponse(

@@ -28,8 +28,9 @@ const uploadFile = async (file, document, field, path) => {
   await document.save();
 };
 
-// Checks if documents contain a file reference, then deletes from bucket
-const deleteFile = async (document, field) => {
+// Checks if documents contain a file reference, then deletes from
+// bucket. Will save the document by default.
+const deleteFile = async (document, field, save = true) => {
   if (document[field].url || document[field].filename) {
     const fileRef = bucket.file(document[field].filename);
 
@@ -42,6 +43,10 @@ const deleteFile = async (document, field) => {
     // Wipe url and filename from document
     document[field].url = undefined;
     document[field].filename = undefined;
+
+    if (!save) {
+      return;
+    }
 
     await document.save();
   }
