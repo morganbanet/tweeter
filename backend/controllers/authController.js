@@ -4,9 +4,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const generateToken = require('../utils/generateToken');
 const sendEmail = require('../utils/sendEmail');
-const { v4: uuid } = require('uuid');
-const { getDownloadURL } = require('firebase-admin/storage');
-const { bucket } = require('../services/firebaseConfig');
+const { uploadFile, deleteFile } = require('../utils/storageBucket');
 
 const {
   passwordResetText,
@@ -217,18 +215,9 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Password is incorrect', 401));
   }
 
-  // Remove user avatar and banner from bucket
-  if (user.avatar.filename) {
-    const avatarRef = bucket.file(user.avatar.filename);
-    const [exists] = await avatarRef.exists();
-    if (exists) await bucket.file(avatarRef.name).delete();
-  }
-
-  if (user.banner.filename) {
-    const bannerRef = bucket.file(user.banner.filename);
-    const [exists] = await bannerRef.exists();
-    if (exists) await bucket.file(bannerRef.name).delete();
-  }
+  // Delete user banner and avatar from bucket
+  await deleteFile(user, 'avatar');
+  await deleteFile(user, 'banner');
 
   await user.deleteOne();
 
@@ -242,32 +231,7 @@ exports.uploadAvatar = asyncHandler(async (req, res, next) => {
   const user = req.user;
   const file = req.files.file;
 
-  // Delete current avatar from bucket
-  if (user.avatar.url || user.avatar.filename) {
-    const fileRef = bucket.file(user.avatar.filename);
-    const [exists] = await fileRef.exists(); // Returns boolean in array
-    if (exists) await bucket.file(user.avatar.filename).delete();
-
-    user.avatar.url = undefined;
-    user.avatar.filename = undefined;
-
-    await user.save();
-  }
-
-  // Upload to bucket & replace filename with unique id
-  const extension = file.name.split('.')[1];
-  const filename = `tweeter_avatars_${uuid()}.${extension}`;
-  await bucket.file(`avatars/${filename}`).save(file.data);
-
-  // Get file URL & filename
-  const fileRef = bucket.file(`avatars/${filename}`);
-  const downloadURL = await getDownloadURL(fileRef);
-  const downloadName = fileRef.name;
-
-  // Save file URL & name to user document
-  user.avatar.url = downloadURL;
-  user.avatar.filename = downloadName;
-  await user.save();
+  await uploadFile(file, user, 'avatar', 'avatars');
 
   res.status(200).json({ success: true, data: user.avatar });
 });
@@ -277,23 +241,14 @@ exports.uploadAvatar = asyncHandler(async (req, res, next) => {
 // @access      Private
 exports.deleteAvatar = asyncHandler(async (req, res, next) => {
   const user = req.user;
-  const file = user.avatar.filename;
 
-  if (!file) {
+  if (!user.avatar.filename) {
     return next(
       new ErrorResponse('No avatar currently exists for this user', 400)
     );
   }
 
-  // Check file exists and delete from bucket
-  const fileRef = bucket.file(file);
-  const [exists] = await fileRef.exists();
-  if (exists) await bucket.file(file).delete();
-
-  user.avatar.filename = undefined;
-  user.avatar.url = undefined;
-
-  await user.save();
+  await deleteFile(user, 'avatar');
 
   res.status(200).json({ success: true, data: user });
 });
@@ -305,32 +260,7 @@ exports.uploadBanner = asyncHandler(async (req, res, next) => {
   const user = req.user;
   const file = req.files.file;
 
-  // Delete current banner from bucket
-  if (user.banner.url || user.banner.filename) {
-    const fileRef = bucket.file(user.banner.filename);
-    const [exists] = await fileRef.exists();
-    if (exists) await bucket.file(user.banner.filename).delete();
-
-    user.banner.url = undefined;
-    user.banner.filename = undefined;
-
-    await user.save();
-  }
-
-  // Upload to bucket & replace filename with unique id
-  const extension = file.name.split('.')[1];
-  const filename = `tweeter_banners_${uuid()}.${extension}`;
-  await bucket.file(`banners/${filename}`).save(file.data);
-
-  // Get file URL & filename
-  const fileRef = bucket.file(`banners/${filename}`);
-  const downloadURL = await getDownloadURL(fileRef);
-  const downloadName = fileRef.name;
-
-  // Save file URL & name to user document
-  user.banner.url = downloadURL;
-  user.banner.filename = downloadName;
-  await user.save();
+  await uploadFile(file, user, 'banner', 'banners');
 
   res.status(200).json({ success: true, data: user.banner });
 });
@@ -340,23 +270,14 @@ exports.uploadBanner = asyncHandler(async (req, res, next) => {
 // @access      Private
 exports.deleteBanner = asyncHandler(async (req, res, next) => {
   const user = req.user;
-  const file = user.banner.filename;
 
-  if (!file) {
+  if (!user.banner.filename) {
     return next(
       new ErrorResponse('No banner currently exists for this user', 400)
     );
   }
 
-  // Check file exists and delete from bucket
-  const fileRef = bucket.file(file);
-  const [exists] = await fileRef.exists();
-  if (exists) await bucket.file(file).delete();
-
-  user.banner.filename = undefined;
-  user.banner.url = undefined;
-
-  await user.save();
+  await deleteFile(user, 'banner');
 
   res.status(200).json({ success: true, data: user });
 });

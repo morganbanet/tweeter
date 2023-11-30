@@ -1,52 +1,5 @@
 const mongoose = require('mongoose');
 
-likeSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Types.ObjectId,
-    required: true,
-    ref: 'User',
-  },
-});
-
-const commentSchema = new mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Types.ObjectId,
-      required: true,
-      ref: 'User',
-    },
-    body: {
-      type: String,
-      required: [true, 'Comment must contain some text'],
-      maxLength: [280, 'Comment cannot exceeed 280 characters'],
-    },
-    image: {
-      url: String,
-      filename: String,
-    },
-    likes: [likeSchema],
-  },
-  {
-    timestamps: true,
-  }
-);
-
-const retweetSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Types.ObjectId,
-    required: true,
-    ref: 'User',
-  },
-});
-
-const savedSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Types.ObjectId,
-    required: true,
-    ref: 'User',
-  },
-});
-
 const tweetSchema = new mongoose.Schema(
   {
     user: {
@@ -54,7 +7,8 @@ const tweetSchema = new mongoose.Schema(
       required: true,
       ref: 'User',
     },
-    body: {
+    text: {
+      type: String,
       required: [true, 'Tweet must contain a body'],
       maxLength: [280, 'Tweet cannot exceed 280 characters'],
     },
@@ -64,12 +18,37 @@ const tweetSchema = new mongoose.Schema(
     },
     public: {
       type: Boolean,
+      required: true,
       default: true,
     },
-    comments: [commentSchema],
-    likes: [likeSchema],
-    retweets: [retweetSchema],
-    saved: [savedSchema],
+    comments: [
+      {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'Comment',
+      },
+    ],
+    likes: [
+      {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'Like',
+      },
+    ],
+    retweets: [
+      {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'Retweet',
+      },
+    ],
+    saved: [
+      {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'Saved',
+      },
+    ],
   },
   {
     timestamps: true,

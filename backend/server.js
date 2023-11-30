@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 
 const authRoutes = require('./routes/authRoutes');
+const tweetRoutes = require('./routes/tweetRoutes');
 const deploymentRoutes = require('./routes/deploymentRoutes');
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 // Route mounts
 app.use('/api/auth', authRoutes);
+app.use('/api/tweets', tweetRoutes);
 
 // Deployment config route mount
 app.use(deploymentRoutes);
