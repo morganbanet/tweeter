@@ -78,26 +78,30 @@ exports.deleteTweet = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: {} });
 });
 
-// @desc        Add like
+// @desc        Get likes
+// @route       GET /api/tweets/:id/like
+// @access      Private
+
+// @desc        Create like
 // @route       POST /api/tweets/:id/like
 // @access      Private
 
-// @desc        Remove like
+// @desc        Delete like
 // @route       DELETE /api/tweets/:id/like
 // @access      Private
 
-// @desc        Save bookmark
+// @desc        Create retweet
+// @route       POST /api/tweets/:id/retweet
+// @access      Private
+
+// @desc        Delete retweet
+// @route       DELETE /api/tweets/:id/retweet
+// @access      Private
+
+// @desc        Create bookmark
 // @route       POST /api/tweets/:id/bookmark
 // @access      Private
 
-// @desc        Remove bookmark
-// @route       DELETE /api/action/:id/bookmark
-// @access      Private
-
-// @desc        Retweet
-// @route       POST /api/action/:id/retweet
-// @access      Private
-
-// @desc        Remove retweet
-// @route       DELETE /api/action/:id/retweet
+// @desc        Delete bookmark
+// @route       DELETE /api/tweets/:id/bookmark
 // @access      Private

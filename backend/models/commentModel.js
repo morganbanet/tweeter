@@ -30,7 +30,7 @@ const commentSchema = new mongoose.Schema(
       {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: 'User',
+        ref: 'Like',
       },
     ],
   },

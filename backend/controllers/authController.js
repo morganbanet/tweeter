@@ -295,6 +295,4 @@ exports.deleteBanner = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: user });
 });
 
-// @desc        Get users bookmarks
-// @route       DELETE /api/action/:id/bookmark
-// @access      Private
+// @Todo: Split avatar & banner routes into userController
