@@ -3,7 +3,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
 
-// @desc        Get All Tweets
+// @desc        Get all tweets
 // @route       GET /api/tweets
 // @access      Public
 exports.getTweets = asyncHandler(async (req, res, next) => {
@@ -12,13 +12,14 @@ exports.getTweets = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, count: tweets.length, data: tweets });
 });
 
-// @desc        Create Tweet
+// @desc        Create tweet
 // @route       POST /api/tweets
 // @access      Private
 exports.createTweet = asyncHandler(async (req, res, next) => {
   req.body.user = req.user.id;
+  const { user, text, public } = req.body;
 
-  const tweet = await Tweet.create(req.body);
+  const tweet = await Tweet.create({ user, text, public });
 
   if (req.files) {
     file = req.files.file;
@@ -28,12 +29,13 @@ exports.createTweet = asyncHandler(async (req, res, next) => {
   res.status(201).json({ success: true, data: tweet });
 });
 
-// @desc        Update Tweet
+// @desc        Update tweet
 // @route       PATCH /api/tweets/:id
 // @access      Private
 exports.updateTweet = asyncHandler(async (req, res, next) => {
   const fieldsToUpdate = {
     text: req.body.text,
+    public: req.body.public,
   };
 
   let tweet = await Tweet.findById(req.params.id);
@@ -57,7 +59,7 @@ exports.updateTweet = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: tweet });
 });
 
-// @desc        Delete Tweet
+// @desc        Delete tweet
 // @route       DELETE /api/tweets/:id
 // @access      Private
 exports.deleteTweet = asyncHandler(async (req, res, next) => {
@@ -75,3 +77,27 @@ exports.deleteTweet = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: {} });
 });
+
+// @desc        Add like
+// @route       POST /api/tweets/:id/like
+// @access      Private
+
+// @desc        Remove like
+// @route       DELETE /api/tweets/:id/like
+// @access      Private
+
+// @desc        Save bookmark
+// @route       POST /api/tweets/:id/bookmark
+// @access      Private
+
+// @desc        Remove bookmark
+// @route       DELETE /api/action/:id/bookmark
+// @access      Private
+
+// @desc        Retweet
+// @route       POST /api/action/:id/retweet
+// @access      Private
+
+// @desc        Remove retweet
+// @route       DELETE /api/action/:id/retweet
+// @access      Private

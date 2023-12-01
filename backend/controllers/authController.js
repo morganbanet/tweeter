@@ -6,6 +6,7 @@ const generateToken = require('../utils/generateToken');
 const sendEmail = require('../utils/sendEmail');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
 const Tweet = require('../models/tweetModel');
+const Comment = require('../models/commentModel');
 
 const {
   passwordResetText,
@@ -126,7 +127,7 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
     .json({ success: true, data: user });
 });
 
-// @desc        Forgot Password
+// @desc        Forgot password
 // @route       PUT /api/auth/forgotpassword
 // @access      Public
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
@@ -216,6 +217,11 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Password is incorrect', 401));
   }
 
+  // Delete comments & bucket files
+  const comments = await Comment.find({ user: req.user.id });
+  comments.forEach(async (comm) => await deleteFile(comm, 'image', false));
+  await Comment.deleteMany({ user: user.id });
+
   // Delete tweets & bucket files
   const tweets = await Tweet.find({ user: req.user.id });
   tweets.forEach(async (tweet) => await deleteFile(tweet, 'image', false));
@@ -288,3 +294,14 @@ exports.deleteBanner = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: user });
 });
+
+// @desc        Follow user
+// @route       PUT /api/user/:id/follow
+// @access      Private
+
+// @desc        Unfollow user
+// @route       PUT /api/user/:id/unfollow
+// @access      Private
+
+// @Todo: Create controller & route for profile management, and split
+// avatar/banner uploading & follow/unfollow into it

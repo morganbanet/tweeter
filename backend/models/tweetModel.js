@@ -21,32 +21,25 @@ const tweetSchema = new mongoose.Schema(
       required: true,
       default: true,
     },
-    comments: [
-      {
-        type: mongoose.Types.ObjectId,
-        required: true,
-        ref: 'Comment',
-      },
-    ],
     likes: [
       {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: 'Like',
+        ref: 'User',
       },
     ],
     retweets: [
       {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: 'Retweet',
+        ref: 'User',
       },
     ],
     saved: [
       {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: 'Saved',
+        ref: 'User',
       },
     ],
   },

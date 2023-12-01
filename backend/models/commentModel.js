@@ -7,7 +7,12 @@ const commentSchema = new mongoose.Schema(
       required: true,
       ref: 'User',
     },
-    body: {
+    tweet: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      ref: 'Tweet',
+    },
+    text: {
       type: String,
       required: [true, 'Comment must contain some text'],
       maxLength: [280, 'Comment cannot exceeed 280 characters'],
@@ -16,11 +21,16 @@ const commentSchema = new mongoose.Schema(
       url: String,
       filename: String,
     },
+    public: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
     likes: [
       {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: 'Like',
+        ref: 'User',
       },
     ],
   },

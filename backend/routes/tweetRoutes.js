@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const Tweet = require('../models/tweetModel');
+const commentRouter = require('./commentRoutes');
+const { protect, checkOwnership } = require('../middleware/authMiddleware');
 
 const {
   getTweets,
@@ -8,17 +11,16 @@ const {
   deleteTweet,
 } = require('../controllers/tweetController');
 
-const Tweet = require('../models/tweetModel');
-const { protect, checkOwnership } = require('../middleware/authMiddleware');
+router.use('/:tweetId/comments', commentRouter);
 
 // prettier-ignore
 router.route('/')
-  .get(getTweets)
-  .post(protect, createTweet);
+.get(getTweets)
+.post(protect, createTweet);
 
 // prettier-ignore
 router.route('/:id')
-  .patch(protect, checkOwnership(Tweet), updateTweet)
-  .delete(protect, checkOwnership(Tweet), deleteTweet)
+.patch(protect, checkOwnership(Tweet), updateTweet)
+.delete(protect, checkOwnership(Tweet), deleteTweet)
 
 module.exports = router;
