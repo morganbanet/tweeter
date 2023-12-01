@@ -295,13 +295,6 @@ exports.deleteBanner = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: user });
 });
 
-// @desc        Follow user
-// @route       PUT /api/user/:id/follow
+// @desc        Get users bookmarks
+// @route       DELETE /api/action/:id/bookmark
 // @access      Private
-
-// @desc        Unfollow user
-// @route       PUT /api/user/:id/unfollow
-// @access      Private
-
-// @Todo: Create controller & route for profile management, and split
-// avatar/banner uploading & follow/unfollow into it

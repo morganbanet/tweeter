@@ -71,7 +71,7 @@ exports.deleteTweet = asyncHandler(async (req, res, next) => {
     );
   }
 
-  await deleteFile(tweet, 'image');
+  await deleteFile(tweet, 'image', false);
 
   await tweet.deleteOne();
 

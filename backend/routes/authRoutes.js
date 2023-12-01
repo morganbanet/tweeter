@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { protect } = require('../middleware/authMiddleware');
 
 const {
   registerUser,
@@ -16,8 +17,6 @@ const {
   deleteBanner,
   deleteUser,
 } = require('../controllers/authController');
-
-const { protect } = require('../middleware/authMiddleware');
 
 // Authentication
 router.route('/register').post(registerUser);
