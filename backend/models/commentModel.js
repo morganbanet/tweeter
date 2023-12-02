@@ -26,13 +26,6 @@ const commentSchema = new mongoose.Schema(
       required: true,
       default: true,
     },
-    likes: [
-      {
-        type: mongoose.Types.ObjectId,
-        required: true,
-        ref: 'Like',
-      },
-    ],
   },
   {
     timestamps: true,

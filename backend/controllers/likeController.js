@@ -2,23 +2,36 @@ const Like = require('../models/likeModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 
-// @desc        Get tweet likes
+// @desc        Get likes
 // @route       GET /api/tweets/:tweetId/likes
+// @route       GET /api/comments/:commentId/likes
 // @access      Public
-exports.getTweetLikes = asyncHandler(async (req, res, next) => {
-  const likes = await Like.find({ liked: req.params.tweetId }).populate('user');
+exports.getLikes = asyncHandler(async (req, res, next) => {
+  let likes;
+
+  if (req.params.tweetId) {
+    likes = await Like.find({ liked: req.params.tweetId }).populate('user');
+  }
+
+  if (req.params.commentId) {
+    likes = await Like.find({ liked: req.params.commentId }).populate('user');
+  }
 
   res.status(200).json({ success: true, count: likes.length, data: likes });
 });
 
-// @desc        Like tweet
+// @desc        Add like
 // @route       POST /api/tweets/:tweetId/likes
+// @route       POST /api/comments/:commentId/likes
 // @access      Private
-exports.likeTweet = asyncHandler(async (req, res, next) => {
+exports.addLike = asyncHandler(async (req, res, next) => {
+  const paramsId = req.params.tweetId || req.params.commentId;
+  const type = req.params.tweetId ? 'Tweet' : 'Comment';
+
   const likeToCreate = {
     user: req.user.id,
-    liked: req.params.tweetId,
-    likedType: 'Tweet',
+    liked: paramsId,
+    likedType: type,
   };
 
   const likeExists = await Like.find(likeToCreate);
@@ -26,7 +39,7 @@ exports.likeTweet = asyncHandler(async (req, res, next) => {
   if (likeExists.length > 0) {
     return next(
       new ErrorResponse(
-        `User ${req.user.id} already liked tweet ${req.params.tweetId}`,
+        `User ${req.user.id} already liked ${type.toLowerCase()} ${paramsId}`,
         400
       )
     );
@@ -37,10 +50,11 @@ exports.likeTweet = asyncHandler(async (req, res, next) => {
   res.status(201).json({ success: true, data: like });
 });
 
-// @desc        Unlike tweet
+// @desc        Remove like
 // @route       DELETE /api/tweets/:tweetId/likes/:id
+// @route       DELETE /api/comments/:commentId/likes/:id
 // @access      Private
-exports.unlikeTweet = asyncHandler(async (req, res, next) => {
+exports.removeLike = asyncHandler(async (req, res, next) => {
   const like = await Like.findById(req.params.id);
 
   if (!like) {
@@ -53,15 +67,3 @@ exports.unlikeTweet = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: {} });
 });
-
-// @desc        Get comment likes
-// @route       GET /api/comments/:commentId/likes
-// @access      Public
-
-// @desc        Like comment
-// @route       POST /api/comments/:commentId/likes/:id
-// @access      Private
-
-// @desc        Unlike comment
-// @route       DELETE /api/comments/:commentId/likes/:id
-// @access      Private

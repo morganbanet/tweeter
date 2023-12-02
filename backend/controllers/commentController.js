@@ -90,15 +90,3 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: {} });
 });
-
-// @desc        Get likes
-// @route       GET /api/comments/:id/likes
-// @access      Private
-
-// @desc        Add like
-// @route       POST /api/comments/:id/likes
-// @access      Private
-
-// @desc        Delete
-// @route       DELETE /api/comments/:id/likes
-// @access      Private

@@ -6,7 +6,7 @@
 // @access      Public
 
 // @desc        Get tweets
-// @route       GET /api/tweets/:tweetId/user/:id
+// @route       GET /api/users/:id/tweets
 // @access      Public
 
 // @desc        Get comments
