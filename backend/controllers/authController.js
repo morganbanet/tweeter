@@ -7,6 +7,7 @@ const sendEmail = require('../utils/sendEmail');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
 const Tweet = require('../models/tweetModel');
 const Comment = require('../models/commentModel');
+const Like = require('../models/likeModel');
 
 const {
   passwordResetText,
@@ -217,10 +218,13 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Password is incorrect', 401));
   }
 
+  // Delete likes
+  await Like.deleteMany({ user: req.user.id });
+
   // Delete comments & bucket files
   const comments = await Comment.find({ user: req.user.id });
   comments.forEach(async (comm) => await deleteFile(comm, 'image', false));
-  await Comment.deleteMany({ user: user.id });
+  await Comment.deleteMany({ user: req.user.id });
 
   // Delete tweets & bucket files
   const tweets = await Tweet.find({ user: req.user.id });

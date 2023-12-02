@@ -16,10 +16,10 @@ const tweetSchema = new mongoose.Schema(
       url: String,
       filename: String,
     },
-    public: {
+    private: {
       type: Boolean,
       required: true,
-      default: true,
+      default: false,
     },
     retweets: [
       {

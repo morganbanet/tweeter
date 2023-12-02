@@ -31,7 +31,7 @@ exports.createComment = asyncHandler(async (req, res, next) => {
   }
 
   // Set comment privacy same as parent tweet
-  req.body.public = tweet.public;
+  req.body.private = tweet.private;
 
   const comment = await Comment.create(req.body);
 

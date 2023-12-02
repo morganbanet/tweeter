@@ -18,9 +18,9 @@ exports.getTweets = asyncHandler(async (req, res, next) => {
 // @access      Private
 exports.createTweet = asyncHandler(async (req, res, next) => {
   req.body.user = req.user.id;
-  const { user, text, public } = req.body;
+  const { user, text, private } = req.body;
 
-  const tweet = await Tweet.create({ user, text, public });
+  const tweet = await Tweet.create({ user, text, private });
 
   if (req.files) {
     file = req.files.file;
@@ -36,7 +36,7 @@ exports.createTweet = asyncHandler(async (req, res, next) => {
 exports.updateTweet = asyncHandler(async (req, res, next) => {
   const fieldsToUpdate = {
     text: req.body.text,
-    public: req.body.public,
+    public: req.body.private,
   };
 
   let tweet = await Tweet.findById(req.params.id);
