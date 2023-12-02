@@ -1,4 +1,5 @@
 const Tweet = require('../models/tweetModel');
+const Like = require('../models/likeModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
@@ -77,18 +78,6 @@ exports.deleteTweet = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: {} });
 });
-
-// @desc        Get likes
-// @route       GET /api/tweets/:id/like
-// @access      Private
-
-// @desc        Create like
-// @route       POST /api/tweets/:id/like
-// @access      Private
-
-// @desc        Delete like
-// @route       DELETE /api/tweets/:id/like
-// @access      Private
 
 // @desc        Create retweet
 // @route       POST /api/tweets/:id/retweet

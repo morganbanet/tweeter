@@ -92,13 +92,13 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
 });
 
 // @desc        Get likes
-// @route       GET /api/comments/:id/like
+// @route       GET /api/comments/:id/likes
 // @access      Private
 
 // @desc        Add like
-// @route       POST /api/comments/:id/like
+// @route       POST /api/comments/:id/likes
 // @access      Private
 
 // @desc        Delete
-// @route       DELETE /api/comments/:id/like
+// @route       DELETE /api/comments/:id/likes
 // @access      Private

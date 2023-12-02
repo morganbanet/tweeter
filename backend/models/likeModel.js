@@ -8,11 +8,11 @@ const likeSchema = new mongoose.Schema(
       ref: 'User',
     },
     liked: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Types.ObjectId,
       required: true,
-      refPath: 'docModel',
+      refPath: 'likedType',
     },
-    docModel: {
+    likedType: {
       type: String,
       required: true,
       enum: ['Tweet', 'Comment'],
@@ -22,5 +22,8 @@ const likeSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Make sure user can only like a post once
+likeSchema.index({ liked: 1, user: 1 }, { unique: true });
 
 module.exports = mongoose.model('Like', likeSchema);

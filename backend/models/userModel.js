@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema(
       url: String,
       filename: String,
     },
+    bio: {
+      type: String,
+      maxLength: [160, 'Bio cannot exceed 160 characters.'],
+    },
     following: [
       {
         type: mongoose.Types.ObjectId,

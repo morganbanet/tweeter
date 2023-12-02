@@ -237,7 +237,7 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   res.status(200).clearCookie('jwt').json({ success: true, data: {} });
 });
 
-// @desc        Upload avatar & upload to bucket
+// @desc        Upload avatar
 // @route       POST /api/auth/avatar
 // @access      Private
 exports.uploadAvatar = asyncHandler(async (req, res, next) => {
@@ -249,7 +249,7 @@ exports.uploadAvatar = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: user.avatar });
 });
 
-// @desc        Delete avatar & delete from bucket
+// @desc        Delete avatar
 // @route       DELETE /api/auth/avatar
 // @access      Private
 exports.deleteAvatar = asyncHandler(async (req, res, next) => {
@@ -266,7 +266,7 @@ exports.deleteAvatar = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: user });
 });
 
-// @desc        Upload banner & upload to bucket
+// @desc        Upload banner
 // @route       POST /api/auth/banner
 // @access      Private
 exports.uploadBanner = asyncHandler(async (req, res, next) => {
@@ -278,7 +278,7 @@ exports.uploadBanner = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: user.banner });
 });
 
-// @desc        Delete banner & delete from bucket
+// @desc        Delete banner
 // @route       DELETE /api/auth/banner
 // @access      Private
 exports.deleteBanner = asyncHandler(async (req, res, next) => {
@@ -294,5 +294,3 @@ exports.deleteBanner = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: user });
 });
-
-// @Todo: Split avatar & banner routes into userController

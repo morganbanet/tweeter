@@ -9,6 +9,7 @@ const fileUpload = require('express-fileupload');
 const authRoutes = require('./routes/authRoutes');
 const tweetRoutes = require('./routes/tweetRoutes');
 const commentRoutes = require('./routes/commentRoutes');
+const likeRoutes = require('./routes/likeRoutes');
 const deploymentRoutes = require('./routes/deploymentRoutes');
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
@@ -30,6 +31,7 @@ if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 app.use('/api/auth', authRoutes);
 app.use('/api/tweets', tweetRoutes);
 app.use('/api/comments', commentRoutes);
+app.use('/api/likes', likeRoutes);
 
 // Deployment config route mount
 app.use(deploymentRoutes);
