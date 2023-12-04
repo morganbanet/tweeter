@@ -21,20 +21,11 @@ const tweetSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
-    retweets: [
-      {
-        type: mongoose.Types.ObjectId,
-        required: true,
-        ref: 'User',
-      },
-    ],
-    saved: [
-      {
-        type: mongoose.Types.ObjectId,
-        required: true,
-        ref: 'User',
-      },
-    ],
+    retweet: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   {
     timestamps: true,

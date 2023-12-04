@@ -3,6 +3,7 @@ const router = express.Router();
 const Tweet = require('../models/tweetModel');
 const commentRouter = require('./commentRoutes');
 const likeRouter = require('./likeRoutes');
+const retweetRouter = require('./retweetRoutes');
 const { protect, checkOwnership } = require('../middleware/authMiddleware');
 
 const {
@@ -12,8 +13,9 @@ const {
   deleteTweet,
 } = require('../controllers/tweetController');
 
-router.use('/:tweetId/likes', likeRouter);
-router.use('/:tweetId/comments', commentRouter);
+router.use('/:id/likes', likeRouter);
+router.use('/:id/retweets', retweetRouter);
+router.use('/:id/comments', commentRouter);
 
 // prettier-ignore
 router.route('/')

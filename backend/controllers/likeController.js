@@ -3,8 +3,8 @@ const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 
 // @desc        Get likes
-// @route       GET /api/tweets/:tweetId/likes
-// @route       GET /api/comments/:commentId/likes
+// @route       GET /api/tweets/:id/likes
+// @route       GET /api/comments/:id/likes
 // @access      Public
 exports.getLikes = asyncHandler(async (req, res, next) => {
   let likes;
@@ -21,8 +21,8 @@ exports.getLikes = asyncHandler(async (req, res, next) => {
 });
 
 // @desc        Add like
-// @route       POST /api/tweets/:tweetId/likes
-// @route       POST /api/comments/:commentId/likes
+// @route       POST /api/tweets/:id/likes
+// @route       POST /api/comments/:id/likes
 // @access      Private
 exports.addLike = asyncHandler(async (req, res, next) => {
   const paramsId = req.params.tweetId || req.params.commentId;
@@ -51,8 +51,7 @@ exports.addLike = asyncHandler(async (req, res, next) => {
 });
 
 // @desc        Remove like
-// @route       DELETE /api/tweets/:tweetId/likes/:id
-// @route       DELETE /api/comments/:commentId/likes/:id
+// @route       DELETE /api/likes/:id
 // @access      Private
 exports.removeLike = asyncHandler(async (req, res, next) => {
   const like = await Like.findById(req.params.id);
