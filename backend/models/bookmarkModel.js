@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
-const retweetSchema = new mongoose.Schema(
+const bookmarkSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Types.ObjectId,
       required: true,
       ref: 'User',
     },
-    retweeted: {
+    bookmarked: {
       type: mongoose.Types.ObjectId,
       required: true,
       ref: 'Tweet',
@@ -24,6 +24,6 @@ const retweetSchema = new mongoose.Schema(
 );
 
 // Make sure user can only retweet a post once
-retweetSchema.index({ retweeted: 1, user: 1 }, { unique: true });
+bookmarkSchema.index({ bookmarked: 1, user: 1 }, { unique: true });
 
-module.exports = mongoose.model('Retweet', retweetSchema);
+module.exports = mongoose.model('Bookmark', bookmarkSchema);

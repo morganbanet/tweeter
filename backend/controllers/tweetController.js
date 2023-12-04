@@ -10,6 +10,12 @@ const { uploadFile, deleteFile } = require('../utils/storageBucket');
 exports.getTweets = asyncHandler(async (req, res, next) => {
   const tweets = await Tweet.find({});
 
+  // @Todo: Combine retweets and tweets using $unionWith aggregation,
+  // add pagination
+
+  // @Todo: Check if request user is authenticated to return private
+  // tweets if being followed by author of private tweet
+
   res.status(200).json({ success: true, count: tweets.length, data: tweets });
 });
 
@@ -76,34 +82,18 @@ exports.deleteTweet = asyncHandler(async (req, res, next) => {
 
   await tweet.deleteOne();
 
+  // @Todo: Delete user tweets and all associated tweets data:
+  // Comment likes
+  // Delete comment bucket files
+  // Delete comments
+  // Tweet likes
+  // Retweets
+  // Bookmarks
+  // Delete tweet bucket files
+  // Tweet
+
   res.status(200).json({ success: true, data: {} });
 });
-
-// @desc        Create retweet
-// @route       POST /api/tweets/:id/retweet
-// @access      Private
-// prettier-ignore
-exports.createRetweet = asyncHandler(async (req, res, next) => {
-  // Create new tweet using original tweets contents
-
-  // Associate retweet with a user, and add reference for original tweet
-
-  // Set retweet flag to true
-
-  // @Notes
-  // - Each subsequent action should associate with the original tweet
-  // - User retweet flag to prevent edits on retweets
-
-  // Or seperate retweets into own collection, and use aggregation to
-  // combine tweets & retweets for pagination. This will provide the
-  // benefits of both pagination, and avoiding duplicate data. Use
-  // the mongodb method $unionwith for this?
-  // https://www.mongodb.com/docs/manual/reference/operator/aggregation/unionWith/
-});
-
-// @desc        Delete retweet
-// @route       DELETE /api/tweets/:id/retweet
-// @access      Private
 
 // @desc        Create bookmark
 // @route       POST /api/tweets/:id/bookmark

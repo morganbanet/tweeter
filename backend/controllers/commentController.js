@@ -4,7 +4,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
 
-// @desc        Get comments for a tweet
+// @desc        Get tweet comments
 // @route       GET /api/tweets/:tweetId/comments
 // @access      Public
 exports.getComments = asyncHandler(async (req, res, next) => {
@@ -87,6 +87,8 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
   await deleteFile(comment, 'image', false);
 
   await comment.deleteOne();
+
+  // @Todo: Delete all associated likes
 
   res.status(200).json({ success: true, data: {} });
 });

@@ -4,6 +4,7 @@ const Tweet = require('../models/tweetModel');
 const commentRouter = require('./commentRoutes');
 const likeRouter = require('./likeRoutes');
 const retweetRouter = require('./retweetRoutes');
+const bookmarkRouter = require('./bookmarkRoutes');
 const { protect, checkOwnership } = require('../middleware/authMiddleware');
 
 const {
@@ -16,6 +17,7 @@ const {
 router.use('/:id/likes', likeRouter);
 router.use('/:id/retweets', retweetRouter);
 router.use('/:id/comments', commentRouter);
+router.use('/:id/bookmarks', bookmarkRouter);
 
 // prettier-ignore
 router.route('/')

@@ -1,21 +1,21 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const Like = require('../models/likeModel');
+const Bookmark = require('../models/bookmarkModel');
 const { protect, checkOwnership } = require('../middleware/authMiddleware');
 
 const {
-  getLikes,
-  createLike,
-  deleteLike,
-} = require('../controllers/likeController');
+  getBookmarks,
+  createBookmark,
+  deleteBookmark,
+} = require('../controllers/bookmarkController');
 
 // prettier-ignore
 router.route('/')
-  .get(getLikes)
-  .post(protect, createLike)
+  .get(getBookmarks)
+  .post(protect, createBookmark)
 
 // prettier-ignore
 router.route('/:id')
-  .delete(protect, checkOwnership(Like), deleteLike)
+  .delete(protect, checkOwnership(Bookmark), deleteBookmark)
 
 module.exports = router;

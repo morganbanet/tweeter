@@ -21,11 +21,6 @@ const tweetSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
-    retweet: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
   },
   {
     timestamps: true,

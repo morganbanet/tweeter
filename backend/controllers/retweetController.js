@@ -1,8 +1,9 @@
+const Tweet = require('../models/tweetModel');
 const Retweet = require('../models/retweetModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 
-// @desc        Get retweets
+// @desc        Get tweet retweets
 // @route       GET /api/tweets/:id/retweets
 // @access      Public
 exports.getRetweets = asyncHandler(async (req, res, next) => {
@@ -19,6 +20,8 @@ exports.getRetweets = asyncHandler(async (req, res, next) => {
 // @route       POST /api/tweets/:id/retweets
 // @access      Private
 exports.createRetweet = asyncHandler(async (req, res, next) => {
+  const tweet = await Tweet.findById(req.parms.id);
+
   const retweetToCreate = {
     user: req.user.id,
     retweeted: req.params.id,
@@ -33,6 +36,8 @@ exports.createRetweet = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
+  retweetToCreate.private = tweet.private;
 
   const retweet = await Retweet.create(retweetToCreate);
 

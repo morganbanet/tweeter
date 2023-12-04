@@ -61,6 +61,8 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+// Delete user data
+
 // Create slug from User name
 userSchema.pre('save', async function (next) {
   if (!this.isModified('name')) next();
