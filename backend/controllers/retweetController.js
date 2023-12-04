@@ -3,8 +3,8 @@ const Retweet = require('../models/retweetModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 
-// @desc        Get tweet retweets
-// @route       GET /api/tweets/:id/retweets
+// @desc        Get retweets for a tweet
+// @route       GET /api/tweets/:tweetId/retweets
 // @access      Public
 exports.getRetweets = asyncHandler(async (req, res, next) => {
   const retweets = await Retweet.find({ retweeted: req.params.id }).populate(
@@ -17,7 +17,7 @@ exports.getRetweets = asyncHandler(async (req, res, next) => {
 });
 
 // @desc        Create retweet
-// @route       POST /api/tweets/:id/retweets
+// @route       POST /api/tweets/:tweetId/retweets
 // @access      Private
 exports.createRetweet = asyncHandler(async (req, res, next) => {
   const tweet = await Tweet.findById(req.parms.id);
@@ -32,7 +32,8 @@ exports.createRetweet = asyncHandler(async (req, res, next) => {
   if (retweetExists.length > 0) {
     return next(
       new ErrorResponse(
-        `User ${req.user.id} already retweeted tweet ${req.params.id}`
+        `User ${req.user.id} already retweeted tweet ${req.params.id}`,
+        400
       )
     );
   }

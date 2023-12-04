@@ -4,8 +4,8 @@ const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
 
-// @desc        Get tweet comments
-// @route       GET /api/tweets/:tweetId/comments
+// @desc        Get comments for a tweet
+// @route       GET /api/tweets/:id/comments
 // @access      Public
 exports.getComments = asyncHandler(async (req, res, next) => {
   const comments = await Comment.find({ tweet: req.params.tweetId });

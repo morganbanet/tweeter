@@ -1,34 +1,36 @@
+const User = require('../models/userModel');
+const asyncHandler = require('../utils/asyncHandler');
+const ErrorResponse = require('../utils/ErrorResponse');
+
 // @Note: MongoDB aggregation $lookup for tweets & comments?
 // - Perform aggregation: https://stackoverflow.com/questions/35795480/mongoose-query-to-get-data-from-multiple-collections
 
-// @desc        Get user
+// Pass in queries for getting tweets by user, comments by user, etc?
+
+// @desc        Get all users
+// @route       GET /api/users
+// @access      Public
+
+// @desc        Get single user
 // @route       GET /api/users/:id
 // @access      Public
 
-// @desc        Get tweets
+// @desc        Get tweets by user
 // @route       GET /api/users/:id/tweets
 // @access      Public
 
-// @desc        Get comments
+// @desc        Get comments by user
 // @route       GET /api/users/:id/comments
 // @access      Public
 
-// @desc        Get likes
+// @desc        Get likes by user
 // @route       GET /api/users/:id/likes
 // @access      Public
 
-// @desc        Get retweets
+// @desc        Get retweets by user
 // @route       GET /api/users/:id/retweets
 // @access      Public
 
-// @desc        Get bookmarks
+// @desc        Get bookmarks by user
 // @route       GET /api/users/:id/bookmarks
-// @access      Private
-
-// @desc        Follow user
-// @route       POST /api/users/:id/follow
-// @access      Private
-
-// @desc        Unfollow user
-// @route       DELETE /api/users/:id/unfollow
 // @access      Private

@@ -7,6 +7,8 @@ const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const followRoutes = require('./routes/followRoutes');
 const tweetRoutes = require('./routes/tweetRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const likeRoutes = require('./routes/likeRoutes');
@@ -31,6 +33,8 @@ if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 // Route mounts
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/follows', followRoutes);
 app.use('/api/tweets', tweetRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/likes', likeRoutes);

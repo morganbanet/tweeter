@@ -1,5 +1,4 @@
 const Tweet = require('../models/tweetModel');
-const Like = require('../models/likeModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
@@ -9,9 +8,8 @@ const { uploadFile, deleteFile } = require('../utils/storageBucket');
 // @access      Public
 exports.getTweets = asyncHandler(async (req, res, next) => {
   const tweets = await Tweet.find({});
-
   // @Todo: Combine retweets and tweets using $unionWith aggregation,
-  // add pagination
+  // add pagination, & support queries for returning tweets by user
 
   // @Todo: Check if request user is authenticated to return private
   // tweets if being followed by author of private tweet
@@ -94,11 +92,3 @@ exports.deleteTweet = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: {} });
 });
-
-// @desc        Create bookmark
-// @route       POST /api/tweets/:id/bookmark
-// @access      Private
-
-// @desc        Delete bookmark
-// @route       DELETE /api/tweets/:id/bookmark
-// @access      Private

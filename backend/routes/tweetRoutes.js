@@ -14,10 +14,10 @@ const {
   deleteTweet,
 } = require('../controllers/tweetController');
 
-router.use('/:id/likes', likeRouter);
-router.use('/:id/retweets', retweetRouter);
-router.use('/:id/comments', commentRouter);
-router.use('/:id/bookmarks', bookmarkRouter);
+router.use('/:tweetId/likes', likeRouter);
+router.use('/:tweetId/retweets', retweetRouter);
+router.use('/:tweetId/comments', commentRouter);
+router.use('/:tweetId/bookmarks', bookmarkRouter);
 
 // prettier-ignore
 router.route('/')
