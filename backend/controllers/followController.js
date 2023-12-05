@@ -4,7 +4,6 @@ const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 
 // @Todo: Combine into one using query via advancedResults.js
-
 // @desc        Get all follows
 // @route       GET /api/users/:userId/follows
 // @access      Public

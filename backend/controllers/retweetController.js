@@ -7,9 +7,9 @@ const ErrorResponse = require('../utils/ErrorResponse');
 // @route       GET /api/tweets/:tweetId/retweets
 // @access      Public
 exports.getRetweets = asyncHandler(async (req, res, next) => {
-  const retweets = await Retweet.find({ retweeted: req.params.id }).populate(
-    'user'
-  );
+  const retweets = await Retweet.find({
+    retweeted: req.params.tweetId,
+  }).populate('user');
 
   res
     .status(200)
@@ -20,11 +20,11 @@ exports.getRetweets = asyncHandler(async (req, res, next) => {
 // @route       POST /api/tweets/:tweetId/retweets
 // @access      Private
 exports.createRetweet = asyncHandler(async (req, res, next) => {
-  const tweet = await Tweet.findById(req.parms.id);
+  const tweet = await Tweet.findById(req.parms.tweetId);
 
   const retweetToCreate = {
     user: req.user.id,
-    retweeted: req.params.id,
+    retweeted: req.params.tweetId,
   };
 
   const retweetExists = await Retweet.find(retweetToCreate);
@@ -32,7 +32,7 @@ exports.createRetweet = asyncHandler(async (req, res, next) => {
   if (retweetExists.length > 0) {
     return next(
       new ErrorResponse(
-        `User ${req.user.id} already retweeted tweet ${req.params.id}`,
+        `User ${req.user.id} already retweeted tweet ${req.params.tweetId}`,
         400
       )
     );
@@ -53,7 +53,7 @@ exports.deleteRetweet = asyncHandler(async (req, res, next) => {
 
   if (!retweet) {
     return next(
-      new ErrorResponse(`Retweet not found with id ${req.params.id}`, 404)
+      new ErrorResponse(`Retweet not found with id ${req.params.tweetId}`, 404)
     );
   }
 

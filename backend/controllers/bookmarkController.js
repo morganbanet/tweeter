@@ -7,9 +7,9 @@ const ErrorResponse = require('../utils/ErrorResponse');
 // @route       GET /api/tweets/:tweetId/bookmarks
 // @access      Public
 exports.getBookmarks = asyncHandler(async (req, res, next) => {
-  const bookmarks = await Bookmark.find({ bookmarked: req.params.id }).populate(
-    'user'
-  );
+  const bookmarks = await Bookmark.find({
+    bookmarked: req.params.tweetId,
+  }).populate('user');
 
   res
     .status(200)
@@ -20,11 +20,11 @@ exports.getBookmarks = asyncHandler(async (req, res, next) => {
 // @route       POST /api/tweets/:tweetId/bookmarks
 // @access      Private
 exports.createBookmark = asyncHandler(async (req, res, next) => {
-  const tweet = await Tweet.findById(req.params.id);
+  const tweet = await Tweet.findById(req.params.tweetId);
 
   const bookmarkToCreate = {
     user: req.user.id,
-    bookmarked: req.params.id,
+    bookmarked: req.params.tweetId,
   };
 
   const bookmarkExists = await Bookmark.find(bookmarkToCreate);
@@ -32,7 +32,7 @@ exports.createBookmark = asyncHandler(async (req, res, next) => {
   if (bookmarkExists.length > 0) {
     return next(
       new ErrorResponse(
-        `User ${req.user.id} already bookmarked tweet ${req.params.id}`,
+        `User ${req.user.id} already bookmarked tweet ${req.params.tweetId}`,
         400
       )
     );

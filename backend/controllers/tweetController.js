@@ -1,20 +1,22 @@
 const Tweet = require('../models/tweetModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
+const advancedResults = require('../utils/advancedResults');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
 
 // @desc        Get all tweets
 // @route       GET /api/tweets
 // @access      Public
 exports.getTweets = asyncHandler(async (req, res, next) => {
-  const tweets = await Tweet.find({});
-  // @Todo: Combine retweets and tweets using $unionWith aggregation,
-  // add pagination, & support queries for returning tweets by user
+  // @Todo: Combine retweets and tweets using $unionWith aggregation
+  //        Return private tweets if authed and followed by author
 
-  // @Todo: Check if request user is authenticated to return private
-  // tweets if being followed by author of private tweet
+  const result = await advancedResults(req, Tweet);
+  const { pagination, results: tweets } = result;
 
-  res.status(200).json({ success: true, count: tweets.length, data: tweets });
+  res
+    .status(200)
+    .json({ success: true, count: tweets.length, pagination, data: tweets });
 });
 
 // @desc        Create tweet

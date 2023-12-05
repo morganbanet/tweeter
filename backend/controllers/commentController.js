@@ -2,17 +2,26 @@ const Tweet = require('../models/tweetModel');
 const Comment = require('../models/commentModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
+const advancedResults = require('../utils/advancedResults');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
 
 // @desc        Get comments for a tweet
-// @route       GET /api/tweets/:id/comments
+// @route       GET /api/tweets/:tweetId/comments
 // @access      Public
 exports.getComments = asyncHandler(async (req, res, next) => {
-  const comments = await Comment.find({ tweet: req.params.tweetId });
+  // @Todo: Allow query by user while enforcing altQuery(?)
 
-  res
-    .status(200)
-    .json({ success: true, count: comments.length, data: comments });
+  const altQuery = { tweet: req.params.tweetId };
+
+  const result = await advancedResults(req, Comment, altQuery);
+  const { pagination, results: comments } = result;
+
+  res.status(200).json({
+    success: true,
+    count: comments.length,
+    pagination,
+    data: comments,
+  });
 });
 
 // @desc        Create comment

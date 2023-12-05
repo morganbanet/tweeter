@@ -21,6 +21,7 @@ const tweetSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    hashtags: [],
   },
   {
     timestamps: true,

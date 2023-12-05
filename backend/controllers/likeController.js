@@ -1,23 +1,29 @@
 const Like = require('../models/likeModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
+const advancedResults = require('../utils/advancedResults');
 
 // @desc        Get likes for a tweet or comment
 // @route       GET /api/tweets/:tweetId/likes
 // @route       GET /api/comments/:commentId/likes
 // @access      Public
 exports.getLikes = asyncHandler(async (req, res, next) => {
-  let likes;
+  let altQuery;
 
   if (req.params.tweetId) {
-    likes = await Like.find({ liked: req.params.tweetId }).populate('user');
+    altQuery = { liked: req.params.tweetId };
   }
 
   if (req.params.commentId) {
-    likes = await Like.find({ liked: req.params.commentId }).populate('user');
+    altQuery = { liked: req.params.commentId };
   }
 
-  res.status(200).json({ success: true, count: likes.length, data: likes });
+  const result = await advancedResults(req, Like, altQuery, 'user');
+  const { pagination, results: likes } = result;
+
+  res
+    .status(200)
+    .json({ success: true, count: likes.length, pagination, data: likes });
 });
 
 // @desc        Add like
