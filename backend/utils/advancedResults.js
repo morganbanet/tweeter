@@ -1,4 +1,6 @@
-const advancedResults = async (req, model, altQuery, populate) => {
+const advancedResults = async (req, model, options) => {
+  const { altQuery, populate, aggregate } = options;
+
   let { select, sort, page, limit, ...query } = req.query;
 
   // Include query operators (ie, $gt, $lt, $lte)
@@ -27,14 +29,16 @@ const advancedResults = async (req, model, altQuery, populate) => {
   if (endIndex < total) pagination.next = { page: page + 1, limit };
   if (startIndex > 0) pagination.prev = { page: page - 1, limit };
 
-  // Find results by queries
-  const results = await model
-    .find(altQuery || query)
-    .select(select)
-    .sort(sort)
-    .skip(startIndex)
-    .limit(limit)
-    .populate(populate);
+  // @Todo: Fix custom queries
+
+  // prettier-ignore
+  let queryChain = aggregate
+    ? model.aggregate(aggregate)
+    : model.find(altQuery || query).populate(populate).select(select);
+
+  queryChain = queryChain.sort(sort).skip(startIndex).limit(limit);
+
+  const results = await queryChain;
 
   return { pagination, results };
 };

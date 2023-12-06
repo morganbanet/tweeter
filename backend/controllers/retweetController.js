@@ -8,9 +8,12 @@ const advancedResults = require('../utils/advancedResults');
 // @route       GET /api/tweets/:tweetId/retweets
 // @access      Public
 exports.getRetweets = asyncHandler(async (req, res, next) => {
-  const altQuery = { retweeted: req.params.tweetId };
+  const options = {
+    altQuery: { retweeted: req.params.tweetId },
+    populate: 'user',
+  };
 
-  const result = await advancedResults(req, Retweet, altQuery, 'user');
+  const result = await advancedResults(req, Retweet, options);
   const { pagination, results: retweets } = result;
 
   res.status(200).json({
@@ -25,7 +28,7 @@ exports.getRetweets = asyncHandler(async (req, res, next) => {
 // @route       POST /api/tweets/:tweetId/retweets
 // @access      Private
 exports.createRetweet = asyncHandler(async (req, res, next) => {
-  const tweet = await Tweet.findById(req.parms.tweetId);
+  const tweet = await Tweet.findById(req.params.tweetId);
 
   const retweetToCreate = {
     user: req.user.id,

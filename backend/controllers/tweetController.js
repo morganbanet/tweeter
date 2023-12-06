@@ -2,17 +2,22 @@ const Tweet = require('../models/tweetModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const advancedResults = require('../utils/advancedResults');
+const combineCols = require('../utils/combineCols');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
+
+// @Todo: Update controller functions to accomodate for advResults options
+// @Todo: Extract hashtags from the req.body.text and add to an array
+// @Todo: Return private tweets if authed and followed by author
 
 // @desc        Get all tweets
 // @route       GET /api/tweets
 // @access      Public
 exports.getTweets = asyncHandler(async (req, res, next) => {
-  // @Todo: Combine retweets and tweets using $unionWith aggregation
-  //        Return private tweets if authed and followed by author
-  //        Extract hashtags from the req.body.text and add to an array
+  const options = {
+    aggregate: combineCols('retweets', 'retweeted', 'tweets'),
+  };
 
-  const result = await advancedResults(req, Tweet);
+  const result = await advancedResults(req, Tweet, options);
   const { pagination, results: tweets } = result;
 
   res
