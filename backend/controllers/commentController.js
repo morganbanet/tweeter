@@ -9,8 +9,6 @@ const { uploadFile, deleteFile } = require('../utils/storageBucket');
 // @route       GET /api/tweets/:tweetId/comments
 // @access      Public
 exports.getComments = asyncHandler(async (req, res, next) => {
-  // @Todo: Allow query by user while enforcing altQuery(?)
-
   const altQuery = { tweet: req.params.tweetId };
 
   const result = await advancedResults(req, Comment, altQuery);

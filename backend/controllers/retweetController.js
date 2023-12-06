@@ -2,18 +2,23 @@ const Tweet = require('../models/tweetModel');
 const Retweet = require('../models/retweetModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
+const advancedResults = require('../utils/advancedResults');
 
 // @desc        Get retweets for a tweet
 // @route       GET /api/tweets/:tweetId/retweets
 // @access      Public
 exports.getRetweets = asyncHandler(async (req, res, next) => {
-  const retweets = await Retweet.find({
-    retweeted: req.params.tweetId,
-  }).populate('user');
+  const altQuery = { retweeted: req.params.tweetId };
 
-  res
-    .status(200)
-    .json({ success: true, count: retweets.length, data: retweets });
+  const result = await advancedResults(req, Retweet, altQuery, 'user');
+  const { pagination, results: retweets } = result;
+
+  res.status(200).json({
+    success: true,
+    count: retweets.length,
+    pagination,
+    data: retweets,
+  });
 });
 
 // @desc        Create retweet

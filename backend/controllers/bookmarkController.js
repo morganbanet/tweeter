@@ -2,18 +2,23 @@ const Tweet = require('../models/tweetModel');
 const Bookmark = require('../models/bookmarkModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
+const advancedResults = require('../utils/advancedResults');
 
 // @desc        Get bookmarks for a tweet
 // @route       GET /api/tweets/:tweetId/bookmarks
 // @access      Public
 exports.getBookmarks = asyncHandler(async (req, res, next) => {
-  const bookmarks = await Bookmark.find({
-    bookmarked: req.params.tweetId,
-  }).populate('user');
+  const altQuery = { bookmarked: req.params.tweetId };
 
-  res
-    .status(200)
-    .json({ success: true, count: bookmarks.length, data: bookmarks });
+  const result = await advancedResults(req, Bookmark, altQuery, 'user');
+  const { pagination, results: bookmarks } = result;
+
+  res.status(200).json({
+    success: true,
+    count: bookmarks.length,
+    pagination,
+    data: bookmarks,
+  });
 });
 
 // @desc        Create bookmark

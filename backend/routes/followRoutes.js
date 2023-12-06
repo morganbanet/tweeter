@@ -10,16 +10,9 @@ const {
   unfollowUser,
 } = require('../controllers/followController');
 
-// prettier-ignore
-router.route('/followers')
-
-// prettier-ignore
-router.route('/')
-  .get(getFollowing)
-  .post(protect, followUser)
-
-// prettier-ignore
-router.route('/:id')
-  .delete(protect, checkOwnership(Follow), unfollowUser)
+router.route('/followers').get(getFollowers);
+router.route('/following').get(getFollowing);
+router.route('/').post(protect, followUser);
+router.route('/:id').delete(protect, checkOwnership(Follow), unfollowUser);
 
 module.exports = router;

@@ -10,6 +10,7 @@ const { uploadFile, deleteFile } = require('../utils/storageBucket');
 exports.getTweets = asyncHandler(async (req, res, next) => {
   // @Todo: Combine retweets and tweets using $unionWith aggregation
   //        Return private tweets if authed and followed by author
+  //        Extract hashtags from the req.body.text and add to an array
 
   const result = await advancedResults(req, Tweet);
   const { pagination, results: tweets } = result;

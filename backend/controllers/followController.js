@@ -2,32 +2,40 @@ const User = require('../models/userModel');
 const Follow = require('../models/followModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
-
-// @Todo: Combine into one using query via advancedResults.js
-// @desc        Get all follows
-// @route       GET /api/users/:userId/follows
-// @access      Public
+const advancedResults = require('../utils/advancedResults');
 
 // @desc        Get user followers
-// @route       GET /api/users/:userId/followers
+// @route       GET /api/users/:userId/follows/followers
 // @access      Public
 exports.getFollowers = asyncHandler(async (req, res, next) => {
-  const followers = await Follow.find({ following: req.user.id }).populate(
-    'user'
-  );
+  const altQuery = { following: req.params.userId };
 
-  res.status(200).json({ success: true, data: followers });
+  const result = await advancedResults(req, Follow, altQuery, 'user');
+  const { pagination, results: followers } = result;
+
+  res.status(200).json({
+    success: true,
+    count: followers.length,
+    pagination,
+    data: followers,
+  });
 });
 
 // @desc        Get user following
-// @route       GET /api/users/:userId/follows
+// @route       GET /api/users/:userId/follows/following
 // @access      Public
 exports.getFollowing = asyncHandler(async (req, res, next) => {
-  const following = await Follow.find({ user: req.params.userId }).populate(
-    'following'
-  );
+  const altQuery = { user: req.params.userId };
 
-  res.status(200).json({ success: true, data: following });
+  const result = await advancedResults(req, Follow, altQuery, 'following');
+  const { pagination, results: following } = result;
+
+  res.status(200).json({
+    success: true,
+    count: following.length,
+    pagination,
+    data: following,
+  });
 });
 
 // @desc        Follow user
@@ -38,6 +46,10 @@ exports.followUser = asyncHandler(async (req, res, next) => {
     user: req.user.id,
     following: req.params.userId,
   };
+
+  if (req.user.id === req.params.userId) {
+    return next(new ErrorResponse(`Cannot follow user ${req.params.userId}`));
+  }
 
   const followExists = await Follow.find(followToCreate);
 

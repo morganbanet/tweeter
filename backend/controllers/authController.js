@@ -263,6 +263,10 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   res.status(200).clearCookie('jwt').json({ success: true, data: {} });
 });
 
+// @desc        @Todo: Create bio
+// @route       POST /api/auth/bio
+// @access      Private
+
 // @desc        Upload avatar
 // @route       POST /api/auth/avatar
 // @access      Private
