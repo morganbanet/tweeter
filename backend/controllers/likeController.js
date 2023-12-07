@@ -8,17 +8,20 @@ const advancedResults = require('../utils/advancedResults');
 // @route       GET /api/comments/:commentId/likes
 // @access      Public
 exports.getLikes = asyncHandler(async (req, res, next) => {
-  let altQuery;
+  let options = {
+    altQuery: {},
+    populate: 'user',
+  };
 
   if (req.params.tweetId) {
-    altQuery = { liked: req.params.tweetId };
+    options.altQuery = { liked: req.params.tweetId };
   }
 
   if (req.params.commentId) {
-    altQuery = { liked: req.params.commentId };
+    options.altQuery = { liked: req.params.commentId };
   }
 
-  const result = await advancedResults(req, Like, altQuery, 'user');
+  const result = await advancedResults(req, Like, options);
   const { pagination, results: likes } = result;
 
   res

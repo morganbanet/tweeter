@@ -8,9 +8,12 @@ const advancedResults = require('../utils/advancedResults');
 // @route       GET /api/users/:userId/follows/followers
 // @access      Public
 exports.getFollowers = asyncHandler(async (req, res, next) => {
-  const altQuery = { following: req.params.userId };
+  const options = {
+    altQuery: { following: req.params.userId },
+    populate: 'user',
+  };
 
-  const result = await advancedResults(req, Follow, altQuery, 'user');
+  const result = await advancedResults(req, Follow, options);
   const { pagination, results: followers } = result;
 
   res.status(200).json({

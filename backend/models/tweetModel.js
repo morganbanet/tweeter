@@ -28,6 +28,4 @@ const tweetSchema = new mongoose.Schema(
   }
 );
 
-tweetSchema.methods.getTweetsAndRetweets = function () {};
-
 module.exports = mongoose.model('Tweet', tweetSchema);

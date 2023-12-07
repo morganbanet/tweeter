@@ -8,9 +8,12 @@ const advancedResults = require('../utils/advancedResults');
 // @route       GET /api/tweets/:tweetId/bookmarks
 // @access      Public
 exports.getBookmarks = asyncHandler(async (req, res, next) => {
-  const altQuery = { bookmarked: req.params.tweetId };
+  const options = {
+    altQuery: { bookmarked: req.params.tweetId },
+    populate: 'user',
+  };
 
-  const result = await advancedResults(req, Bookmark, altQuery, 'user');
+  const result = await advancedResults(req, Bookmark, options);
   const { pagination, results: bookmarks } = result;
 
   res.status(200).json({
