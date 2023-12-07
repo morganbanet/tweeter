@@ -1,6 +1,6 @@
-// Will use custom queries in request (other than sort, page, or limit),
-// defaults to queries via the altQuery parameter passed into options
-// otherwise
+// Will use custom queries in request, defaults to queries via the
+// altQuery parameter passed into options otherwise. Includes pagination
+// and will return the results back to the controller function.
 
 const advancedResults = async (req, model, options) => {
   const { altQuery, populate, aggregate } = options;

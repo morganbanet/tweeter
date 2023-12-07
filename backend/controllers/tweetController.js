@@ -5,9 +5,8 @@ const advancedResults = require('../utils/advancedResults');
 const combineCols = require('../utils/combineCols');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
 
-// @Todo: Update controller functions to accomodate for advResults options
-// @Todo: Extract hashtags from the req.body.text and add to an array
 // @Todo: Return private tweets if authed and followed by author
+// @Todo: Add controller to return trending topics based on hashtags(?)
 
 // @desc        Get all tweets
 // @route       GET /api/tweets
@@ -30,9 +29,12 @@ exports.getTweets = asyncHandler(async (req, res, next) => {
 // @access      Private
 exports.createTweet = asyncHandler(async (req, res, next) => {
   req.body.user = req.user.id;
+
   const { user, text, private } = req.body;
 
-  const tweet = await Tweet.create({ user, text, private });
+  const hashtags = text.match(/#\w+/g);
+
+  const tweet = await Tweet.create({ user, text, private, hashtags });
 
   if (req.files) {
     file = req.files.file;
