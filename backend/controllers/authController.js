@@ -84,6 +84,24 @@ exports.userProfile = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: user });
 });
 
+// @desc        Update user bio
+// @route       PATCH /api/auth/bio
+// @access      Private
+exports.updateBio = asyncHandler(async (req, res, next) => {
+  const fieldsToUpdate = {
+    bio: req.body.bio,
+  };
+
+  console.log(req.body.bio);
+
+  const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+    runValidators: true,
+    new: true,
+  });
+
+  res.status(200).json({ success: true, data: user });
+});
+
 // @desc        Update user details
 // @route       POST /api/auth/updatedetails
 // @access      Private
@@ -262,10 +280,6 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
 
   res.status(200).clearCookie('jwt').json({ success: true, data: {} });
 });
-
-// @desc        @Todo: Create bio
-// @route       POST /api/auth/bio
-// @access      Private
 
 // @desc        Upload avatar
 // @route       POST /api/auth/avatar

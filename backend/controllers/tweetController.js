@@ -5,7 +5,6 @@ const advancedResults = require('../utils/advancedResults');
 const combineCols = require('../utils/combineCols');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
 
-// @Todo: Return private tweets if authed and followed by author
 // @Todo: Add controller to return trending topics based on hashtags(?)
 
 // @desc        Get all tweets

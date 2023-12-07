@@ -1,10 +1,12 @@
-// Will use custom queries in request, defaults to queries via the
-// altQuery parameter passed into options otherwise. Includes pagination
-// and will return the results back to the controller function.
+// Allows for custom queries in requests made by the client. If no
+// custom query is present in the request (aside from sort, page,
+// and limit), then will default to the aggregate option first, and the
+// altQuery otherwise. Aggregation will not take place if a custom query
+// is present. Will return pagination and the results.
 
 const advancedResults = async (req, model, options) => {
-  const { altQuery, populate, aggregate } = options;
-  let { select, sort, page, limit, ...query } = req.query;
+  const { aggregate, altQuery, populate } = options;
+  let { sort, page, limit, select, ...query } = req.query;
 
   // True if request contains query other than sort, page, or limit
   const isCustomQuery = Object.keys(query).length > 0 || select ? true : false;
@@ -52,6 +54,7 @@ const advancedResults = async (req, model, options) => {
     queryChain = model.find(query).populate(populate).select(select);
   }
 
+  // Add sort & pagination queries to the queryChain
   queryChain = queryChain.sort(sort).skip(startIndex).limit(limit);
 
   const results = await queryChain;

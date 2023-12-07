@@ -34,14 +34,8 @@ const userSchema = new mongoose.Schema(
     bio: {
       type: String,
       maxLength: [160, 'Bio cannot exceed 160 characters.'],
+      default: `Say Hi, I'm new to Tweeter! 👋`,
     },
-    following: [
-      {
-        type: mongoose.Types.ObjectId,
-        required: true,
-        ref: 'User',
-      },
-    ],
     password: {
       type: String,
       required: [true, 'Password cannot be blank'],

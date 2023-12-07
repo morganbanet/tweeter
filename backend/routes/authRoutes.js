@@ -11,6 +11,7 @@ const {
   updatePassword,
   forgotPassword,
   resetPassword,
+  updateBio,
   uploadAvatar,
   deleteAvatar,
   uploadBanner,
@@ -23,6 +24,7 @@ router.route('/register').post(registerUser);
 router.route('/login').post(loginUser);
 router.route('/logout').post(protect, logoutUser);
 router.route('/profile').get(protect, userProfile);
+router.route('/bio').patch(protect, updateBio);
 router.route('/updatedetails').patch(protect, updateDetails);
 router.route('/updatepassword').put(protect, updatePassword);
 router.route('/forgotpassword').put(forgotPassword);
