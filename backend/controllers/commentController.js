@@ -1,4 +1,5 @@
 const Tweet = require('../models/tweetModel');
+const Follow = require('../models/followModel');
 const Comment = require('../models/commentModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
@@ -40,7 +41,24 @@ exports.createComment = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // Set comment privacy same as parent tweet
+  // If tweet is private, allow comments only from users author follows
+  if (tweet.private && tweet.user.toString() !== req.user.id) {
+    const isBeingFollowed = await Follow.find({
+      user: tweet.user,
+      following: req.user.id,
+    });
+
+    if (isBeingFollowed.length === 0) {
+      return next(
+        new ErrorResponse(
+          `User ${req.user.id} not followed by tweet author ${tweet.user}`,
+          401
+        )
+      );
+    }
+  }
+
+  // Mark comment privacy same as parent tweet
   req.body.private = tweet.private;
 
   const comment = await Comment.create(req.body);
