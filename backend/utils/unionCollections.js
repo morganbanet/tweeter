@@ -6,7 +6,7 @@
 // local - The field to populate
 // from - The collection being used to populate
 
-const combineCols = (collection, local, from) => {
+const unionCollections = (collection, local, from) => {
   const aggregate = [
     { $unionWith: { coll: `${collection}` } },
 
@@ -31,4 +31,4 @@ const combineCols = (collection, local, from) => {
   return aggregate;
 };
 
-module.exports = combineCols;
+module.exports = unionCollections;

@@ -92,8 +92,6 @@ exports.updateBio = asyncHandler(async (req, res, next) => {
     bio: req.body.bio,
   };
 
-  console.log(req.body.bio);
-
   const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
     runValidators: true,
     new: true,

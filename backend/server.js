@@ -15,6 +15,7 @@ const likeRoutes = require('./routes/likeRoutes');
 const retweetRoutes = require('./routes/retweetRoutes');
 const bookmarkRoutes = require('./routes/bookmarkRoutes');
 const deploymentRoutes = require('./routes/deploymentRoutes');
+const hashtagRoutes = require('./routes/hashtagRoutes');
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
@@ -40,6 +41,7 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/likes', likeRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
 app.use('/api/retweets', retweetRoutes);
+app.use('/api/hashtags', hashtagRoutes);
 
 // Deployment config route mount
 app.use(deploymentRoutes);

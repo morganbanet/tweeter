@@ -2,17 +2,16 @@ const Tweet = require('../models/tweetModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const advancedResults = require('../utils/advancedResults');
-const combineCols = require('../utils/combineCols');
+const unionCollections = require('../utils/unionCollections');
+const { createHashtags } = require('../utils/hashtagHelper');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
-
-// @Todo: Add controller to return trending topics based on hashtags(?)
 
 // @desc        Get all tweets
 // @route       GET /api/tweets
 // @access      Public
 exports.getTweets = asyncHandler(async (req, res, next) => {
   const options = {
-    aggregate: combineCols('retweets', 'retweeted', 'tweets'),
+    aggregate: unionCollections('retweets', 'retweeted', 'tweets'),
   };
 
   const result = await advancedResults(req, Tweet, options);
@@ -27,13 +26,19 @@ exports.getTweets = asyncHandler(async (req, res, next) => {
 // @route       POST /api/tweets
 // @access      Private
 exports.createTweet = asyncHandler(async (req, res, next) => {
-  req.body.user = req.user.id;
+  const tweetToCreate = {
+    user: req.user.id,
+    text: req.body.text,
+    private: req.body.private,
+  };
 
-  const { user, text, private } = req.body;
+  // @Todo: Update hashtag docs & count when updating/deleting tweets
 
-  const hashtags = text.match(/#\w+/g);
+  let tweet = await Tweet.create(tweetToCreate);
 
-  const tweet = await Tweet.create({ user, text, private, hashtags });
+  const hashtags = tweetToCreate.text.match(/#\w+/g);
+
+  if (hashtags) tweet = await createHashtags(hashtags, tweet);
 
   if (req.files) {
     file = req.files.file;
