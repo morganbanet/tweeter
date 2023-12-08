@@ -17,11 +17,22 @@ const hashtagSchema = new mongoose.Schema(
   }
 );
 
-// @Todo: Pre save middleware, check if count is 0 and delete if so (?)
+// Increment or decrement count
+hashtagSchema.methods.modifyCount = async function (value) {
+  if (value === +1) {
+    this.count = this.count + 1;
+    await this.save();
+  }
 
-hashtagSchema.methods.increaseCount = async function () {
-  this.count = this.count + 1;
-  await this.save();
+  if (value === -1) {
+    this.count = this.count - 1;
+    await this.save();
+  }
+
+  // Delete doc if count becomes 0
+  if (this.count === 0) {
+    await this.deleteOne();
+  }
 };
 
 module.exports = mongoose.model('Hashtag', hashtagSchema);

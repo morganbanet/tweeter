@@ -3,7 +3,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const advancedResults = require('../utils/advancedResults');
 const unionCollections = require('../utils/unionCollections');
-const { createHashtags } = require('../utils/hashtagHelper');
+const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
 
 // @desc        Get all tweets
@@ -32,12 +32,10 @@ exports.createTweet = asyncHandler(async (req, res, next) => {
     private: req.body.private,
   };
 
-  // @Todo: Update hashtag docs & count when updating/deleting tweets
-
   let tweet = await Tweet.create(tweetToCreate);
 
+  // Create array of hashtags from req.body.text and process them
   const hashtags = tweetToCreate.text.match(/#\w+/g);
-
   if (hashtags) tweet = await createHashtags(hashtags, tweet);
 
   if (req.files) {
@@ -70,6 +68,11 @@ exports.updateTweet = asyncHandler(async (req, res, next) => {
     new: true,
   });
 
+  // Remove existing hashtags and process any new ones
+  tweet = await removeHashtags(tweet);
+  const hashtags = fieldsToUpdate.text.match(/#\w+/g);
+  if (hashtags) tweet = await createHashtags(hashtags, tweet);
+
   if (req.files) {
     file = req.files.file;
     await uploadFile(file, tweet, 'image', 'tweets');
@@ -89,6 +92,8 @@ exports.deleteTweet = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Tweet not found with id ${req.params.id}`, 404)
     );
   }
+
+  await removeHashtags(tweet);
 
   await deleteFile(tweet, 'image', false);
 
