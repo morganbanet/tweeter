@@ -13,7 +13,7 @@ const Retweet = require('../models/retweetModel');
 const Bookmark = require('../models/bookmarkModel');
 
 const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
-const { uploadFile } = require('../utils/storageBucket');
+const { uploadFile, deleteFile } = require('../utils/storageBucket');
 
 mongoose.connect(process.env.MONGO_URI);
 console.log('Database connected');
@@ -34,20 +34,28 @@ const users = parseJson('users');
 
 // Import data
 const importData = async () => {
+  console.log('Flushing old data before seeding...'.bgYellow);
+  await flushData(true);
+
   try {
     console.log('Seeding database...'.bgYellow);
-
-    // Flush data first
-    await Like.deleteMany();
-    await Retweet.deleteMany();
-    await Bookmark.deleteMany();
-    await Comment.deleteMany();
-    await Tweet.deleteMany();
-    await Follow.deleteMany();
-    await User.deleteMany();
-
     // Insert sample users
     const insertedUsers = await User.create(users);
+
+    for (let x = 0; x < insertedUsers.length; x++) {
+      const insertedUser = insertedUsers[x];
+
+      let userId = JSON.stringify(insertedUser._id).split(`"`)[1];
+      const user = await User.findById(userId);
+
+      const file = {
+        name: `avatar_${x + 1}.jpg`,
+        path: `${__dirname}/../_data/images/avatars/avatar_${x + 1}.jpg`,
+      };
+
+      const options = { local: true };
+      await uploadFile(file, user, 'avatar', 'avatars', options);
+    }
 
     console.log('Database successfuly seeded!'.bgGreen);
 
@@ -59,9 +67,9 @@ const importData = async () => {
 };
 
 // Flush data
-const flushData = async () => {
+const flushData = async (preSeed = false) => {
   try {
-    console.log('Flushing database...'.bgYellow);
+    !preSeed && console.log('Flushing database...'.bgYellow);
 
     await Like.deleteMany();
     await Retweet.deleteMany();
@@ -71,9 +79,9 @@ const flushData = async () => {
     await Follow.deleteMany();
     await User.deleteMany();
 
-    console.log('Database successfully flushed!'.bgGreen);
+    !preSeed && console.log('Database successfully flushed!'.bgGreen);
 
-    process.exit();
+    !preSeed && process.exit();
   } catch (error) {
     console.log(error);
     process.exit(1);

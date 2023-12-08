@@ -6,15 +6,25 @@ const { bucket } = require('../services/firebaseConfig');
 // the field on the doc object as a string (ie, 'avatar'), and the path
 // in the bucket as a string (ie, 'tweets' saves in tweets/filename)
 
-const uploadFile = async (file, document, field, path) => {
+const uploadFile = async (file, document, field, path, options = {}) => {
+  const { local } = options;
+
   await deleteFile(document, field);
 
   // Generate name
   const extension = file.name.split('.')[1];
   const filename = `tweeter_${path}_${uuid()}.${extension}`;
 
-  // Upload to bucket
-  await bucket.file(`${path}/${filename}`).save(file.data);
+  // Upload local file to bucket
+  if (local) {
+    const options = { destination: `${path}/${filename}` };
+    await bucket.upload(file.path, options);
+  }
+
+  // Upload file stored in memory to bucket
+  if (!local) {
+    await bucket.file(`${path}/${filename}`).save(file.data);
+  }
 
   // Get file url and name
   const fileRef = bucket.file(`${path}/${filename}`);

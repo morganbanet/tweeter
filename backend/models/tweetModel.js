@@ -42,16 +42,18 @@ const tweetSchema = new mongoose.Schema(
 );
 
 tweetSchema.pre(['deleteOne', 'deleteMany'], async function (next) {
-  const tweet = await this.model.findOne(this.getQuery());
+  const tweets = await this.model.find(this.getQuery());
 
-  if (tweet) {
-    await Comment.deleteMany({ tweet: tweet.id });
-    await Like.deleteMany({ liked: tweet.id });
-    await Retweet.deleteMany({ retweeted: tweet.id });
-    await Bookmark.deleteMany({ bookmarked: tweet.id });
+  if (tweets) {
+    for (const tweet of tweets) {
+      await Comment.deleteMany({ tweet: tweet.id });
+      await Like.deleteMany({ liked: tweet.id });
+      await Retweet.deleteMany({ retweeted: tweet.id });
+      await Bookmark.deleteMany({ bookmarked: tweet.id });
 
-    await removeHashtags(tweet);
-    await deleteFile(tweet, 'image', false);
+      await removeHashtags(tweet);
+      await deleteFile(tweet, 'image', false);
+    }
   }
 
   next();

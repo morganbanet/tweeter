@@ -63,22 +63,24 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.pre(['deleteOne', 'deletMany'], async function (next) {
-  const user = await this.model.findOne(this.getQuery());
+userSchema.pre(['deleteOne', 'deleteMany'], async function (next) {
+  const users = await this.model.find(this.getQuery());
 
-  if (user) {
-    await Like.deleteMany({ user: user.id });
-    await Bookmark.deleteMany({ user: user.id });
-    await Retweet.deleteMany({ user: user.id });
+  if (users) {
+    for (const user of users) {
+      await Like.deleteMany({ user: user.id });
+      await Bookmark.deleteMany({ user: user.id });
+      await Retweet.deleteMany({ user: user.id });
 
-    await Comment.deleteMany({ user: user.id });
-    await Tweet.deleteMany({ user: user.id });
+      await Comment.deleteMany({ user: user.id });
+      await Tweet.deleteMany({ user: user.id });
 
-    await Follow.deleteMany({ user: user.id });
-    await Follow.deleteMany({ following: user.id });
+      await Follow.deleteMany({ user: user.id });
+      await Follow.deleteMany({ following: user.id });
 
-    await deleteFile(user, 'banner', false);
-    await deleteFile(user, 'avatar', false);
+      await deleteFile(user, 'avatar', false);
+      await deleteFile(user, 'banner', false);
+    }
   }
 
   next();

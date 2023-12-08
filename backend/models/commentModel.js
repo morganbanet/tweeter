@@ -36,11 +36,13 @@ const commentSchema = new mongoose.Schema(
 );
 
 commentSchema.pre(['deleteOne', 'deleteMany'], async function (next) {
-  const comment = await this.model.findOne(this.getQuery());
+  const comments = await this.model.find(this.getQuery());
 
-  if (comment) {
-    await Like.deleteMany({ liked: comment.id });
-    await deleteFile(comment, 'image', false);
+  if (comments) {
+    for (const comment of comments) {
+      await Like.deleteMany({ liked: comment.id });
+      await deleteFile(comment, 'image', false);
+    }
   }
 
   next();
