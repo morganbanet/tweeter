@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       unique: [true, 'Email already in use'],
       required: [true, 'Email cannot be blank'],
-      maxlength: [254, 'Email cannot exceed 254 characters'],
+      maxLength: [254, 'Email cannot exceed 254 characters'],
       match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Invalid email'],
     },
     role: {
@@ -47,11 +47,11 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, 'Password cannot be blank'],
-      minlength: [6, 'Password must be a minimum of 6 characters'],
+      minLength: [6, 'Password must be a minimum of 6 characters'],
       select: false,
       match: [
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
-        'Password must be a minimum of 6 characters, at least one letter, and one number',
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+        'Password must be a minimum eight characters, at least one letter, one number, and one special character',
       ],
     },
     passwordResetToken: String,

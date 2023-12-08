@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Aria Moonlight",
+    "email": "aria@example.com",
+    "bio": "Passionate about exploring the universe 🚀",
+    "password": "P@ssw0rd123"
+  },
+  {
+    "name": "Xavier Phoenix",
+    "email": "xavier@example.com",
+    "bio": "Tech enthusiast and avid gamer 🎮",
+    "password": "Gaming#2023"
+  },
+  {
+    "name": "Luna Starlight",
+    "email": "luna@example.com",
+    "bio": "Dreamer and aspiring artist 🎨",
+    "password": "ArtisticSoul22!"
+  },
+  {
+    "name": "Max Velocity",
+    "email": "max@example.com",
+    "bio": "Adventurer seeking thrilling experiences 🌍",
+    "password": "Adventure123!"
+  },
+  {
+    "name": "Zara Mystic",
+    "email": "zara@example.com",
+    "bio": "Believer in magic and positivity ✨",
+    "password": "MagicP@ss1"
+  },
+  {
+    "name": "Oliver Nightshade",
+    "email": "oliver@example.com",
+    "bio": "Night owl and book lover 📚",
+    "password": "BookWorm567!"
+  },
+  {
+    "name": "Nova Storm",
+    "email": "nova@example.com",
+    "bio": "Storm chaser and meteorology enthusiast ⚡",
+    "password": "WeatherPro22!"
+  },
+  {
+    "name": "Zane Quantum",
+    "email": "zane@example.com",
+    "bio": "Quantum physicist with a passion for science 🔬",
+    "password": "QuantumLeap55!"
+  },
+  {
+    "name": "Violet Echo",
+    "email": "violet@example.com",
+    "bio": "Musician and melody creator 🎶",
+    "password": "MusicalSoul88!"
+  },
+  {
+    "name": "Eva Serenade",
+    "email": "eva@example.com",
+    "bio": "Lover of nature and serenades in the moonlight 🌙",
+    "password": "NatureL0ver#"
+  },
+  {
+    "name": "Atlas Voyager",
+    "email": "atlas@example.com",
+    "bio": "Nomad and traveler exploring the world 🌏",
+    "password": "Wanderlust123!"
+  },
+  {
+    "name": "Ivy Enigma",
+    "email": "ivy@example.com",
+    "bio": "Solving mysteries and cracking codes 🔍",
+    "password": "CodeBreaker99!"
+  },
+  {
+    "name": "Phoenix Blaze",
+    "email": "phoenix@example.com",
+    "bio": "Fire dancer and pyrotechnic artist 🔥",
+    "password": "DanceWithFire22!"
+  },
+  {
+    "name": "Leo Stardust",
+    "email": "leo@example.com",
+    "bio": "Astrologer and stargazing enthusiast ✨",
+    "password": "CelestialWatcher1!"
+  },
+  {
+    "name": "Sasha Sable",
+    "email": "sasha@example.com",
+    "bio": "Fashionista and trendsetter 👗",
+    "password": "FashionForward77!"
+  },
+  {
+    "name": "Kai Zenith",
+    "email": "kai@example.com",
+    "bio": "Yoga instructor and mindfulness advocate 🧘‍♂️",
+    "password": "ZenLifestyle22!"
+  },
+  {
+    "name": "Elena Aurora",
+    "email": "elena@example.com",
+    "bio": "Aurora chaser and photographer 📸",
+    "password": "CapturingLight1!"
+  },
+  {
+    "name": "Quincy Thunder",
+    "email": "quincy@example.com",
+    "bio": "Electrician with a love for storms ⚡",
+    "password": "Thunderstruck88!"
+  },
+  {
+    "name": "Isabella Harmony",
+    "email": "isabella@example.com",
+    "bio": "Music composer and harmony seeker 🎵",
+    "password": "HarmonicNotes123!"
+  },
+  {
+    "name": "Lucas Nebula",
+    "email": "lucas@example.com",
+    "bio": "Astronomy enthusiast and starry-eyed dreamer 🌌",
+    "password": "StarryDreamer55!"
+  }
+]
