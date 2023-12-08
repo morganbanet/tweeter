@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Like = require('./likeModel');
 
 const commentSchema = new mongoose.Schema(
   {
@@ -31,5 +32,10 @@ const commentSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+commentSchema.pre('deleteOne', async function (next) {
+  await Like.deleteMany({ liked: this._conditions._id });
+  next();
+});
 
 module.exports = mongoose.model('Comment', commentSchema);

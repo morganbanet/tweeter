@@ -11,7 +11,7 @@ const {
   deleteComment,
 } = require('../controllers/commentController');
 
-router.use('/:tweetId/likes', likeRouter);
+router.use('/:commentId/likes', likeRouter);
 
 // prettier-ignore
 router.route('/')

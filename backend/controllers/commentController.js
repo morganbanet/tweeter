@@ -1,6 +1,7 @@
 const Tweet = require('../models/tweetModel');
 const Follow = require('../models/followModel');
 const Comment = require('../models/commentModel');
+const Like = require('../models/likeModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const advancedResults = require('../utils/advancedResults');
@@ -115,8 +116,6 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
   await deleteFile(comment, 'image', false);
 
   await comment.deleteOne();
-
-  // @Todo: Delete all associated likes
 
   res.status(200).json({ success: true, data: {} });
 });
