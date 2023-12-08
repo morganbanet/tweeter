@@ -113,8 +113,6 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
     );
   }
 
-  await deleteFile(comment, 'image', false);
-
   await comment.deleteOne();
 
   res.status(200).json({ success: true, data: {} });

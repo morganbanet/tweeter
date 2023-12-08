@@ -3,6 +3,14 @@ const slugify = require('slugify');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
+const Like = require('./likeModel');
+const Retweet = require('./retweetModel');
+const Bookmark = require('./bookmarkModel');
+const Tweet = require('./tweetModel');
+const Comment = require('./commentModel');
+const Follow = require('./followModel');
+const { deleteFile } = require('../utils/storageBucket');
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -55,7 +63,26 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Delete user data
+userSchema.pre(['deleteOne', 'deletMany'], async function (next) {
+  const user = await this.model.findOne(this.getQuery());
+
+  if (user) {
+    await Like.deleteMany({ user: user.id });
+    await Bookmark.deleteMany({ user: user.id });
+    await Retweet.deleteMany({ user: user.id });
+
+    await Comment.deleteMany({ user: user.id });
+    await Tweet.deleteMany({ user: user.id });
+
+    await Follow.deleteMany({ user: user.id });
+    await Follow.deleteMany({ following: user.id });
+
+    await deleteFile(user, 'banner', false);
+    await deleteFile(user, 'avatar', false);
+  }
+
+  next();
+});
 
 // Create slug from User name
 userSchema.pre('save', async function (next) {

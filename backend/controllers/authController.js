@@ -234,46 +234,6 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Password is incorrect', 401));
   }
 
-  // Pre-delete middleware on model?
-
-  // @Todo: Delete user following
-  // @Todo: Delete user bookmarks
-  // @Todo: Delete user retweets
-  // @Todo: Delete user likes
-
-  // @Todo: Delete user comments and all associated comments data:
-  // Comment likes
-  // Delete comment bucket files
-  // Delete comments
-
-  // @Todo: Delete user tweets and all associated tweets data:
-  // Comment likes
-  // Delete comment bucket files
-  // Delete comments
-  // Tweet likes
-  // Retweets
-  // Bookmarks
-  // Delete tweet bucket files
-  // Tweet
-
-  // Delete comments & bucket files
-  const comments = await Comment.find({ user: req.user.id });
-  comments.forEach(async (comm) => await deleteFile(comm, 'image', false));
-  await Comment.deleteMany({ user: req.user.id });
-
-  // Delete tweets & bucket files
-  const tweets = await Tweet.find({ user: req.user.id });
-  tweets.forEach(async (tweet) => await deleteFile(tweet, 'image', false));
-  await Tweet.deleteMany({ user: user.id });
-
-  // Delete likes
-  await Like.deleteMany({ user: req.user.id });
-
-  // Delete user avatar and banner & bucket files
-  await deleteFile(user, 'avatar', false);
-  await deleteFile(user, 'banner', false);
-
-  // Delete user
   await user.deleteOne();
 
   res.status(200).clearCookie('jwt').json({ success: true, data: {} });

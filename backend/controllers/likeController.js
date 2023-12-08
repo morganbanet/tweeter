@@ -1,4 +1,6 @@
 const Like = require('../models/likeModel');
+const Tweet = require('../models/tweetModel');
+const Comment = require('../models/commentModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const advancedResults = require('../utils/advancedResults');
@@ -42,6 +44,17 @@ exports.createLike = asyncHandler(async (req, res, next) => {
     liked: paramsId,
     likedType: type,
   };
+
+  // Check if resource to like exists
+  let model;
+  if (req.params.tweetId) model = await Tweet.findById(paramsId);
+  if (req.params.commentId) model = await Comment.findById(paramsId);
+
+  if (!model) {
+    return next(
+      new ErrorResponse(`${type} not found with id ${paramsId}`, 404)
+    );
+  }
 
   const likeExists = await Like.find(likeToCreate);
 

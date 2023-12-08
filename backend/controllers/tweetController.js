@@ -4,7 +4,7 @@ const ErrorResponse = require('../utils/ErrorResponse');
 const advancedResults = require('../utils/advancedResults');
 const unionCollections = require('../utils/unionCollections');
 const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
-const { uploadFile, deleteFile } = require('../utils/storageBucket');
+const { uploadFile } = require('../utils/storageBucket');
 
 // @desc        Get all tweets
 // @route       GET /api/tweets
@@ -93,21 +93,7 @@ exports.deleteTweet = asyncHandler(async (req, res, next) => {
     );
   }
 
-  await removeHashtags(tweet);
-
-  await deleteFile(tweet, 'image', false);
-
   await tweet.deleteOne();
-
-  // @Todo: Delete user tweets and all associated tweets data:
-  // Comment likes
-  // Delete comment bucket files
-  // Delete comments
-  // Tweet likes
-  // Retweets
-  // Bookmarks
-  // Delete tweet bucket files
-  // Tweet
 
   res.status(200).json({ success: true, data: {} });
 });

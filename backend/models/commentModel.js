@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+
 const Like = require('./likeModel');
+const { deleteFile } = require('../utils/storageBucket');
 
 const commentSchema = new mongoose.Schema(
   {
@@ -33,8 +35,14 @@ const commentSchema = new mongoose.Schema(
   }
 );
 
-commentSchema.pre('deleteOne', async function (next) {
-  await Like.deleteMany({ liked: this._conditions._id });
+commentSchema.pre(['deleteOne', 'deleteMany'], async function (next) {
+  const comment = await this.model.findOne(this.getQuery());
+
+  if (comment) {
+    await Like.deleteMany({ liked: comment.id });
+    await deleteFile(comment, 'image', false);
+  }
+
   next();
 });
 
