@@ -31,7 +31,7 @@ exports.removeHashtags = async (document) => {
 
   for (const hashtag of document.hashtags) {
     const existingTag = await Hashtag.findById(hashtag);
-    existingTag.modifyCount(-1);
+    await existingTag.modifyCount(-1);
 
     document.hashtags = document.hashtags.filter((tag) => tag !== hashtag);
 
