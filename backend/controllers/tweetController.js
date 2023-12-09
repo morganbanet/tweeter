@@ -40,9 +40,6 @@ exports.createTweet = asyncHandler(async (req, res, next) => {
 
   if (req.files) {
     file = req.files.file;
-
-    console.log(file);
-
     await uploadFile(file, tweet, 'image', 'tweets');
   }
 

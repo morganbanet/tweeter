@@ -12,6 +12,7 @@ const Like = require('../models/likeModel');
 const Retweet = require('../models/retweetModel');
 const Bookmark = require('../models/bookmarkModel');
 
+const { createHashtags } = require('./hashtagHelper');
 const { uploadFile } = require('./storageBucket');
 
 mongoose.connect(process.env.MONGO_URI);
@@ -24,6 +25,7 @@ const parseJson = (filename) => {
 
 const users = parseJson('users');
 const tweets = parseJson('tweets');
+const comments = parseJson('comments');
 
 const avatars = fs.readdirSync(`${__dirname}/../_data/images/avatars`);
 const banners = fs.readdirSync(`${__dirname}/../_data/images/banners`);
@@ -35,6 +37,7 @@ const importData = async () => {
 
     console.log('Seeding database...'.bgYellow);
     await insertSampleUsers();
+    await insertSampleTweets();
 
     console.log('Database successfully seeded!'.bgGreen);
     process.exit();
@@ -71,24 +74,33 @@ const insertSampleUsers = async () => {
   const sampleUsers = await User.create(users);
 
   let userIndex = 0;
-  let tweetIndex = 0;
 
   for (const sampleUser of sampleUsers) {
     const user = await User.findById(sampleUser.id);
 
     // await uploadUserProfileMedia(user, userIndex);
     await genUserFollowers(user, sampleUsers);
-    await genUserTweets(user, tweetIndex);
 
     userIndex = userIndex + 1;
-    tweetIndex = tweetIndex + 2;
   }
 };
 
-const genUserTweets = async (user, tweetIndex) => {
-  for (let x = 0; x < 2; x++) {
-    tweetIndex = tweetIndex + x;
-    await Tweet.create({ user, text: tweets[tweetIndex].text });
+const insertSampleTweets = async () => {
+  const sampleUsers = await User.find({});
+
+  let tweetIndex = 0;
+
+  for (const sampleUser of sampleUsers) {
+    for (let x = 0; x < 2; x++) {
+      const user = sampleUser.id;
+      const text = tweets[tweetIndex].text;
+      const tweet = await Tweet.create({ user, text });
+
+      const hashtags = text.match(/#\w+/g);
+      if (hashtags) await createHashtags(hashtags, tweet);
+
+      tweetIndex = tweetIndex + 1;
+    }
   }
 };
 

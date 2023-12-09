@@ -4,7 +4,7 @@ const Like = require('./likeModel');
 const Retweet = require('./retweetModel');
 const Bookmark = require('./bookmarkModel');
 const Comment = require('./commentModel');
-const { removeHashtags } = require('../utils/hashtagHelper');
+const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
 const { deleteFile } = require('../utils/storageBucket');
 
 const tweetSchema = new mongoose.Schema(
