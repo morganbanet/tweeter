@@ -3,8 +3,8 @@ const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const advancedResults = require('../utils/advancedResults');
 const unionCollections = require('../utils/unionCollections');
-const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
 const { uploadFile } = require('../utils/storageBucket');
+const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
 
 // @desc        Get all tweets
 // @route       GET /api/tweets

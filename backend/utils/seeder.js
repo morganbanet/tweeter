@@ -38,6 +38,7 @@ const importData = async () => {
     console.log('Seeding database...'.bgYellow);
     await insertSampleUsers();
     await insertSampleTweets();
+    await insertSampleComments();
 
     console.log('Database successfully seeded!'.bgGreen);
     process.exit();
@@ -85,6 +86,17 @@ const insertSampleUsers = async () => {
   }
 };
 
+const genUserFollowers = async (user, sampleUsers) => {
+  const usersToFollow = genRandomNums(2, 14, 19);
+
+  for (let x = 0; x < usersToFollow.length; x++) {
+    const userToFollow = usersToFollow[x];
+    const following = sampleUsers[userToFollow].id;
+
+    await Follow.create({ user, following });
+  }
+};
+
 const insertSampleTweets = async () => {
   const sampleUsers = await User.find({});
 
@@ -104,24 +116,44 @@ const insertSampleTweets = async () => {
   }
 };
 
-const genUserFollowers = async (user, sampleUsers) => {
-  const usersToFollow = genRandomNums(8, 19);
+const insertSampleComments = async () => {
+  const sampleUsers = await User.find({});
+  const tweets = await Tweet.find({});
 
-  for (let x = 0; x < usersToFollow.length; x++) {
-    const userToFollow = usersToFollow[x];
-    const following = sampleUsers[userToFollow].id;
+  let commentIndex = 0;
 
-    await Follow.create({ user, following });
+  for (const sampleUser of sampleUsers) {
+    const tweetsToComment = genRandomNums(4, 4, 39);
+
+    for (let x = 0; x < tweetsToComment.length; x++) {
+      const tweetToComment = tweetsToComment[x];
+
+      const user = sampleUser.id;
+      const tweet = tweets[tweetToComment].id;
+      const text = comments[commentIndex].text;
+
+      const comment = await Comment.create({ user, tweet, text });
+
+      const hashtags = text.match(/#\w+/g);
+      if (hashtags) await createHashtags(hashtags, comment);
+
+      commentIndex = commentIndex + 1;
+    }
   }
 };
 
-const genRandomNums = (maxLength, maxNumber) => {
-  const arryLength = Math.floor(Math.random() * maxLength) + 2;
+const genRandomNums = (minLength, maxLength, maxNumber) => {
+  let arrLength;
+
+  maxLength === minLength
+    ? (arrLength = maxLength)
+    : (arrLength =
+        Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength);
 
   let uniqueArr = [];
 
-  for (let x = 0; x < arryLength; x++) {
-    const randomNum = Math.floor(Math.random() * maxNumber);
+  for (let x = 0; x < arrLength; x++) {
+    const randomNum = Math.floor(Math.random() * maxNumber + 1);
 
     uniqueArr.includes(randomNum) ? (x = x - 1) : uniqueArr.push(randomNum);
   }

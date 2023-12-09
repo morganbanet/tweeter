@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const Like = require('./likeModel');
 const { deleteFile } = require('../utils/storageBucket');
+const { removeHashtags } = require('../utils/hashtagHelper');
 
 const commentSchema = new mongoose.Schema(
   {
@@ -29,6 +30,13 @@ const commentSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    hashtags: [
+      {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'Hashtag',
+      },
+    ],
   },
   {
     timestamps: true,
@@ -41,6 +49,7 @@ commentSchema.pre(['deleteOne', 'deleteMany'], async function (next) {
   if (comments) {
     for (const comment of comments) {
       await Like.deleteMany({ liked: comment.id });
+      await removeHashtags(comment);
       await deleteFile(comment, 'image', false);
     }
   }

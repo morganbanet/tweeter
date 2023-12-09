@@ -6,6 +6,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const advancedResults = require('../utils/advancedResults');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
+const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
 
 // @desc        Get comments for a tweet
 // @route       GET /api/tweets/:tweetId/comments
@@ -64,6 +65,9 @@ exports.createComment = asyncHandler(async (req, res, next) => {
 
   const comment = await Comment.create(req.body);
 
+  const hashtags = req.body.text.match(/#\w+/g);
+  if (hashtags) comment = await createHashtags(hashtags, comment);
+
   if (req.files) {
     file = req.files.file;
     await uploadFile(file, comment, 'image', 'comments');
@@ -92,6 +96,10 @@ exports.updateComment = asyncHandler(async (req, res, next) => {
     runValidators: true,
     new: true,
   });
+
+  comment = await removeHashtags(comment);
+  const hashtags = fieldsToUpdate.text.match(/#\w+/g);
+  if (hashtags) comment = await createHashtags(hashtags, comment);
 
   if (req.files) {
     file = req.files.file;
