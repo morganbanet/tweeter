@@ -18,7 +18,9 @@ const followSchema = new mongoose.Schema(
   }
 );
 
-// Make sure user can only like a post once
+// Make sure users can only follow once, documents should be able to
+// exist both ways
 followSchema.index({ following: 1, user: 1 }, { unique: true });
+followSchema.index({ user: 1, following: 1 }, { unique: true });
 
 module.exports = mongoose.model('Follow', followSchema);
