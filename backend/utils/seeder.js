@@ -12,8 +12,7 @@ const Like = require('../models/likeModel');
 const Retweet = require('../models/retweetModel');
 const Bookmark = require('../models/bookmarkModel');
 
-const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
-const { uploadFile, deleteFile } = require('../utils/storageBucket');
+const { uploadFile } = require('./storageBucket');
 
 mongoose.connect(process.env.MONGO_URI);
 console.log('Database connected');
@@ -23,73 +22,21 @@ const parseJson = (filename) => {
   return JSON.parse(fs.readFileSync(file));
 };
 
-// Json files used for seeding
 const users = parseJson('users');
-// const tweets = parseJson('tweets');
-// const comments = parseJson('comments');
-// const likes = parseJson('likes');
-// const retweets = parseJson('retweets');
-// const bookmarks = parseJson('bookmarks');
+const tweets = parseJson('tweets');
 
-// Import data
+const avatars = fs.readdirSync(`${__dirname}/../_data/images/avatars`);
+const banners = fs.readdirSync(`${__dirname}/../_data/images/banners`);
+
 const importData = async () => {
-  console.log('Flushing old data before seeding...'.bgYellow);
-  await flushData(true);
-
   try {
+    console.log('Flushing old data...'.bgYellow);
+    await flush();
+
     console.log('Seeding database...'.bgYellow);
+    await insertSampleUsers();
 
-    // Insert sample users
-    const insertedUsers = await User.create(users);
-
-    for (let x = 0; x < insertedUsers.length; x++) {
-      // Get insertedUser id in string format
-      let userId = JSON.stringify(insertedUsers[x]._id).split(`"`)[1];
-      const user = await User.findById(userId);
-
-      // User sample image files config
-      const avatar = {
-        name: `avatar_${x + 1}.jpg`,
-        path: `${__dirname}/../_data/images/avatars/avatar_${x + 1}.jpg`,
-      };
-      const banner = {
-        name: `banner_${x + 1}.jpg`,
-        path: `${__dirname}/../_data/images/banners/banner_${x + 1}.jpg`,
-      };
-
-      // Upload sample avatar & banner for each user
-      const options = { local: true };
-      // await uploadFile(avatar, user, 'avatar', 'avatars', options);
-      // await uploadFile(banner, user, 'banner', 'banners', options);
-
-      // Generate following & followers for each user
-      const amountToFollow = Math.floor(Math.random() * 8) + 2;
-
-      // prettier-ignore
-      function getRandomNumberNoRepeat(length) {
-        let numToPick = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,16,18,19];
-        return numToPick.sort(() => Math.random() - 0.5).slice(0, length);
-      }
-
-      // Get an array of unique numbers
-      const usersToFollow = getRandomNumberNoRepeat(amountToFollow);
-
-      // Use the unique numbers as the index of insertedUsers
-      for (let x = 0; x < usersToFollow.length; x++) {
-        const randomUserIndex = usersToFollow[x];
-
-        const userToFollow = JSON.stringify(
-          insertedUsers[randomUserIndex]._id
-        ).split(`"`)[1];
-
-        const followToCreate = { user, following: userToFollow };
-
-        await Follow.create(followToCreate);
-      }
-    }
-
-    console.log('Database successfuly seeded!'.bgGreen);
-
+    console.log('Database successfully seeded!'.bgGreen);
     process.exit();
   } catch (error) {
     console.log(error);
@@ -97,31 +44,92 @@ const importData = async () => {
   }
 };
 
-// Flush data
-const flushData = async (preSeed = false) => {
+const flushData = async () => {
   try {
-    !preSeed && console.log('Flushing database...'.bgYellow);
+    console.log('Flushing database...'.bgYellow);
+    await flush();
 
-    await Like.deleteMany();
-    await Retweet.deleteMany();
-    await Bookmark.deleteMany();
-    await Comment.deleteMany();
-    await Tweet.deleteMany();
-    await Follow.deleteMany();
-    await User.deleteMany();
-
-    !preSeed && console.log('Database successfully flushed!'.bgGreen);
-
-    !preSeed && process.exit();
+    console.log('Database successfully flushed'.bgGreen);
+    process.exit();
   } catch (error) {
     console.log(error);
     process.exit(1);
   }
 };
 
-// Check command flags
-if (process.argv[2] === '-f') {
-  flushData();
-} else {
-  importData();
-}
+const flush = async () => {
+  await Like.deleteMany();
+  await Retweet.deleteMany();
+  await Bookmark.deleteMany();
+  await Comment.deleteMany();
+  await Tweet.deleteMany();
+  await Follow.deleteMany();
+  await User.deleteMany();
+};
+
+const insertSampleUsers = async () => {
+  const sampleUsers = await User.create(users);
+
+  let userIndex = 0;
+  let tweetIndex = 0;
+
+  for (const sampleUser of sampleUsers) {
+    const user = await User.findById(sampleUser.id);
+
+    // await uploadUserProfileMedia(user, userIndex);
+    await genUserFollowers(user, sampleUsers);
+    await genUserTweets(user, tweetIndex);
+
+    userIndex = userIndex + 1;
+    tweetIndex = tweetIndex + 2;
+  }
+};
+
+const genUserTweets = async (user, tweetIndex) => {
+  for (let x = 0; x < 2; x++) {
+    tweetIndex = tweetIndex + x;
+    await Tweet.create({ user, text: tweets[tweetIndex].text });
+  }
+};
+
+const genUserFollowers = async (user, sampleUsers) => {
+  const usersToFollow = genRandomNums(8, 19);
+
+  for (let x = 0; x < usersToFollow.length; x++) {
+    const userToFollow = usersToFollow[x];
+    const following = sampleUsers[userToFollow].id;
+
+    await Follow.create({ user, following });
+  }
+};
+
+const genRandomNums = (maxLength, maxNumber) => {
+  const arryLength = Math.floor(Math.random() * maxLength) + 2;
+
+  let uniqueArr = [];
+
+  for (let x = 0; x < arryLength; x++) {
+    const randomNum = Math.floor(Math.random() * maxNumber);
+
+    uniqueArr.includes(randomNum) ? (x = x - 1) : uniqueArr.push(randomNum);
+  }
+
+  return uniqueArr;
+};
+
+const uploadUserProfileMedia = async (user, userIndex) => {
+  const avatar = createFileObject(avatars, userIndex);
+  const banner = createFileObject(banners, userIndex);
+
+  const options = { local: true };
+  await uploadFile(avatar, user, 'avatar', 'avatars', options);
+  await uploadFile(banner, user, 'banner', 'banners', options);
+};
+
+const createFileObject = (type, index) => {
+  const name = type[index];
+  const path = `${__dirname}/../_data/images/${name.split('_')[0]}s/${name}`;
+  return { name, path };
+};
+
+process.argv[2] === '-f' ? flushData() : importData();

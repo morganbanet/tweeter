@@ -18,9 +18,7 @@ const followSchema = new mongoose.Schema(
   }
 );
 
-// Make sure users can only follow once, documents should be able to
-// exist both ways
+// Make sure users can only follow the same person once
 followSchema.index({ following: 1, user: 1 }, { unique: true });
-followSchema.index({ user: 1, following: 1 }, { unique: true });
 
 module.exports = mongoose.model('Follow', followSchema);
