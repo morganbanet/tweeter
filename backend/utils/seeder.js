@@ -32,13 +32,28 @@ const banners = fs.readdirSync(`${__dirname}/../_data/images/banners`);
 
 const importData = async () => {
   try {
-    console.log('Flushing old data...'.bgYellow);
+    console.log('Flushing old data...'.bgRed);
     await flush();
 
-    console.log('Seeding database...'.bgYellow);
+    console.log('Seeding database...'.bgCyan);
+
+    console.log('Populating with users 👻 ...'.bgYellow);
     await insertSampleUsers();
+
+    console.log('Writing tweets 🦜 ...'.bgYellow);
     await insertSampleTweets();
+
+    console.log('Inserting comments 📖 ...'.bgYellow);
     await insertSampleComments();
+
+    console.log('Adding likes 🍻 ...'.bgYellow);
+    await genUserLikes();
+
+    console.log('Generating retweets 🚀 ...'.bgYellow);
+    await genUserRetweets();
+
+    console.log('Saving bookmarks 🔖 ... '.bgYellow);
+    await genUserBookmarks();
 
     console.log('Database successfully seeded!'.bgGreen);
     process.exit();
@@ -50,10 +65,10 @@ const importData = async () => {
 
 const flushData = async () => {
   try {
-    console.log('Flushing database...'.bgYellow);
+    console.log('Flushing database...'.bgRed);
     await flush();
 
-    console.log('Database successfully flushed'.bgGreen);
+    console.log('Database successfully flushed!'.bgGreen);
     process.exit();
   } catch (error) {
     console.log(error);
@@ -62,12 +77,25 @@ const flushData = async () => {
 };
 
 const flush = async () => {
+  console.log('Deleting likes 🚮 ...'.bgYellow);
   await Like.deleteMany();
+
+  console.log('Deleting retweets 🚮 ...'.bgYellow);
   await Retweet.deleteMany();
+
+  console.log('Deleting bookmarks 🚮 ...'.bgYellow);
   await Bookmark.deleteMany();
+
+  console.log('Deleting comments 🚮 ...'.bgYellow);
   await Comment.deleteMany();
+
+  console.log('Deleting tweets 🚮 ...'.bgYellow);
   await Tweet.deleteMany();
+
+  console.log('Deleting followers 🚮 ...'.bgYellow);
   await Follow.deleteMany();
+
+  console.log('Deleting users 🚮 ...'.bgYellow);
   await User.deleteMany();
 };
 
@@ -79,7 +107,7 @@ const insertSampleUsers = async () => {
   for (const sampleUser of sampleUsers) {
     const user = await User.findById(sampleUser.id);
 
-    // await uploadUserProfileMedia(user, userIndex);
+    await uploadUserProfileMedia(user, userIndex);
     await genUserFollowers(user, sampleUsers);
 
     userIndex = userIndex + 1;
@@ -142,6 +170,85 @@ const insertSampleComments = async () => {
   }
 };
 
+const genUserLikes = async () => {
+  const sampleUsers = await User.find({});
+  const tweets = await Tweet.find({});
+  const comments = await Comment.find({});
+
+  for (const sampleUser of sampleUsers) {
+    const tweetsToLike = genRandomNums(8, 26, 39);
+    const commentsToLike = genRandomNums(16, 32, 79);
+
+    for (let x = 0; x < tweetsToLike.length; x++) {
+      const tweetToLike = tweetsToLike[x];
+
+      const user = sampleUser.id;
+      const liked = tweets[tweetToLike].id;
+      const likedType = 'Tweet';
+
+      await Like.create({ user, liked, likedType });
+    }
+
+    for (let x = 0; x < commentsToLike.length; x++) {
+      const commentToLike = commentsToLike[x];
+
+      const user = sampleUser.id;
+      const liked = comments[commentToLike].id;
+      const likedType = 'Comment';
+
+      await Like.create({ user, liked, likedType });
+    }
+  }
+};
+
+const genUserRetweets = async () => {
+  const sampleUsers = await User.find({});
+  const tweets = await Tweet.find({});
+
+  // Four random users to make one retweet each
+  const usersToCreateRetweet = genRandomNums(4, 4, 19);
+  const tweetsToRetweet = genRandomNums(4, 4, 39);
+
+  for (let x = 0; x < usersToCreateRetweet.length; x++) {
+    const userToCreateRetweet = usersToCreateRetweet[x];
+    const tweetToRetweet = tweetsToRetweet[x];
+
+    const user = sampleUsers[userToCreateRetweet].id;
+    const retweeted = tweets[tweetToRetweet].id;
+
+    // Skip retweet if user tries to retweet own tweet
+    if (sampleUsers[userToCreateRetweet].id === tweets[tweetToRetweet].user) {
+      return;
+    }
+
+    await Retweet.create({ user, retweeted });
+  }
+};
+
+const genUserBookmarks = async () => {
+  const sampleUsers = await User.find({});
+  const tweets = await Tweet.find({});
+
+  // Seven users to create between one and three different bookmarks
+  const usersToCreateBookmarks = genRandomNums(7, 7, 19);
+
+  for (let x = 0; x < usersToCreateBookmarks.length; x++) {
+    const userToCreateBookmarks = usersToCreateBookmarks[x];
+
+    const tweetsToBookmark = genRandomNums(1, 3, 39);
+
+    for (let x = 0; x < tweetsToBookmark.length; x++) {
+      const tweetToBookmark = tweetsToBookmark[x];
+
+      const user = sampleUsers[userToCreateBookmarks].id;
+      const bookmarked = tweets[tweetToBookmark].id;
+
+      await Bookmark.create({ user, bookmarked });
+    }
+  }
+};
+
+// Generate array of random numbers
 const genRandomNums = (minLength, maxLength, maxNumber) => {
   let arrLength;
 
