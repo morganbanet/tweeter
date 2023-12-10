@@ -4,7 +4,7 @@
 // altQuery otherwise. Aggregation will not take place if a custom query
 // is present. Will return pagination and the results.
 
-const advancedResults = async (req, model, options) => {
+const advancedResults = async (req, model, options = {}) => {
   const { aggregate, altQuery, populate } = options;
   let { sort, page, limit, select, ...query } = req.query;
 

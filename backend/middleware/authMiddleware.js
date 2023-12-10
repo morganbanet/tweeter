@@ -13,11 +13,13 @@ exports.protect = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // Verify the token (will throw an error if no match)
+  // Verify the token against signature
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
   // Find the user via the tokens payload
   req.user = await User.findById(decoded.userId);
+
+  console.log(req.user);
 
   next();
 });

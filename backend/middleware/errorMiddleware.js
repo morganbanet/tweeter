@@ -10,8 +10,8 @@ const errorHandler = (err, req, res, next) => {
   error.message = err.message;
 
   // Dev debugging
-  console.log(err.errors);
-  // console.log(JSON.parse(JSON.stringify(error)));
+  // console.log(err.errors);
+  console.log(JSON.parse(JSON.stringify(error)));
 
   // Bad mongoose object id
   if (err.name === 'CastError') {
@@ -35,7 +35,7 @@ const errorHandler = (err, req, res, next) => {
   }
 
   // Json Web Token error
-  if (err.name === 'jsonWebTokenError') {
+  if (err.name === 'JsonWebTokenError') {
     const message = 'Not authorized to access this resource';
     error = new ErrorResponse(message, 401);
   }
