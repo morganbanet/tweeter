@@ -1,14 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 :root {
   --theme-color: #2f80ed;
   --background-color: #f2f2f2;
-  --font-family: Noto Sans;
+
+  --primary-font: Poppins, sans-serif;
+  --secondary-font: Noto Sans, sans-serif;
   --font-color: #333;
 }
 
 body {
   margin: 0;
+  font-family: var(--primary-font);
   background-color: var(--background-color);
 }
 
@@ -17,14 +20,14 @@ body {
   padding: 0 1rem;
   display: flex;
   justify-content: center;
-  /* background-color: #fff; */
+  background-color: #fff;
 
-  background-color: grey;
+  /* background-color: grey; */
 }
 
 .nav-login {
   color: var(--font-color);
-  font-family: var(--font-family);
+  font-family: var(--secondary-font);
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 700;
@@ -35,6 +38,8 @@ body {
 
 .navbar-inner {
   width: 100%;
+  height: 100%;
+  max-height: 4.26931rem;
   max-width: 81rem;
   height: 100%;
   display: flex;
@@ -44,12 +49,70 @@ body {
   background-color: white;
 }
 
-.site-logo > img {
+.site-logo {
+  color: var(--font-color);
+  font-family: var(--primary-font);
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.03938rem;
+  text-decoration: none;
+}
+
+.site-logo > div {
+  display: flex;
+  align-items: flex-end;
+}
+
+.site-logo > div > img {
   width: 2.5625rem;
   height: 1.80769rem;
   flex-shrink: 0;
 }
 
-.site-logo > span {
+.site-logo > div > span {
   display: none;
+}
+
+.nav-tabs {
+  display: none;
+}
+
+@media (min-width: 1140px) {
+  .site-logo > div > span {
+    margin-left: 0.91rem;
+    display: inline;
+  }
+
+  .nav-tabs {
+    display: inline;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-tabs > a {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-left: 5rem;
+    color: #828282;
+    font-family: var(--primary-font);
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.03063rem;
+    text-decoration: none;
+  }
+
+  .nav-tabs > a:first-of-type {
+    margin-left: 0;
+  }
+
+  .nav-tabs > a.active {
+    color: var(--theme-color);
+    border-bottom: 2px solid var(--theme-color);
+  }
 }
