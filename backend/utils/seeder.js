@@ -8,6 +8,7 @@ const User = require('../models/userModel');
 const Follow = require('../models/followModel');
 const Tweet = require('../models/tweetModel');
 const Comment = require('../models/commentModel');
+const Hashtag = require('../models/hashtagModel');
 const Like = require('../models/likeModel');
 const Retweet = require('../models/retweetModel');
 const Bookmark = require('../models/bookmarkModel');
@@ -29,6 +30,7 @@ const comments = parseJson('comments');
 
 const avatars = fs.readdirSync(`${__dirname}/../_data/images/avatars`);
 const banners = fs.readdirSync(`${__dirname}/../_data/images/banners`);
+const tweetImages = fs.readdirSync(`${__dirname}/../_data/images/tweets`);
 
 const importData = async () => {
   try {
@@ -92,6 +94,9 @@ const flush = async () => {
   console.log('Deleting tweets 🚮 ...'.bgYellow);
   await Tweet.deleteMany();
 
+  console.log(`Deleting hashtags 🚮 ...`.bgYellow);
+  await Hashtag.deleteMany();
+
   console.log('Deleting followers 🚮 ...'.bgYellow);
   await Follow.deleteMany();
 
@@ -114,6 +119,15 @@ const insertSampleUsers = async () => {
   }
 };
 
+const uploadUserProfileMedia = async (user, userIndex) => {
+  const avatar = createFileObject(avatars, userIndex);
+  const banner = createFileObject(banners, userIndex);
+
+  const options = { local: true };
+  await uploadFile(avatar, user, 'avatar', 'avatars', options);
+  await uploadFile(banner, user, 'banner', 'banners', options);
+};
+
 const genUserFollowers = async (user, sampleUsers) => {
   const usersToFollow = genRandomNums(2, 14, 19);
 
@@ -129,12 +143,22 @@ const insertSampleTweets = async () => {
   const sampleUsers = await User.find({});
 
   let tweetIndex = 0;
+  let imageIndex = 0;
+
+  const tweetsToHaveImages = genRandomNums(16, 16, 39);
 
   for (const sampleUser of sampleUsers) {
     for (let x = 0; x < 2; x++) {
       const user = sampleUser.id;
       const text = tweets[tweetIndex].text;
+
       const tweet = await Tweet.create({ user, text });
+
+      if (tweetsToHaveImages.includes(tweetIndex)) {
+        await uploadTweetMedia(tweet, imageIndex);
+
+        imageIndex = imageIndex + 1;
+      }
 
       const hashtags = text.match(/#\w+/g);
       if (hashtags) await createHashtags(hashtags, tweet);
@@ -142,6 +166,13 @@ const insertSampleTweets = async () => {
       tweetIndex = tweetIndex + 1;
     }
   }
+};
+
+const uploadTweetMedia = async (tweet, index) => {
+  const file = createFileObject(tweetImages, index);
+
+  const options = { local: true };
+  await uploadFile(file, tweet, 'image', 'tweets', options);
 };
 
 const insertSampleComments = async () => {
@@ -266,15 +297,6 @@ const genRandomNums = (minLength, maxLength, maxNumber) => {
   }
 
   return uniqueArr;
-};
-
-const uploadUserProfileMedia = async (user, userIndex) => {
-  const avatar = createFileObject(avatars, userIndex);
-  const banner = createFileObject(banners, userIndex);
-
-  const options = { local: true };
-  await uploadFile(avatar, user, 'avatar', 'avatars', options);
-  await uploadFile(banner, user, 'banner', 'banners', options);
 };
 
 const createFileObject = (type, index) => {
