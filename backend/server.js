@@ -6,6 +6,12 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 
+const { rateLimit } = require('express-rate-limit');
+const sanitizer = require('express-html-sanitizer');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const hpp = require('hpp');
+
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const followRoutes = require('./routes/followRoutes');
@@ -28,6 +34,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(fileUpload());
 app.use(cookieParser());
+
+// Security packages
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  limit: 100, // Requests per window
+});
+app.use(limiter);
+const sanitizeReqBody = sanitizer();
+app.use(sanitizeReqBody);
+app.use(mongoSanitize());
+app.use(helmet());
+app.use(hpp());
 
 // Morgan config
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));

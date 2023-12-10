@@ -19,8 +19,6 @@ exports.protect = asyncHandler(async (req, res, next) => {
   // Find the user via the tokens payload
   req.user = await User.findById(decoded.userId);
 
-  console.log(req.user);
-
   next();
 });
 
