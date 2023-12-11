@@ -9,6 +9,10 @@
   --font-color: #333;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: var(--primary-font);
@@ -99,15 +103,15 @@ body {
     display: inline;
     height: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    position: relative;
   }
 
   .nav-tabs > a {
-    width: 5rem;
-    height: 100%;
-    margin-left: 3.78rem;
+    margin: 0 0 1rem 5rem;
+    padding: 0.13rem 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     color: #828282;
     font-family: var(--primary-font);
@@ -125,7 +129,21 @@ body {
 
   .nav-tabs > a.active {
     color: var(--theme-color);
-    border-bottom: 0.1875rem solid var(--theme-color);
+    font-family: var(--primary-font);
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.03063rem;
+  }
+
+  .nav-tabs > a.active > div {
+    width: 5rem;
+    height: 0.1875rem;
+    background-color: var(--theme-color);
+    border-radius: 0.5rem 0.5rem 0rem 0rem;
+    position: absolute;
+    bottom: 0;
   }
 
   .current-user > span {
@@ -138,6 +156,10 @@ body {
     line-height: normal;
     letter-spacing: -0.02625rem;
     display: inline;
+  }
+
+  .current-user:hover {
+    cursor: pointer;
   }
 
   .fa-caret-down {

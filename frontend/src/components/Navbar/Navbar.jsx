@@ -14,9 +14,17 @@ function Navbar() {
 
         {userInfo && (
           <div className="nav-tabs">
-            <NavLink to="/">Home</NavLink>
-            <NavLink to="/explore">Explore</NavLink>
-            <NavLink to="/bookmarks">Bookmarks</NavLink>
+            <NavLink to="/">
+              Home <div />
+            </NavLink>
+
+            <NavLink to="/explore">
+              Explore <div />
+            </NavLink>
+
+            <NavLink to="/bookmarks">
+              Bookmarks <div />
+            </NavLink>
           </div>
         )}
 
@@ -24,7 +32,7 @@ function Navbar() {
           <div className="current-user">
             <img src={userInfo.avatar.url} alt="profile avatar" />
             <span>{userInfo.name}</span>
-            <i className="fa-solid fa-caret-down" />
+            <i className="fa-solid fa-caret-down" data-testid="caret-down" />
           </div>
         )}
       </div>
