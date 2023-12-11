@@ -21,7 +21,7 @@ router.use('/:tweetId/bookmarks', bookmarkRouter);
 
 // prettier-ignore
 router.route('/')
-  .get(getTweets)
+  .get(protect, getTweets)
   .post(protect, createTweet);
 
 // prettier-ignore
