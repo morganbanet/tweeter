@@ -19,15 +19,13 @@ body {
   background-color: var(--background-color);
 }
 
+/* ----------------------------------------------------------- navbar */
 .navbar-container {
   height: 4.26931rem;
   padding: 0 1rem;
   display: flex;
   justify-content: center;
   background-color: #fff;
-
-  /* debugging, remove once done */
-  /* background-color: grey; */
 }
 
 .navbar-inner {
@@ -39,7 +37,6 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   background-color: white;
 }
 
@@ -91,6 +88,55 @@ body {
 
 .fa-caret-down {
   display: none;
+}
+
+/* ------------------------------------------------------- mobile nav */
+.mobile-nav-container {
+  width: 100%;
+  height: 4.26931rem;
+  padding: 0 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+}
+
+.mobile-nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-nav-inner > a {
+  width: 7.5rem;
+  height: 2.57306rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #828282;
+  border-radius: 0.5rem;
+  text-decoration: none;
+}
+
+.mobile-nav-inner > a.active {
+  color: var(--theme-color);
+}
+
+.mobile-nav-inner > a.active > div {
+  width: 5rem;
+  height: 0.1875rem;
+  background-color: var(--theme-color);
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
+  position: absolute;
+  bottom: 0;
+}
+
+.fa-house,
+.fa-compass,
+.fa-bookmark {
+  font-size: 1.2rem;
 }
 
 @media (min-width: 1140px) {
@@ -165,5 +211,9 @@ body {
   .fa-caret-down {
     margin-left: 1.21rem;
     display: inline;
+  }
+
+  .mobile-nav-container {
+    display: none;
   }
 }
