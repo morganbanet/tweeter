@@ -1,8 +1,18 @@
+import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import Dropdown from '../Dropdown/Dropdown';
 
 function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
   const { userInfo } = useAuthContext();
+
+  const handleClick = (e) => {
+    if (e.target.classList.contains('nav-dropdown')) return;
+    setIsOpen(!isOpen);
+  };
 
   return (
     <nav className="navbar-container">
@@ -29,11 +39,14 @@ function Navbar() {
         )}
 
         {userInfo && (
-          <div className="current-user">
-            <img src={userInfo.avatar.url} alt="profile avatar" />
-            <span>{userInfo.name}</span>
-            <i className="fa-solid fa-caret-down" data-testid="caret-down" />
-          </div>
+          <ClickAwayListener onClickAway={() => setIsOpen(false)}>
+            <div className="current-user" onClick={(e) => handleClick(e)}>
+              <img src={userInfo.avatar.url} alt="profile avatar" />
+              <span>{userInfo.name}</span>
+              <i className="fa-solid fa-caret-down" data-testid="caret-down" />
+              {isOpen && <Dropdown />}
+            </div>
+          </ClickAwayListener>
         )}
       </div>
     </nav>
