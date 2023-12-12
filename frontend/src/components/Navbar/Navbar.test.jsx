@@ -74,4 +74,27 @@ describe('Navbar', async () => {
     menuItem = screen.queryByRole('link', { name: /my profile/i });
     expect(menuItem).toBeInTheDocument();
   });
+
+  it('closes the dropdown menu when clicked outside', async () => {
+    useAuthContext.mockReturnValue({ userInfo });
+
+    user.setup();
+
+    render(<Navbar />);
+
+    let menuItem = screen.queryByRole('link', { name: /my profile/i });
+    expect(menuItem).toBeNull();
+
+    const profileImage = screen.getByAltText('profile avatar');
+    await user.click(profileImage);
+
+    menuItem = screen.getByRole('link', { name: /my profile/i });
+    expect(menuItem).toBeInTheDocument();
+
+    const homeLink = screen.getByRole('link', { name: /home/i });
+    await user.click(homeLink);
+
+    menuItem = screen.queryByRole('link', { name: /my profile/i });
+    expect(menuItem).toBeNull();
+  });
 });
