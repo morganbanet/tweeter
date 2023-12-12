@@ -1,6 +1,13 @@
 import { NavLink } from 'react-router-dom';
+import { useLogout } from '../../hooks/auth/useLogout';
 
 function Dropdown() {
+  const { logout } = useLogout();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className="nav-dropdown">
       <div className="menu-items">
@@ -27,11 +34,11 @@ function Dropdown() {
       </div>
 
       <div className="menu-logout">
-        <div>
+        <div onClick={() => handleLogout()}>
           <div>
             <i className="fa-solid fa-arrow-right-from-bracket"></i>
           </div>
-          <NavLink to="/settings">Logout</NavLink>
+          <NavLink to="/">Logout</NavLink>
         </div>
       </div>
     </div>
