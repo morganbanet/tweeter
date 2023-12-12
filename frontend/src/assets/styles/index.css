@@ -140,9 +140,9 @@ body {
 
 /* ----------------------------------------------------- nav dropdown */
 .nav-dropdown {
-  width: 12.00225rem;
-  height: 13.89rem;
+  padding: 0.95rem 0.87rem;
   display: flex;
+  flex-direction: column;
   position: absolute;
   right: 0;
   top: 4.6887rem;
@@ -151,6 +151,65 @@ body {
   background: #fff;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
   cursor: default;
+}
+
+.menu-items {
+  border-bottom: 0.0625rem solid #e0e0e0;
+}
+
+.menu-items > div,
+.menu-logout > div {
+  width: 10.25738rem;
+  height: 2.44694rem;
+  padding: 0 0.73rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.menu-items > div:last-of-type {
+  margin-bottom: 0.66rem;
+}
+
+.menu-logout {
+  margin-top: 0.66rem;
+}
+
+.menu-items > div > div {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.menu-items > div > div > i,
+.menu-logout > div > div > i {
+  font-size: 1rem;
+}
+
+.menu-items > div > a,
+.menu-logout > div > a {
+  width: 100%;
+  margin-left: 0.63rem;
+  color: #4f4f4f;
+  font-family: var(--secondary-font);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.02625rem;
+  text-decoration: none;
+}
+
+.menu-logout > div > a,
+.fa-solid.fa-arrow-right-from-bracket {
+  color: #eb5757;
+}
+
+.fa-solid.fa-user-group {
+  font-size: 0.8rem;
 }
 
 @media (min-width: 1140px) {
@@ -230,5 +289,10 @@ body {
 
   .mobile-nav-container {
     display: none;
+  }
+
+  .menu-items > div:hover,
+  .menu-logout > div:hover {
+    background: #f2f2f2;
   }
 }
