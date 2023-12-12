@@ -60,7 +60,7 @@ body {
 }
 
 .site-logo > span {
-  display: none;
+  margin-left: 0.91rem;
 }
 
 .nav-tabs {
@@ -214,12 +214,78 @@ body {
   font-size: 0.8rem;
 }
 
-@media (min-width: 1140px) {
-  .site-logo > span {
-    margin-left: 0.91rem;
-    display: inline;
-  }
+/* ------------------------------------------------------ home screen */
+main {
+  width: 100%;
+  padding: 0 1rem;
+  margin-top: 0.92rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.56rem;
 
+  /* background-color: grey; */
+}
+
+main > section {
+  width: 100%;
+  max-width: 46.5625rem;
+}
+
+article {
+  display: none;
+}
+
+/* ------------------------------------------------------- post tweet */
+.post-tweet-container {
+  width: 100%;
+  height: 9.70575rem;
+  padding: 0.68rem 0.87rem;
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+}
+
+.post-tweet-container > div > h2 {
+  margin: 0 0 0.46rem 0;
+  color: #4f4f4f;
+  font-family: var(--primary-font);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.02625rem;
+}
+
+.post-tweet-container > div {
+  margin-bottom: 0.54rem;
+  border-bottom: 0.0625rem solid #f2f2f2;
+}
+
+.tweet-form {
+  display: flex;
+}
+
+.tweet-form > img {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  background: #c4c4c4;
+}
+
+.tweet-form > textarea {
+  width: 100%;
+  margin-left: 0.75rem;
+  border: none;
+  color: var(--Gray-4, #bdbdbd);
+  font-family: var(--secondary-font);
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.035rem;
+}
+
+@media (min-width: 1140px) {
   .nav-tabs {
     display: inline;
     height: 100%;
@@ -292,5 +358,21 @@ body {
   .menu-items > div:hover,
   .menu-logout > div:hover {
     background: #f2f2f2;
+  }
+
+  main {
+    margin-top: 1.62rem;
+  }
+
+  article {
+    display: flex;
+  }
+
+  .trending-container {
+    width: 19.125rem;
+    height: 30.98094rem;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
   }
 }
