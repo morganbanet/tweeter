@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import Dropdown from '../Dropdown/Dropdown';
 
 function Navbar() {

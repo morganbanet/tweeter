@@ -1,15 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../tests/testUtils';
 import { describe, it, expect } from 'vitest';
-import { BrowserRouter } from 'react-router-dom';
 import Dropdown from './Dropdown';
 
 describe('Dropdown', () => {
   it('should render all links correctly', () => {
-    render(
-      <BrowserRouter>
-        <Dropdown />
-      </BrowserRouter>
-    );
+    render(<Dropdown />);
 
     const profileLink = screen.getByRole('link', { name: /my profile/i });
     expect(profileLink).toBeInTheDocument();

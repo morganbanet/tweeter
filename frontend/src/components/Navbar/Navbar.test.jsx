@@ -1,49 +1,25 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../tests/testUtils';
 import { describe, it, expect, vi } from 'vitest';
-
-import { AuthProvider } from '../../context/auth/AuthContext';
-
-import { BrowserRouter } from 'react-router-dom';
+import { useAuthContext } from '../../hooks/auth/useAuthContext';
+import user from '@testing-library/user-event';
 import Navbar from './Navbar';
 
-describe('Navbar', () => {
-  it('renders only the logo when logged out', () => {
-    render(
-      <AuthProvider>
-        <BrowserRouter>
-          <Navbar />
-        </BrowserRouter>
-      </AuthProvider>
-    );
+let userInfo = {
+  id: 1,
+  name: 'John Doe',
+  email: 'johndoe@email.com',
+  avatar: { url: 'https://exampleurl.com' },
+};
 
-    const logoImage = screen.getByAltText('tweeter logo');
-    expect(logoImage).toBeInTheDocument();
+vi.mock('../../hooks/auth/useAuthContext', () => {
+  return { useAuthContext: vi.fn() };
+});
 
-    const logoText = screen.getByText(/tweeter/i);
-    expect(logoText).toBeInTheDocument();
-  });
-
+describe('Navbar', async () => {
   it('renders all properties when logged in', () => {
-    vi.mock('../../hooks/auth/useAuthContext', () => ({
-      useAuthContext: vi.fn().mockReturnValue({
-        userInfo: {
-          id: 1,
-          name: 'John Doe',
-          email: 'johndoe@email.com',
-          avatar: {
-            url: 'https://exampleurl.com',
-          },
-        },
-      }),
-    }));
+    useAuthContext.mockReturnValue({ userInfo });
 
-    render(
-      <AuthProvider>
-        <BrowserRouter>
-          <Navbar />
-        </BrowserRouter>
-      </AuthProvider>
-    );
+    render(<Navbar />);
 
     const logoImage = screen.getByAltText('tweeter logo');
     expect(logoImage).toBeInTheDocument();
@@ -68,5 +44,34 @@ describe('Navbar', () => {
 
     const dropdown = screen.getByTestId('caret-down');
     expect(dropdown).toBeInTheDocument();
+  });
+
+  it('renders only the logo when logged out', () => {
+    useAuthContext.mockReturnValue({ userInfo });
+
+    render(<Navbar />);
+
+    const logoImage = screen.getByAltText('tweeter logo');
+    expect(logoImage).toBeInTheDocument();
+
+    const logoText = screen.getByText(/tweeter/i);
+    expect(logoText).toBeInTheDocument();
+  });
+
+  it('toggles dropdown menu when user avatar clicked', async () => {
+    useAuthContext.mockReturnValue({ userInfo });
+
+    user.setup();
+
+    render(<Navbar />);
+
+    let menuItem = screen.queryByRole('link', { name: /my profile/i });
+    expect(menuItem).toBeNull();
+
+    const profileImage = screen.getByAltText('profile avatar');
+    await user.click(profileImage);
+
+    menuItem = screen.queryByRole('link', { name: /my profile/i });
+    expect(menuItem).toBeInTheDocument();
   });
 });

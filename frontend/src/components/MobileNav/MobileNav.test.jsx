@@ -1,39 +1,24 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../tests/testUtils';
 import { describe, it, expect, vi } from 'vitest';
-import { BrowserRouter } from 'react-router-dom';
+import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import MobileNav from './MobileNav';
 
+let userInfo = {
+  id: 1,
+  name: 'John Doe',
+  email: 'johndoe@email.com',
+  avatar: { url: 'https://exampleurl.com' },
+};
+
+vi.mock('../../hooks/auth/useAuthContext', () => {
+  return { useAuthContext: vi.fn() };
+});
+
 describe('MobileNav', () => {
-  it('buttons do not render when a the user is logged out', () => {
-    const homeButton = screen.queryByTestId('fa-house');
-    expect(homeButton).toBeNull();
+  it('renders all buttons when user logged in', () => {
+    useAuthContext.mockReturnValue({ userInfo });
 
-    const exploreButton = screen.queryByTestId('fa-compass');
-    expect(exploreButton).toBeNull();
-
-    const bookmarksButton = screen.queryByTestId('fa-bookmark');
-    expect(bookmarksButton).toBeNull();
-  });
-
-  it('renders all components correctly when logged in', () => {
-    vi.mock('../../hooks/auth/useAuthContext', () => ({
-      useAuthContext: vi.fn().mockReturnValue({
-        userInfo: {
-          id: 1,
-          name: 'John Doe',
-          email: 'johndoe@email.com',
-          avatar: {
-            url: 'https://exampleurl.com',
-          },
-        },
-      }),
-    }));
-
-    render(
-      <BrowserRouter>
-        <MobileNav />
-      </BrowserRouter>
-    );
+    render(<MobileNav />);
 
     const homeButton = screen.getByTestId('fa-house');
     expect(homeButton).toBeInTheDocument();
@@ -43,5 +28,20 @@ describe('MobileNav', () => {
 
     const bookmarksButton = screen.getByTestId('fa-bookmark');
     expect(bookmarksButton);
+  });
+
+  it('buttons do not render when user logged out', () => {
+    useAuthContext.mockReturnValue({ userInfo: null });
+
+    render(<MobileNav />);
+
+    const homeButton = screen.queryByTestId('fa-house');
+    expect(homeButton).toBeNull();
+
+    const exploreButton = screen.queryByTestId('fa-compass');
+    expect(exploreButton).toBeNull();
+
+    const bookmarksButton = screen.queryByTestId('fa-bookmark');
+    expect(bookmarksButton).toBeNull();
   });
 });
