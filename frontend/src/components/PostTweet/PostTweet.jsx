@@ -8,9 +8,9 @@ function PostTweet() {
   };
 
   const expandTextArea = (e, maxHeight) => {
-    if (e.target.style.height === maxHeight + 'px') {
-      e.target.style.overflow = 'visible';
-    }
+    e.target.style.height === maxHeight + 'px'
+      ? (e.target.style.overflow = 'visible')
+      : (e.target.style.overflow = 'hidden');
 
     e.target.style.height = '';
     e.target.style.height = Math.min(e.target.scrollHeight, maxHeight) + 'px';
