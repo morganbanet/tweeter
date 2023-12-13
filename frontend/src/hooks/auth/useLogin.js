@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuthContext } from './useAuthContext';
 
 export const useLogin = () => {
-  const [isLoading, setIsLoading] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const { dispatch } = useAuthContext();
@@ -26,7 +26,7 @@ export const useLogin = () => {
 
     if (!response.ok) {
       setIsLoading(false);
-      setError(data.message);
+      setError(data.error);
       return;
     }
 

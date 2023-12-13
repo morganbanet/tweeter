@@ -8,67 +8,67 @@ import { useCreateTweet } from '../../hooks/tweets/useCreateTweet';
 function PostTweet() {
   const [text, setText] = useState('');
   const [file, setFile] = useState(null);
-  const [privacy, setPrivacy] = useState('public');
 
   const imageRef = useRef();
   const cancelRef = useRef();
-  const uploadRef = useRef();
-  const textRef = useRef();
 
-  const { createTweet, isLoading, error } = useCreateTweet();
   const { userInfo } = useAuthContext();
+  const { createTweet, isLoading, error } = useCreateTweet();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log(file);
+
     await createTweet(text, file);
 
-    if (!error) {
+    if (text) {
       setText('');
-      resetFile();
+      setFile(null);
+      handleFile();
     }
   };
 
-  const handleText = (e) => {
-    setText(e.target.value);
-    expandTextarea(e, 200);
-  };
-
   const handleFile = (e) => {
-    setFile(e.target.files[0]);
-    readFile(e.target.files[0]);
-  };
+    if (e && e.target.files[0]) {
+      setFile(e.target.files[0]);
+      displayFile(e);
+      return;
+    }
 
-  // reset file input
-  const resetFile = () => {
-    setFile(null);
-    displayFile();
-    uploadRef.current.value = null;
-  };
-
-  // read file before preview
-  const readFile = (file) => {
-    const reader = new FileReader();
-    reader.onload = (e) => displayFile(e);
-    reader.readAsDataURL(file);
-  };
-
-  // toggle file preview
-  const displayFile = (file) => {
-    imageRef.current.src = file ? file.target.result : '#';
-    imageRef.current.style.display = file ? 'block' : 'none';
-    cancelRef.current.style.display = file ? 'inline' : 'none';
+    if (!e) removeFile();
   };
 
   const expandTextarea = (e, maxHeight) => {
-    const textarea = e.target;
+    setText(e.target.value);
 
-    textarea.style.height === maxHeight + 'px'
-      ? (textarea.style.overflow = 'visible')
-      : (textarea.style.overflow = 'hidden');
+    e.target.style.height === maxHeight + 'px'
+      ? (e.target.style.overflow = 'visible')
+      : (e.target.style.overflow = 'hidden');
 
-    textarea.style.height = '';
-    textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + 'px';
+    e.target.style.height = '';
+    e.target.style.height = Math.min(e.target.scrollHeight, maxHeight) + 'px';
+  };
+
+  const displayFile = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        imageRef.current.src = e.target.result;
+        imageRef.current.style.display = 'block';
+        cancelRef.current.style.display = 'inline';
+      };
+
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const removeFile = () => {
+    console.log('test');
+    imageRef.current.src = '#';
+    imageRef.current.style.display = 'none';
+    cancelRef.current.style.display = 'none';
   };
 
   return (
@@ -87,17 +87,17 @@ function PostTweet() {
             <label htmlFor="text"></label>
             <textarea
               id="text"
-              ref={textRef}
               value={text}
-              onChange={(e) => handleText(e)}
               placeholder="What's happening?"
+              onChange={(e) => expandTextarea(e, 200)}
+              required
             />
 
             <div className="image-container">
               <span
                 ref={cancelRef}
                 className="material-symbols-outlined cancel"
-                onClick={() => resetFile()}
+                onClick={() => removeFile()}
               >
                 cancel
               </span>
@@ -114,7 +114,6 @@ function PostTweet() {
             <input
               type="file"
               id="file-upload"
-              ref={uploadRef}
               onChange={(e) => handleFile(e)}
             />
 

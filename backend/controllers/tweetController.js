@@ -32,6 +32,10 @@ exports.createTweet = asyncHandler(async (req, res, next) => {
     private: req.body.private,
   };
 
+  if (!req.body.text || req.body.text.trim() === '') {
+    return next(new ErrorResponse(`Tweet must contain body text`, 400));
+  }
+
   let tweet = await Tweet.create(tweetToCreate);
 
   // Create array of hashtags from req.body.text and process them

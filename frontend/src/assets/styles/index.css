@@ -273,9 +273,15 @@ article {
   object-position: cover;
 }
 
-.tweet-form .input-area > textarea {
+.tweet-form .preview {
   width: 100%;
   margin-left: 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tweet-form .preview textarea {
+  width: 100%;
   padding-top: 0.56rem;
   border: none;
   font-family: var(--secondary-font);
@@ -291,8 +297,35 @@ article {
   overflow: hidden;
 }
 
-.tweet-form .input-area > textarea::placeholder {
+.tweet-form .preview textarea::placeholder {
   color: #bdbdbd;
+}
+
+.tweet-form .image-container {
+  width: 100%;
+  position: relative;
+}
+
+.tweet-form .image-container img {
+  width: 100%;
+  margin-top: 0.87rem;
+  border-radius: 0.5rem;
+  background-color: lightgray 50%;
+  display: none;
+  object-fit: cover;
+  object-position: center;
+}
+
+.tweet-form .material-symbols-outlined.cancel {
+  font-size: 1.5rem;
+  color: rgba(118, 118, 118, 0.6);
+  display: none;
+  cursor: pointer;
+  position: absolute;
+  right: 0.4rem;
+  top: calc(0.87rem + 0.4rem);
+  mix-blend-mode: exclusion;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 40;
 }
 
 .tweet-form .form-control {
@@ -356,6 +389,11 @@ article {
   font-weight: 500;
   line-height: normal;
   letter-spacing: -0.02625rem;
+}
+
+button:disabled {
+  opacity: 0.8;
+  pointer-events: none;
 }
 
 @media (min-width: 1140px) {
@@ -459,5 +497,13 @@ article {
     border-radius: 0.75rem;
     background: #fff;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+  }
+
+  .tweet-form .image-container img {
+    margin: 1.19rem 0 0.3rem 0;
+  }
+
+  .tweet-form .material-symbols-outlined.cancel {
+    top: calc(1.19rem + 0.4rem);
   }
 }
