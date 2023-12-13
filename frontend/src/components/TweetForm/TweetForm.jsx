@@ -4,7 +4,8 @@ import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useCreateTweet } from '../../hooks/tweets/useCreateTweet';
 import TweetFormDropdown from '../TweetFormDropdown/TweetFormDropdown';
 
-// @todo: add auth mock to test file
+// @todo: add tests to tweet form and its dropdown
+// @todo: map through tweets & display them
 // @todo: create tweet context
 
 function PostTweet() {
