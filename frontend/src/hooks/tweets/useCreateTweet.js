@@ -8,7 +8,7 @@ export const useCreateTweet = () => {
   const { userInfo } = useAuthContext();
   // const { dispatch } = useTweetsContext();
 
-  const createTweet = async (text, file) => {
+  const createTweet = async (text, file, isPrivate) => {
     setIsLoading(true);
 
     if (!userInfo) {
@@ -20,6 +20,7 @@ export const useCreateTweet = () => {
     // multipart/form-data
     const formData = new FormData();
     formData.append('text', text);
+    formData.append('private', isPrivate);
     if (file) formData.append('file', file);
 
     const options = {

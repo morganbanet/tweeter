@@ -1,15 +1,17 @@
 import { useRef, useState } from 'react';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useCreateTweet } from '../../hooks/tweets/useCreateTweet';
+import TweetFormDropdown from '../TweetFormDropdown/TweetFormDropdown';
 
 // @todo: add auth mock to test file
-// @todo: create dropdown for privacy
 // @todo: create tweet context
 
 function PostTweet() {
   const [text, setText] = useState('');
   const [file, setFile] = useState(null);
-  const [privacy, setPrivacy] = useState('public');
+  const [isOpen, setIsOpen] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
 
   const imageRef = useRef();
   const cancelRef = useRef();
@@ -22,12 +24,18 @@ function PostTweet() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await createTweet(text, file);
+    await createTweet(text, file, isPrivate);
 
     if (!error) {
       setText('');
       resetFile();
+      setIsPrivate(false);
     }
+  };
+
+  const handleClick = (e) => {
+    if (e.target.classList.contains('tweet-form-dropdown')) return;
+    setIsOpen(!isOpen);
   };
 
   const handleText = (e) => {
@@ -88,6 +96,7 @@ function PostTweet() {
             <label htmlFor="text"></label>
             <textarea
               id="text"
+              name="text"
               ref={textRef}
               value={text}
               onChange={(e) => handleText(e)}
@@ -110,19 +119,23 @@ function PostTweet() {
         <div className="form-control">
           <div>
             <label htmlFor="file-upload">
-              <span className="material-symbols-outlined">image</span>
+              <span className="material-symbols-outlined image">image</span>
             </label>
             <input
               type="file"
               id="file-upload"
+              name="file-upload"
               ref={uploadRef}
               onChange={(e) => handleFile(e)}
             />
 
-            <div className="privacy">
-              <span className="material-symbols-outlined">public</span>
-              <p>Everyone can reply</p>
-            </div>
+            <ClickAwayListener onClickAway={() => setIsOpen(false)}>
+              <div className="privacy" onClick={(e) => handleClick(e)}>
+                <span className="material-symbols-outlined public">public</span>
+                <p>{!isPrivate ? 'Everyone can reply' : 'People you follow'}</p>
+                {isOpen && <TweetFormDropdown setIsPrivate={setIsPrivate} />}
+              </div>
+            </ClickAwayListener>
           </div>
 
           {isLoading && <button disabled>Tweet</button>}
