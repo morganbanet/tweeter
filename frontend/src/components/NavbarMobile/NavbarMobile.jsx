@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 
-function MobileNav() {
+function NavbarMobile() {
   const { userInfo } = useAuthContext();
 
   return (
@@ -30,4 +30,4 @@ function MobileNav() {
   );
 }
 
-export default MobileNav;
+export default NavbarMobile;

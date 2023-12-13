@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
-import Dropdown from '../Dropdown/Dropdown';
+import NavbarDropdown from '../NavbarDropdown/NavbarDropdown';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +44,7 @@ function Navbar() {
               <img src={userInfo.avatar.url} alt="profile avatar" />
               <span>{userInfo.name}</span>
               <i className="fa-solid fa-caret-down" data-testid="caret-down" />
-              {isOpen && <Dropdown />}
+              {isOpen && <NavbarDropdown />}
             </div>
           </ClickAwayListener>
         )}

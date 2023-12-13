@@ -403,10 +403,11 @@ button:disabled {
     display: flex;
     align-items: flex-end;
     position: relative;
+    gap: 5rem;
   }
 
   .nav-tabs > a {
-    margin: 0 0 1rem 5rem;
+    margin-bottom: 1rem;
     padding: 0.13rem 0;
     display: flex;
     flex-direction: column;

@@ -1,10 +1,10 @@
 import { render, screen } from '../../../tests/testUtils';
 import { describe, it, expect } from 'vitest';
-import Dropdown from './Dropdown';
+import NavbarDropdown from './NavbarDropdown';
 
-describe('Dropdown', () => {
+describe('NavbarDropdown', () => {
   it('should render all links correctly', () => {
-    render(<Dropdown />);
+    render(<NavbarDropdown />);
 
     const profileLink = screen.getByRole('link', { name: /my profile/i });
     expect(profileLink).toBeInTheDocument();

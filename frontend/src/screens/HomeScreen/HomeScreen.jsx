@@ -1,4 +1,4 @@
-import PostTweet from '../../components/PostTweet/PostTweet';
+import TweetForm from '../../components/TweetForm/TweetForm';
 import Trending from '../../components/Trending/Trending';
 
 function HomeScreen() {
@@ -6,7 +6,7 @@ function HomeScreen() {
     <>
       <main>
         <section>
-          <PostTweet />
+          <TweetForm />
         </section>
 
         <article>

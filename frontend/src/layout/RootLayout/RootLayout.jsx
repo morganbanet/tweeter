@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
-import MobileNav from '../../components/MobileNav/MobileNav';
+import NavbarMobile from '../../components/NavbarMobile/NavbarMobile';
 
 function RootLayout() {
   return (
@@ -11,7 +11,7 @@ function RootLayout() {
         <Outlet />
       </div>
 
-      <MobileNav />
+      <NavbarMobile />
     </div>
   );
 }

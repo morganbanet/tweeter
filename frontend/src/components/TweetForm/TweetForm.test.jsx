@@ -1,10 +1,10 @@
 import { render, screen } from '../../../tests/testUtils';
 import { describe, it, expect } from 'vitest';
-import PostTweet from './PostTweet';
+import TweetForm from './TweetForm';
 
-describe('PostTweet', () => {
+describe('TweetForm', () => {
   it('renders all properties correctly', () => {
-    render(<PostTweet />);
+    render(<TweetForm />);
 
     const heading = screen.getByText(/tweet something/i);
     expect(heading).toBeInTheDocument();

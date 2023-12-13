@@ -1,7 +1,7 @@
 import { render, screen } from '../../../tests/testUtils';
 import { describe, it, expect, vi } from 'vitest';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
-import MobileNav from './MobileNav';
+import NavbarMobile from './NavbarMobile';
 
 let userInfo = {
   id: 1,
@@ -14,11 +14,11 @@ vi.mock('../../hooks/auth/useAuthContext', () => {
   return { useAuthContext: vi.fn() };
 });
 
-describe('MobileNav', () => {
+describe('NavbarMobile', () => {
   it('renders all buttons when user logged in', () => {
     useAuthContext.mockReturnValue({ userInfo });
 
-    render(<MobileNav />);
+    render(<NavbarMobile />);
 
     const homeButton = screen.getByTestId('fa-house');
     expect(homeButton).toBeInTheDocument();
@@ -33,7 +33,7 @@ describe('MobileNav', () => {
   it('buttons do not render when user logged out', () => {
     useAuthContext.mockReturnValue({ userInfo: null });
 
-    render(<MobileNav />);
+    render(<NavbarMobile />);
 
     const homeButton = screen.queryByTestId('fa-house');
     expect(homeButton).toBeNull();

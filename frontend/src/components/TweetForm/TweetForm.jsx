@@ -4,6 +4,7 @@ import { useCreateTweet } from '../../hooks/tweets/useCreateTweet';
 
 // @todo: add auth mock to test file
 // @todo: create dropdown for privacy
+// @todo: create tweet context
 
 function PostTweet() {
   const [text, setText] = useState('');

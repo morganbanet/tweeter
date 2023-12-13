@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useLogout } from '../../hooks/auth/useLogout';
 
-function Dropdown() {
+function NavbarDropdown() {
   const { logout } = useLogout();
 
   const handleLogout = () => {
@@ -45,4 +45,4 @@ function Dropdown() {
   );
 }
 
-export default Dropdown;
+export default NavbarDropdown;
