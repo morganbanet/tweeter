@@ -25,7 +25,7 @@ function PostTweet() {
   return (
     <div className="post-tweet-container">
       <div>
-        <h2>Tweet Something</h2>
+        <h2>Tweet something</h2>
       </div>
 
       <form className="tweet-form" onSubmit={handleSubmit}>

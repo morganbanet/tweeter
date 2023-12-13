@@ -298,11 +298,10 @@ article {
 .tweet-form .form-control {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .tweet-form .form-control > div {
-  height: 2rem;
   margin-left: 0;
   display: flex;
 }
@@ -317,14 +316,14 @@ article {
 }
 
 .tweet-form .privacy {
-  margin-left: 0.75rem;
+  margin-left: 0.65rem;
   display: flex;
   align-items: center;
   cursor: pointer;
 }
 
 .tweet-form .privacy > p {
-  margin: 0 0 0 0.5rem;
+  margin: 0 0 0 0.34rem;
   color: var(--theme-color);
   font-family: var(--secondary-font);
   font-size: 0.75rem;
@@ -336,8 +335,7 @@ article {
 
 .tweet-form .form-control span {
   color: var(--theme-color);
-  height: 1.25rem;
-  width: 1.25rem;
+  font-size: 1.25rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -347,11 +345,17 @@ article {
 .form-control button {
   width: 5.0625rem;
   height: 2rem;
-  color: #fff;
   border: none;
   border-radius: 0.25rem;
   background-color: var(--theme-color);
   cursor: pointer;
+  color: #fff;
+  font-family: var(--secondary-font);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.02625rem;
 }
 
 @media (min-width: 1140px) {
@@ -437,12 +441,8 @@ article {
     display: flex;
   }
 
-  .trending-container {
-    width: 19.125rem;
-    height: 30.98094rem;
-    border-radius: 0.75rem;
-    background: #fff;
-    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+  .post-tweet-container {
+    padding: 0.68rem 1.25rem;
   }
 
   .tweet-form .form-control {
@@ -451,5 +451,13 @@ article {
 
   .tweet-form .input-area {
     margin-bottom: 0.75rem;
+  }
+
+  .trending-container {
+    width: 19.125rem;
+    height: 30.98094rem;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
   }
 }
