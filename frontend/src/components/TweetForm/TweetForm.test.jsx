@@ -1,4 +1,4 @@
-import { render, screen } from '../../../tests/testUtils';
+import { fireEvent, render, screen } from '../../../tests/testUtils';
 import { describe, it, expect, vi } from 'vitest';
 import user from '@testing-library/user-event';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
@@ -57,9 +57,23 @@ describe('TweetForm', () => {
     expect(dropdownItem).toBeInTheDocument();
   });
 
-  it('selecting items in the dropdown menu changes privacy text', () => {});
+  it('selecting items in the dropdown menu changes privacy text', async () => {
+    useAuthContext.mockReturnValue({ userInfo });
 
-  it('displays an image when selecting a file for upload', () => {});
+    user.setup();
 
-  it('removes the image from preview when clicking x on the image', () => {});
+    render(<TweetForm />);
+
+    let privacyEl = screen.queryByText('People you follow');
+    expect(privacyEl).toBeNull();
+
+    const privacyBtnIcon = screen.getByText(/public/i);
+    await user.click(privacyBtnIcon);
+
+    const dropdownItem = screen.getByText('People you follow');
+    await user.click(dropdownItem);
+
+    privacyEl = screen.getByText('People you follow');
+    expect(privacyEl).toBeInTheDocument();
+  });
 });

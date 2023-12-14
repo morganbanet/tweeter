@@ -5,9 +5,6 @@ const ErrorResponse = require('../utils/ErrorResponse');
 const generateToken = require('../utils/generateToken');
 const sendEmail = require('../utils/sendEmail');
 const { uploadFile, deleteFile } = require('../utils/storageBucket');
-const Tweet = require('../models/tweetModel');
-const Comment = require('../models/commentModel');
-const Like = require('../models/likeModel');
 
 const {
   passwordResetText,

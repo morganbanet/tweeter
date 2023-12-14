@@ -5,6 +5,7 @@ import { useCreateTweet } from '../../hooks/tweets/useCreateTweet';
 import TweetFormDropdown from '../TweetFormDropdown/TweetFormDropdown';
 
 // @todo: add tests to tweet form and its dropdown
+// @todo: bring test coverage over 80% for all
 // @todo: map through tweets & display them
 // @todo: create tweet context
 

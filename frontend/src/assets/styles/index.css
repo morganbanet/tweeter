@@ -21,11 +21,15 @@ body {
 
 /* ----------------------------------------------------------- navbar */
 .navbar-container {
+  width: 100%;
   height: 4.26931rem;
   padding: 0 1rem;
   display: flex;
   justify-content: center;
   background-color: #fff;
+  position: sticky;
+  z-index: 1;
+  top: 0;
 }
 
 .navbar-inner {
@@ -152,6 +156,7 @@ body {
   background: #fff;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
   cursor: default;
+  z-index: 1;
 }
 
 .menu-items {
@@ -215,12 +220,20 @@ body {
 }
 
 /* ------------------------------------------------------ home screen */
-main {
-  width: 100%;
-  padding: 0 1rem;
+.screens {
   margin-top: 0.92rem;
+  padding: 0 1rem;
   display: flex;
   justify-content: center;
+  gap: 1.56rem;
+}
+
+main {
+  width: 100%;
+  max-width: 46.5625rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 1.56rem;
 
   /* background-color: grey; */
@@ -228,10 +241,9 @@ main {
 
 main > section {
   width: 100%;
-  max-width: 46.5625rem;
 }
 
-article {
+.screens > section {
   display: none;
 }
 
@@ -402,8 +414,6 @@ button:disabled {
 
 /* ---------------------------------------------- tweet form dropdown */
 .tweet-form-dropdown {
-  /* width: 14.64813rem; */
-  /* height: 9.70575rem; */
   padding: 0.57rem 0.75rem;
   border-radius: 0.75rem;
   border: 1px solid #e0e0e0;
@@ -558,12 +568,16 @@ button:disabled {
     background: #f2f2f2;
   }
 
-  main {
+  .screens {
     margin-top: 1.62rem;
   }
 
-  article {
+  .screens > section {
+    width: 100%;
+    max-width: 19.125rem;
     display: flex;
+    flex-direction: column;
+    gap: 1.38rem;
   }
 
   .post-tweet-container {
@@ -579,8 +593,16 @@ button:disabled {
   }
 
   .trending-container {
-    width: 19.125rem;
+    width: 100%;
     height: 30.98094rem;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+  }
+
+  .suggestions-container {
+    width: 100%;
+    height: 32.35619rem;
     border-radius: 0.75rem;
     background: #fff;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);

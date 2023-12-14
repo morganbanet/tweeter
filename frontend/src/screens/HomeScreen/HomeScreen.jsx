@@ -1,5 +1,6 @@
 import TweetForm from '../../components/TweetForm/TweetForm';
 import Trending from '../../components/Trending/Trending';
+import Suggestions from '../../components/Suggestions/Suggestions';
 
 function HomeScreen() {
   return (
@@ -8,11 +9,17 @@ function HomeScreen() {
         <section>
           <TweetForm />
         </section>
+      </main>
 
+      <section>
         <article>
           <Trending />
         </article>
-      </main>
+
+        <article>
+          <Suggestions />
+        </article>
+      </section>
     </>
   );
 }
