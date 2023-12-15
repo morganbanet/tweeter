@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
+import { useTweetsContext } from './useTweetsContext';
 
 export const useCreateTweet = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const { userInfo } = useAuthContext();
-  // const { dispatch } = useTweetsContext();
+  const { dispatch } = useTweetsContext();
 
   const createTweet = async (text, file, isPrivate) => {
     setIsLoading(true);
@@ -37,7 +38,7 @@ export const useCreateTweet = () => {
       return;
     }
 
-    // dispatch({ type: 'CREATE_TWEET', payload: data.data });
+    dispatch({ type: 'CREATE_TWEET', payload: data.data });
 
     setIsLoading(false);
     setError(null);

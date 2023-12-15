@@ -1,10 +1,13 @@
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from '../src/context/auth/AuthContext';
+import { TweetsProvider } from '../src/context/tweets/TweetsContext';
 
 const AppProviders = ({ children }) => {
   return (
     <AuthProvider>
-      <BrowserRouter>{children}</BrowserRouter>
+      <TweetsProvider>
+        <BrowserRouter>{children}</BrowserRouter>
+      </TweetsProvider>
     </AuthProvider>
   );
 };

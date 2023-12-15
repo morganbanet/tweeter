@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 
 import { AuthProvider } from '../../context/auth/AuthContext';
+import { TweetsProvider } from '../../context/tweets/TweetsContext';
 
 import RootLayout from '../../layout/RootLayout/RootLayout';
 import UnauthedLayout from '../../layout/UnauthedLayout/UnauthedLayout';
@@ -37,7 +38,9 @@ const router = createBrowserRouter(
 function App() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <TweetsProvider>
+        <RouterProvider router={router} />
+      </TweetsProvider>
     </AuthProvider>
   );
 }

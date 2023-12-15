@@ -4,11 +4,6 @@ import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useCreateTweet } from '../../hooks/tweets/useCreateTweet';
 import TweetFormDropdown from '../TweetFormDropdown/TweetFormDropdown';
 
-// @todo: add tests to tweet form and its dropdown
-// @todo: bring test coverage over 80% for all
-// @todo: map through tweets & display them
-// @todo: create tweet context
-
 function PostTweet() {
   const [text, setText] = useState('');
   const [file, setFile] = useState(null);
@@ -103,6 +98,7 @@ function PostTweet() {
               value={text}
               onChange={(e) => handleText(e)}
               placeholder="What's happening?"
+              required
             />
 
             <div className="image-container">

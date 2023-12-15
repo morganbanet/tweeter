@@ -10,7 +10,7 @@ const advancedResults = require('../utils/advancedResults');
 exports.getRetweets = asyncHandler(async (req, res, next) => {
   const options = {
     altQuery: { retweeted: req.params.tweetId },
-    populate: 'user',
+    populate: 'user retweeted',
   };
 
   const result = await advancedResults(req, Retweet, options);

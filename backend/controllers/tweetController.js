@@ -2,7 +2,7 @@ const Tweet = require('../models/tweetModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const advancedResults = require('../utils/advancedResults');
-const unionCollections = require('../utils/unionCollections');
+const tweetsAndRetweets = require('../utils/tweetsAndRetweets');
 const { uploadFile } = require('../utils/storageBucket');
 const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
 
@@ -11,7 +11,7 @@ const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
 // @access      Public
 exports.getTweets = asyncHandler(async (req, res, next) => {
   const options = {
-    aggregate: unionCollections('retweets', 'retweeted', 'tweets'),
+    aggregate: tweetsAndRetweets(),
   };
 
   const result = await advancedResults(req, Tweet, options);
