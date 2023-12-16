@@ -30,6 +30,12 @@ exports.getBookmarks = asyncHandler(async (req, res, next) => {
 exports.createBookmark = asyncHandler(async (req, res, next) => {
   const tweet = await Tweet.findById(req.params.tweetId);
 
+  if (!tweet) {
+    return next(
+      new ErrorResponse(`Tweet not found with id ${req.params.tweetId}`, 404)
+    );
+  }
+
   const bookmarkToCreate = {
     user: req.user.id,
     bookmarked: req.params.tweetId,
@@ -50,6 +56,8 @@ exports.createBookmark = asyncHandler(async (req, res, next) => {
 
   const bookmark = await Bookmark.create(bookmarkToCreate);
 
+  await tweet.modifyCount('bookmarkCount', +1);
+
   res.status(201).json({ success: true, data: bookmark });
 });
 
@@ -65,7 +73,11 @@ exports.deleteBookmark = asyncHandler(async (req, res, next) => {
     );
   }
 
+  const tweet = await Tweet.findById(bookmark.bookmarked);
+
   await bookmark.deleteOne();
+
+  await tweet.modifyCount('bookmarkCount', -1);
 
   res.status(200).json({ success: true, data: {} });
 });

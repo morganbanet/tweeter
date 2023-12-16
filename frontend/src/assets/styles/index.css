@@ -77,6 +77,7 @@ body {
   align-items: center;
   position: relative;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .current-user > img {
@@ -84,6 +85,7 @@ body {
   height: 2rem;
   border-radius: 0.5rem;
   background: #c4c4c4;
+  flex-shrink: 0;
 }
 
 .current-user > span {
@@ -281,6 +283,7 @@ main > section {
   border-radius: 0.5rem;
   background: #c4c4c4;
   object-position: cover;
+  flex-shrink: 0;
 }
 
 .tweet-form .preview {
@@ -541,6 +544,7 @@ button:disabled {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 0.5rem;
+  flex-shrink: 0;
 }
 
 .tweet-avatar > img {
@@ -596,8 +600,31 @@ button:disabled {
 .tweet-image > img {
   width: 100%;
   height: 100%;
+  margin-bottom: 0.88rem;
   border-radius: 0.5rem;
   background: lightgray 50%;
+  display: block;
+}
+
+.tweet-stats {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.tweet-stats {
+  margin-bottom: 0.41rem;
+}
+
+.tweet-stats > span {
+  margin-bottom: 0.41rem;
+  color: #bdbdbd;
+  font-family: var(--primary-font);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.02625rem;
 }
 
 @media (min-width: 1140px) {
@@ -725,10 +752,22 @@ button:disabled {
   }
 
   .tweet-container-inner {
-    padding: 0.68rem 1.25rem;
+    padding: 1.31rem 1.25rem;
   }
 
   .user-info {
     margin-bottom: 1.37rem;
+  }
+
+  .tweet-body > p {
+    margin: 0 0 1.19rem 0;
+  }
+
+  .tweet-image > img {
+    margin-bottom: 0.75rem;
+  }
+
+  .tweet-stats {
+    margin-bottom: 0.5rem;
   }
 }

@@ -35,11 +35,43 @@ const tweetSchema = new mongoose.Schema(
         ref: 'Hashtag',
       },
     ],
+    likeCount: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+    retweetCount: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+    bookmarkCount: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+    commentCount: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+tweetSchema.methods.modifyCount = async function (field, val) {
+  if (val === +1) {
+    this[field] += 1;
+    await this.save();
+  }
+
+  if (val === -1) {
+    this[field] -= 1;
+    await this.save();
+  }
+};
 
 tweetSchema.pre(['deleteOne', 'deleteMany'], async function (next) {
   const tweets = await this.model.find(this.getQuery());

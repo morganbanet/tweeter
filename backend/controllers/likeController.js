@@ -69,6 +69,8 @@ exports.createLike = asyncHandler(async (req, res, next) => {
 
   const like = await Like.create(likeToCreate);
 
+  await model.modifyCount('likeCount', +1);
+
   res.status(201).json({ success: true, data: like });
 });
 
@@ -84,7 +86,13 @@ exports.deleteLike = asyncHandler(async (req, res, next) => {
     );
   }
 
+  let model;
+  if (like.likedType === 'Tweet') model = await Tweet.findById(like.liked);
+  if (like.likedType === 'Comment') model = await Comment.findById(like.liked);
+
   await like.deleteOne();
+
+  await model.modifyCount('likeCount', -1);
 
   res.status(200).json({ success: true, data: {} });
 });

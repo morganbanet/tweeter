@@ -9,13 +9,7 @@ import Tweet from '../../components/Tweet/Tweet';
 import Trending from '../../components/Trending/Trending';
 import Suggestions from '../../components/Suggestions/Suggestions';
 
-// @todo: create tweet context & getTweets hook
-// - context/tweets/tweetContext.jsx
-// - context/tweets/tweetReducer.jsx
-// - hooks/tweets/useTweetContext.jsx
-// - hooks/tweets/useGetTweets.jsx
-
-// @todo: map through tweets & display them
+// @todo: add comment, retweet, and saved count on tweets model
 
 function HomeScreen() {
   const { getTweets } = useGetTweets();

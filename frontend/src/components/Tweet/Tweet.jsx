@@ -47,9 +47,17 @@ function Tweet({ tweet }) {
         <div className="tweet-body">
           <p>{tweet.text}</p>
 
-          <div className="tweet-image">
-            <img src={tweet.image && tweet.image.url} />
-          </div>
+          {tweet.image && (
+            <div className="tweet-image">
+              <img src={tweet.image && tweet.image.url} />
+            </div>
+          )}
+        </div>
+
+        <div className="tweet-stats">
+          <span>449 Comments</span>
+          <span>59K Retweets</span>
+          <span>234 Saved</span>
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ const hashtagSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'Hashtag must be a minimum of 0'],
       min: 0,
+      default: 0,
     },
   },
   {

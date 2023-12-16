@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-
 const Like = require('./likeModel');
+
 const { deleteFile } = require('../utils/storageBucket');
 const { removeHashtags } = require('../utils/hashtagHelper');
 
@@ -37,11 +37,28 @@ const commentSchema = new mongoose.Schema(
         ref: 'Hashtag',
       },
     ],
+    likeCount: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+commentSchema.methods.modifyCount = async function (field, val) {
+  if (val === +1) {
+    this[field] += 1;
+    await this.save();
+  }
+
+  if (val === -1) {
+    this[field] -= 1;
+    await this.save();
+  }
+};
 
 commentSchema.pre(['deleteOne', 'deleteMany'], async function (next) {
   const comments = await this.model.find(this.getQuery());

@@ -30,6 +30,12 @@ exports.getRetweets = asyncHandler(async (req, res, next) => {
 exports.createRetweet = asyncHandler(async (req, res, next) => {
   const tweet = await Tweet.findById(req.params.tweetId);
 
+  if (!tweet) {
+    return next(
+      new ErrorResponse(`Tweet not found with id ${req.params.tweetId}`, 404)
+    );
+  }
+
   const retweetToCreate = {
     user: req.user.id,
     retweeted: req.params.tweetId,
@@ -50,6 +56,8 @@ exports.createRetweet = asyncHandler(async (req, res, next) => {
 
   const retweet = await Retweet.create(retweetToCreate);
 
+  await tweet.modifyCount('retweetCount', +1);
+
   res.status(201).json({ success: true, data: retweet });
 });
 
@@ -65,7 +73,11 @@ exports.deleteRetweet = asyncHandler(async (req, res, next) => {
     );
   }
 
+  const tweet = await Tweet.findById(retweet.retweeted);
+
   await retweet.deleteOne();
+
+  await tweet.modifyCount('retweetCount', -1);
 
   res.status(200).json({ success: true, data: {} });
 });

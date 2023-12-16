@@ -1,7 +1,6 @@
 const Tweet = require('../models/tweetModel');
 const Follow = require('../models/followModel');
 const Comment = require('../models/commentModel');
-const Like = require('../models/likeModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const advancedResults = require('../utils/advancedResults');
@@ -12,6 +11,14 @@ const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
 // @route       GET /api/tweets/:tweetId/comments
 // @access      Public
 exports.getComments = asyncHandler(async (req, res, next) => {
+  const tweet = await Tweet.findById(req.params.tweetId);
+
+  if (!tweet) {
+    return next(
+      new ErrorResponse(`Tweet not found with id ${req.params.tweetId}`, 404)
+    );
+  }
+
   const options = {
     altQuery: { tweet: req.params.tweetId },
     populate: 'user',
@@ -64,6 +71,8 @@ exports.createComment = asyncHandler(async (req, res, next) => {
   req.body.private = tweet.private;
 
   const comment = await Comment.create(req.body);
+
+  await tweet.modifyCount('commentCount', +1);
 
   const hashtags = req.body.text.match(/#\w+/g);
   if (hashtags) comment = await createHashtags(hashtags, comment);
@@ -121,7 +130,11 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
     );
   }
 
+  const tweet = await Tweet.findById(comment.tweet);
+
   await comment.deleteOne();
+
+  await tweet.modifyCount('commentCount', -1);
 
   res.status(200).json({ success: true, data: {} });
 });

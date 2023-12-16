@@ -193,6 +193,9 @@ const insertSampleComments = async () => {
 
       const comment = await Comment.create({ user, tweet, text });
 
+      const tweetToModify = await Tweet.findById(tweet);
+      await tweetToModify.modifyCount('commentCount', +1);
+
       const hashtags = text.match(/#\w+/g);
       if (hashtags) await createHashtags(hashtags, comment);
 
@@ -218,6 +221,9 @@ const genUserLikes = async () => {
       const likedType = 'Tweet';
 
       await Like.create({ user, liked, likedType });
+
+      const tweet = await Tweet.findById(liked);
+      await tweet.modifyCount('likedCount', +1);
     }
 
     for (let x = 0; x < commentsToLike.length; x++) {
@@ -228,6 +234,9 @@ const genUserLikes = async () => {
       const likedType = 'Comment';
 
       await Like.create({ user, liked, likedType });
+
+      const comment = await Comment.findById(liked);
+      await comment.modifyCount('likeCount', +1);
     }
   }
 };
@@ -253,6 +262,9 @@ const genUserRetweets = async () => {
     }
 
     await Retweet.create({ user, retweeted });
+
+    const tweet = await Tweet.findById(retweeted);
+    await tweet.modifyCount('retweetCount', +1);
   }
 };
 
@@ -275,6 +287,9 @@ const genUserBookmarks = async () => {
       const bookmarked = tweets[tweetToBookmark].id;
 
       await Bookmark.create({ user, bookmarked });
+
+      const tweet = await Tweet.findById(bookmarked);
+      await tweet.modifyCount('bookmarkCount', +1);
     }
   }
 };
