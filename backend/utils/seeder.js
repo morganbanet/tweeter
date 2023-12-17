@@ -223,7 +223,7 @@ const genUserLikes = async () => {
       await Like.create({ user, liked, likedType });
 
       const tweet = await Tweet.findById(liked);
-      await tweet.modifyCount('likedCount', +1);
+      await tweet.modifyCount('likeCount', +1);
     }
 
     for (let x = 0; x < commentsToLike.length; x++) {

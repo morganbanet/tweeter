@@ -1,4 +1,6 @@
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
+import CommentForm from '../CommentForm/CommentForm';
+import Comment from '../Comment/Comment';
 
 function Tweet({ tweet }) {
   const { userInfo } = useAuthContext();
@@ -24,7 +26,7 @@ function Tweet({ tweet }) {
     <div className="tweet-container">
       {retweet && (
         <div className="retweet-info">
-          <i className="fa-solid fa-rotate" />
+          <span class="material-symbols-outlined">sync</span>
           <p>{retweet.user.name} Retweeted</p>
         </div>
       )}
@@ -55,10 +57,36 @@ function Tweet({ tweet }) {
         </div>
 
         <div className="tweet-stats">
-          <span>449 Comments</span>
-          <span>59K Retweets</span>
-          <span>234 Saved</span>
+          {tweet.commentCount > 0 && <span>{tweet.commentCount} Comments</span>}
+          {tweet.retweetCount > 0 && <span>{tweet.retweetCount} Retweets</span>}
+          {tweet.likeCount > 0 && <span>{tweet.likeCount} Likes</span>}
         </div>
+
+        <div className="tweet-controls">
+          <div>
+            <span className="material-symbols-outlined">mode_comment</span>
+            <p>Comment</p>
+          </div>
+
+          <div>
+            <span className="material-symbols-outlined sync">sync</span>
+            <p>Retweet</p>
+          </div>
+
+          <div>
+            <span className="material-symbols-outlined">favorite</span>
+            <p>Like</p>
+          </div>
+
+          <div>
+            <span className="material-symbols-outlined">bookmark</span>
+            <p>Save</p>
+          </div>
+        </div>
+
+        <CommentForm />
+
+        <Comment tweet={tweet} />
       </div>
     </div>
   );
