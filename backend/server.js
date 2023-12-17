@@ -36,11 +36,11 @@ app.use(fileUpload());
 app.use(cookieParser());
 
 // Security packages
-const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 minutes
-  limit: 100, // Requests per window
-});
-app.use(limiter);
+// const limiter = rateLimit({
+//   windowMs: 10 * 60 * 1000, // 10 minutes
+//   limit: 100, // Requests per window
+// });
+// app.use(limiter);
 const sanitizeReqBody = sanitizer();
 app.use(sanitizeReqBody);
 app.use(mongoSanitize());

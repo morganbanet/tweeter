@@ -1,25 +1,26 @@
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
+import formatDate from '../../utils/formatDate';
 
-function Comment({ tweet }) {
+function Comment({ tweet, comment }) {
   const { userInfo } = useAuthContext();
 
   return (
     <div className="tweet-comment">
       <div className="comment-avatar">
-        <img src={userInfo.avatar.url} />
+        <img
+          src={comment.user.avatar?.url || userInfo.avatar.url}
+          alt="user avatar"
+        />
       </div>
 
       <div className="comment-area">
         <div className="comment-container">
           <div className="comment-info">
-            <p>Waqar Bloom</p>
-            <span>24 August at 20:43</span>
+            <p>{comment.user.name}</p>
+            <span>{formatDate(comment.createdAt)}</span>
           </div>
 
-          <p>
-            I’ve seen awe-inspiring things that I thought I’d never be able to
-            explain to another person.
-          </p>
+          <p>{comment.text}</p>
         </div>
 
         <div className="comment-controls">
@@ -28,10 +29,12 @@ function Comment({ tweet }) {
             <p>Like</p>
           </div>
 
-          <div className="like-info">
-            <span>·</span>
-            <span>12k Likes</span>
-          </div>
+          {comment.likeCount > 0 && (
+            <div className="like-info">
+              <span>·</span>
+              <span>{comment.likeCount} Comments</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

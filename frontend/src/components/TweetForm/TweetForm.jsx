@@ -3,6 +3,7 @@ import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useCreateTweet } from '../../hooks/tweets/useCreateTweet';
 import TweetFormDropdown from '../TweetFormDropdown/TweetFormDropdown';
+import expandTextarea from '../../utils/expandTextarea';
 
 function PostTweet() {
   const [text, setText] = useState('');
@@ -64,17 +65,6 @@ function PostTweet() {
     imageRef.current.src = file ? file.target.result : '#';
     imageRef.current.style.display = file ? 'block' : 'none';
     cancelRef.current.style.display = file ? 'inline' : 'none';
-  };
-
-  const expandTextarea = (e, maxHeight) => {
-    const textarea = e.target;
-
-    textarea.style.height === maxHeight + 'px'
-      ? (textarea.style.overflow = 'visible')
-      : (textarea.style.overflow = 'hidden');
-
-    textarea.style.height = '';
-    textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + 'px';
   };
 
   return (

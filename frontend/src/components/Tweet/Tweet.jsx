@@ -1,32 +1,29 @@
+import { useState, useEffect } from 'react';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
+import { useGetComments } from '../../hooks/comments/useGetComments';
 import CommentForm from '../CommentForm/CommentForm';
 import Comment from '../Comment/Comment';
+import formatDate from '../../utils/formatDate';
+import { motion } from 'framer-motion';
 
 function Tweet({ tweet }) {
+  const [formIsOpen, setFormIsOpen] = useState(false);
+  const [comments, setComments] = useState([]);
+
+  const { getComments, data, isLoading, error } = useGetComments();
   const { userInfo } = useAuthContext();
 
   const retweet = tweet.retweeted ? tweet.retweeted : null;
   tweet = tweet.retweeted || tweet;
 
-  const formatDate = (val) => {
-    const date = new Date(val);
-
-    const options = {
-      day: 'numeric',
-      month: 'short',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: false,
-    };
-
-    return date.toLocaleString('en-GB', options).split(',').join(' at');
-  };
+  useEffect(() => async () => await getComments(tweet._id), []);
+  useEffect(() => setComments(data), [data]);
 
   return (
     <div className="tweet-container">
       {retweet && (
         <div className="retweet-info">
-          <span class="material-symbols-outlined">sync</span>
+          <span className="material-symbols-outlined">sync</span>
           <p>{retweet.user.name} Retweeted</p>
         </div>
       )}
@@ -63,7 +60,7 @@ function Tweet({ tweet }) {
         </div>
 
         <div className="tweet-controls">
-          <div>
+          <div onClick={() => setFormIsOpen(!formIsOpen)}>
             <span className="material-symbols-outlined">mode_comment</span>
             <p>Comment</p>
           </div>
@@ -84,9 +81,11 @@ function Tweet({ tweet }) {
           </div>
         </div>
 
-        <CommentForm />
+        {formIsOpen && <CommentForm />}
 
-        <Comment tweet={tweet} />
+        {comments.map((comment) => (
+          <Comment key={comment._id} tweet={tweet} comment={comment} />
+        ))}
       </div>
     </div>
   );

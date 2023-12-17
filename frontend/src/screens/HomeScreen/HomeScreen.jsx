@@ -9,10 +9,12 @@ import Tweet from '../../components/Tweet/Tweet';
 import Trending from '../../components/Trending/Trending';
 import Suggestions from '../../components/Suggestions/Suggestions';
 
-// @todo: add comment, retweet, and saved count on tweets model
+// @todo: make comment form functional, add image preview.
+// maybe create hook for the display image function from TweetForm?
+// - hooks/comments/useCreateComment.js
 
 function HomeScreen() {
-  const { getTweets } = useGetTweets();
+  const { getTweets, isLoading, error } = useGetTweets();
   const { tweets } = useTweetsContext();
   const { userInfo } = useAuthContext();
 
@@ -21,7 +23,7 @@ function HomeScreen() {
     fetchTweets();
   }, [userInfo]);
 
-  console.log(tweets);
+  // console.log(tweets);
 
   return (
     <>
