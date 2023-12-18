@@ -9,19 +9,13 @@ import Tweet from '../../components/Tweet/Tweet';
 import Trending from '../../components/Trending/Trending';
 import Suggestions from '../../components/Suggestions/Suggestions';
 
-// @todo: refactor hooks and relvant components
 // @todo: make buttons on comments functional
 // @todo: construct urls on profile names
 
 function HomeScreen() {
-  const { getTweets, isLoading, error } = useGetTweets();
+  const { isLoading, error } = useGetTweets();
   const { tweets } = useTweetsContext();
   const { userInfo } = useAuthContext();
-
-  useEffect(() => {
-    const fetchTweets = async () => await getTweets();
-    fetchTweets();
-  }, [userInfo]);
 
   return (
     <>

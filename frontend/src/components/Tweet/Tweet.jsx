@@ -22,7 +22,7 @@ function Tweet({ tweet }) {
   }, [tweet._id, data]);
 
   const handleCreateComment = (comment) => {
-    setComments([comment, ...comments]);
+    setComments((comments) => [comment, ...comments]);
     setCommentCount(commentCount + 1);
   };
 

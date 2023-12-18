@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTweetsContext } from './useTweetsContext';
 
 export const useGetTweets = () => {
@@ -7,23 +7,27 @@ export const useGetTweets = () => {
 
   const { dispatch } = useTweetsContext();
 
-  const getTweets = async () => {
-    setIsLoading(true);
-    setError(null);
+  useEffect(() => {
+    const getTweets = async () => {
+      setIsLoading(true);
+      setError(null);
 
-    const response = await fetch('/api/tweets?limit=10');
-    const data = await response.json();
+      const response = await fetch('/api/tweets?limit=10');
+      const data = await response.json();
 
-    if (!response.ok) {
+      if (!response.ok) {
+        setIsLoading(false);
+        setError(data.error);
+        return;
+      }
+
+      dispatch({ type: 'GET_TWEETS', payload: data.data });
+
       setIsLoading(false);
-      setError(data.error);
-      return;
-    }
+    };
 
-    dispatch({ type: 'GET_TWEETS', payload: data.data });
+    getTweets();
+  }, []);
 
-    setIsLoading(false);
-  };
-
-  return { getTweets, isLoading, error };
+  return { isLoading, error };
 };
