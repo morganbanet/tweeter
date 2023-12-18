@@ -1,34 +1,37 @@
 import { useState } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
 
-export const useRemoveLike = () => {
+export const useRetweetTweet = () => {
+  const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const { userInfo } = useAuthContext();
 
-  const removeLike = async (likeId) => {
+  const retweetTweet = async (tweetId) => {
     setIsLoading(true);
     setError(null);
 
     if (!userInfo) {
-      setError({ error: `User must be authenticated` });
+      setError({ error: 'User must be authenticated' });
       setIsLoading(false);
       return;
     }
 
-    const options = { method: 'DELETE' };
-    const response = await fetch(`/api/likes/${likeId}`, options);
+    const options = { method: 'POST' };
+    const response = await fetch(`/api/tweets/${tweetId}/retweets`, options);
     const data = await response.json();
 
-    if (!response.ok) {
+    if (!response) {
       setError(data.error);
       setIsLoading(false);
       return;
     }
 
+    setData(data.data);
+
     setIsLoading(false);
   };
 
-  return { removeLike, isLoading, error };
+  return { retweetTweet, data, isLoading, error };
 };

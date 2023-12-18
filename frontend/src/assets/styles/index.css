@@ -673,6 +673,16 @@ button:disabled {
   color: #eb5757;
 }
 
+.tweet-controls .retweeted-tweet > span,
+.tweet-controls .retweeted-tweet > p {
+  color: #27ae60;
+}
+
+.tweet-controls .saved-tweet > span,
+.tweet-controls .saved-tweet > p {
+  color: #2d9cdb;
+}
+
 .comment-form {
   padding-bottom: 0.62rem;
   display: flex;

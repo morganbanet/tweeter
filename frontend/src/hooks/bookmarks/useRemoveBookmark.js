@@ -1,24 +1,24 @@
 import { useState } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
 
-export const useRemoveLike = () => {
+export const useRemoveBookmark = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const { userInfo } = useAuthContext();
 
-  const removeLike = async (likeId) => {
+  const removeBookmark = async (retweetId) => {
     setIsLoading(true);
     setError(null);
 
     if (!userInfo) {
-      setError({ error: `User must be authenticated` });
+      setError({ error: 'User must be authenticated' });
       setIsLoading(false);
       return;
     }
 
     const options = { method: 'DELETE' };
-    const response = await fetch(`/api/likes/${likeId}`, options);
+    const response = await fetch(`/api/bookmarks/${retweetId}`, options);
     const data = await response.json();
 
     if (!response.ok) {
@@ -30,5 +30,5 @@ export const useRemoveLike = () => {
     setIsLoading(false);
   };
 
-  return { removeLike, isLoading, error };
+  return { removeBookmark, isLoading, error };
 };

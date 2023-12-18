@@ -15,7 +15,7 @@ function TweetLikeButton({ tweet, likeCount, setLikeCount }) {
     likedData && setLike(likedData);
     likeData && setLike(likeData);
     (likedData || likeData) && setIsLiked(true);
-  }, [tweet._id, likedData, likeData]);
+  }, [likedData, likeData]);
   useEffect(() => setLikeCount(tweet.likedCount), [tweet._id]);
 
   const handleLikeTweet = () => {

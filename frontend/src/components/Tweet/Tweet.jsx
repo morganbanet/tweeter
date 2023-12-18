@@ -2,14 +2,19 @@ import { useState, useEffect } from 'react';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useGetComments } from '../../hooks/comments/useGetComments';
 import TweetLikeButton from '../TweetLikeButton/TweetLikeButton';
+import TweetRetweetButton from '../TweetRetweetButton/TweetRetweetButton';
+import TweetBookmarkButton from '../TweetBookmarkButton/TweetBookmarkButton';
 import CommentForm from '../CommentForm/CommentForm';
 import Comment from '../Comment/Comment';
 import formatDate from '../../utils/formatDate';
 
 function Tweet({ tweet }) {
-  const [likeCount, setLikeCount] = useState(0);
-  const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
+  const [likeCount, setLikeCount] = useState(0);
+  const [retweetCount, setRetweetCount] = useState(0);
+  const [bookmarkCount, setBookmarkCount] = useState(0);
+
+  const [comments, setComments] = useState([]);
   const [formIsOpen, setFormIsOpen] = useState(false);
 
   const retweet = tweet.retweeted ? tweet.retweeted : null;
@@ -19,8 +24,11 @@ function Tweet({ tweet }) {
   const { data, isLoading, error } = useGetComments(tweet._id);
 
   useEffect(() => {
-    setLikeCount(tweet.likeCount);
     setCommentCount(tweet.commentCount);
+    setLikeCount(tweet.likeCount);
+    setRetweetCount(tweet.retweetCount);
+    setBookmarkCount(tweet.bookmarkCount);
+
     setComments(data);
   }, [tweet._id, data]);
 
@@ -65,8 +73,9 @@ function Tweet({ tweet }) {
 
         <div className="tweet-stats">
           {commentCount > 0 && <span>{commentCount} Comments</span>}
-          {tweet.retweetCount > 0 && <span>{tweet.retweetCount} Retweets</span>}
+          {retweetCount > 0 && <span>{retweetCount} Retweets</span>}
           {likeCount > 0 && <span>{likeCount} Likes</span>}
+          {bookmarkCount > 0 && <span>{bookmarkCount} Saved</span>}
         </div>
 
         <div className="tweet-controls">
@@ -75,10 +84,11 @@ function Tweet({ tweet }) {
             <p>Comment</p>
           </div>
 
-          <div>
-            <span className="material-symbols-outlined sync">sync</span>
-            <p>Retweet</p>
-          </div>
+          <TweetRetweetButton
+            tweet={tweet}
+            retweetCount={retweetCount}
+            setRetweetCount={setRetweetCount}
+          />
 
           <TweetLikeButton
             tweet={tweet}
@@ -86,10 +96,11 @@ function Tweet({ tweet }) {
             setLikeCount={setLikeCount}
           />
 
-          <div>
-            <span className="material-symbols-outlined">bookmark</span>
-            <p>Save</p>
-          </div>
+          <TweetBookmarkButton
+            tweet={tweet}
+            bookmarkCount={bookmarkCount}
+            setBookmarkCount={setBookmarkCount}
+          />
         </div>
 
         {formIsOpen && (
