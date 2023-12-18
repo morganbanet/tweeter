@@ -16,7 +16,7 @@ function Comment({ tweet, comment }) {
       <div className="comment-area">
         <div className="comment-container">
           <div className="comment-info">
-            <p>{comment.user.name}</p>
+            <p>{comment.user.name || userInfo.name}</p>
             <span>{formatDate(comment.createdAt)}</span>
           </div>
 

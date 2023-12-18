@@ -6,23 +6,20 @@ import Comment from '../Comment/Comment';
 import formatDate from '../../utils/formatDate';
 
 function Tweet({ tweet }) {
-  const [formIsOpen, setFormIsOpen] = useState(false);
   const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
-
-  const { getComments, data, isLoading, error } = useGetComments();
-  const { userInfo } = useAuthContext();
+  const [formIsOpen, setFormIsOpen] = useState(false);
 
   const retweet = tweet.retweeted ? tweet.retweeted : null;
   tweet = tweet.retweeted || tweet;
 
+  const { userInfo } = useAuthContext();
+  const { data, isLoading, error } = useGetComments(tweet._id);
+
   useEffect(() => {
     setCommentCount(tweet.commentCount);
-    const fetchData = async () => await getComments(tweet._id);
-    fetchData();
-  }, []);
-
-  useEffect(() => setComments(data), [data]);
+    setComments(data);
+  }, [tweet._id, data]);
 
   const handleCreateComment = (comment) => {
     setComments([comment, ...comments]);

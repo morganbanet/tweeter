@@ -1,27 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export const useGetComments = () => {
+export const useGetComments = (tweetId) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const getComments = async (tweetId) => {
-    setIsLoading(true);
-    setError(null);
+  useEffect(() => {
+    const getComments = async () => {
+      setIsLoading(true);
+      setError(null);
 
-    const response = await fetch(`/api/tweets/${tweetId}/comments?limit=5`);
-    const data = await response.json();
+      const response = await fetch(`/api/tweets/${tweetId}/comments?limit=5`);
+      const data = await response.json();
 
-    if (!response.ok) {
+      if (!response.ok) {
+        setIsLoading(false);
+        setError(data.error);
+        return;
+      }
+
+      setData(data.data);
       setIsLoading(false);
-      setError(data.error);
-      return;
-    }
+    };
 
-    setData(data.data);
+    getComments();
+  }, [tweetId]);
 
-    setIsLoading(false);
-  };
-
-  return { getComments, data, isLoading, error };
+  return { data, isLoading, error };
 };
