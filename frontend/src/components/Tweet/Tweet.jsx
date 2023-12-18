@@ -1,67 +1,32 @@
 import { useState, useEffect } from 'react';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useGetComments } from '../../hooks/comments/useGetComments';
-import { useGetTweetLiked } from '../../hooks/likes/useGetTweetLiked';
-import { useLikeTweet } from '../../hooks/likes/useLikeTweet';
+import TweetLikeButton from '../TweetLikeButton/TweetLikeButton';
 import CommentForm from '../CommentForm/CommentForm';
 import Comment from '../Comment/Comment';
 import formatDate from '../../utils/formatDate';
-import { useRemoveLike } from '../../hooks/likes/useRemoveLike';
 
 function Tweet({ tweet }) {
-  const [like, setLike] = useState(null);
-  const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
-
   const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
-
   const [formIsOpen, setFormIsOpen] = useState(false);
 
   const retweet = tweet.retweeted ? tweet.retweeted : null;
   tweet = tweet.retweeted || tweet;
 
   const { userInfo } = useAuthContext();
-
-  const { data: likedData } = useGetTweetLiked(tweet._id);
-  const { data: cmtsData, isLoading, error } = useGetComments(tweet._id);
-
-  const { likeTweet, data: likeData } = useLikeTweet();
-  const { removeLike } = useRemoveLike();
+  const { data, isLoading, error } = useGetComments(tweet._id);
 
   useEffect(() => {
     setLikeCount(tweet.likeCount);
-
-    if (likeData) setLike(likeData);
-
-    if (likedData) {
-      setIsLiked(true);
-      setLike(likedData);
-    }
-
     setCommentCount(tweet.commentCount);
-    setComments(cmtsData);
-  }, [tweet._id, cmtsData, likeData]);
+    setComments(data);
+  }, [tweet._id, data]);
 
   const handleCreateComment = (comment) => {
     setComments((comments) => [comment, ...comments]);
     setCommentCount(commentCount + 1);
-  };
-
-  const handleLikeTweet = () => {
-    if (isLiked) {
-      removeLike(like._id);
-      setLike(null);
-      setIsLiked(false);
-      setLikeCount(likeCount - 1);
-    }
-
-    if (!isLiked) {
-      likeTweet(tweet._id);
-      setLike(likeData);
-      setIsLiked(true);
-      setLikeCount(likeCount + 1);
-    }
   };
 
   return (
@@ -115,13 +80,11 @@ function Tweet({ tweet }) {
             <p>Retweet</p>
           </div>
 
-          <div
-            onClick={() => handleLikeTweet()}
-            className={isLiked ? 'liked-tweet' : ''}
-          >
-            <span className={`material-symbols-outlined`}>favorite</span>
-            {isLiked ? <p>Liked</p> : <p>Like</p>}
-          </div>
+          <TweetLikeButton
+            tweet={tweet}
+            likeCount={likeCount}
+            setLikeCount={setLikeCount}
+          />
 
           <div>
             <span className="material-symbols-outlined">bookmark</span>
