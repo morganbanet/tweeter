@@ -4,11 +4,11 @@ import { useGetComments } from '../../hooks/comments/useGetComments';
 import CommentForm from '../CommentForm/CommentForm';
 import Comment from '../Comment/Comment';
 import formatDate from '../../utils/formatDate';
-import { motion } from 'framer-motion';
 
 function Tweet({ tweet }) {
   const [formIsOpen, setFormIsOpen] = useState(false);
   const [comments, setComments] = useState([]);
+  const [commentCount, setCommentCount] = useState(0);
 
   const { getComments, data, isLoading, error } = useGetComments();
   const { userInfo } = useAuthContext();
@@ -16,8 +16,18 @@ function Tweet({ tweet }) {
   const retweet = tweet.retweeted ? tweet.retweeted : null;
   tweet = tweet.retweeted || tweet;
 
-  useEffect(() => async () => await getComments(tweet._id), []);
+  useEffect(() => {
+    setCommentCount(tweet.commentCount);
+    const fetchData = async () => await getComments(tweet._id);
+    fetchData();
+  }, []);
+
   useEffect(() => setComments(data), [data]);
+
+  const handleCreateComment = (comment) => {
+    setComments([comment, ...comments]);
+    setCommentCount(commentCount + 1);
+  };
 
   return (
     <div className="tweet-container">
@@ -54,7 +64,7 @@ function Tweet({ tweet }) {
         </div>
 
         <div className="tweet-stats">
-          {tweet.commentCount > 0 && <span>{tweet.commentCount} Comments</span>}
+          {commentCount > 0 && <span>{commentCount} Comments</span>}
           {tweet.retweetCount > 0 && <span>{tweet.retweetCount} Retweets</span>}
           {tweet.likeCount > 0 && <span>{tweet.likeCount} Likes</span>}
         </div>
@@ -81,7 +91,12 @@ function Tweet({ tweet }) {
           </div>
         </div>
 
-        {formIsOpen && <CommentForm />}
+        {formIsOpen && (
+          <CommentForm
+            tweet={tweet}
+            handleCreateComment={handleCreateComment}
+          />
+        )}
 
         {comments.map((comment) => (
           <Comment key={comment._id} tweet={tweet} comment={comment} />

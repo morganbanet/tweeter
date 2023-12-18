@@ -1,19 +1,18 @@
 import { useState } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
-import { useTweetsContext } from './useTweetsContext';
 
-export const useCreateTweet = () => {
+export const useCreateComment = () => {
+  const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
 
   const { userInfo } = useAuthContext();
-  const { dispatch } = useTweetsContext();
 
-  const createTweet = async (text, file, isPrivate) => {
+  const createComment = async (text, file, tweetId) => {
     setIsLoading(true);
 
     if (!userInfo) {
-      setError({ error: 'User must be authenticated' });
+      setError({ error: `User must be authenticated` });
       setIsLoading(false);
       return;
     }
@@ -21,7 +20,6 @@ export const useCreateTweet = () => {
     // multipart/form-data
     const formData = new FormData();
     formData.append('text', text);
-    formData.append('private', isPrivate);
     if (file) formData.append('file', file);
 
     const options = {
@@ -29,7 +27,7 @@ export const useCreateTweet = () => {
       body: formData,
     };
 
-    const response = await fetch('/api/tweets', options);
+    const response = await fetch(`/api/tweets/${tweetId}/comments`, options);
     const data = await response.json();
 
     if (!response.ok) {
@@ -38,11 +36,11 @@ export const useCreateTweet = () => {
       return;
     }
 
-    dispatch({ type: 'CREATE_TWEET', payload: data.data });
+    setData(data.data);
 
     setIsLoading(false);
     setError(null);
   };
 
-  return { createTweet, isLoading, error };
+  return { createComment, data, isLoading, error };
 };

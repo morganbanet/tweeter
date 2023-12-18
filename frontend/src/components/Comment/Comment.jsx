@@ -21,6 +21,12 @@ function Comment({ tweet, comment }) {
           </div>
 
           <p>{comment.text}</p>
+
+          {comment.image && (
+            <div className="comment-image">
+              <img src={comment.image && comment.image.url} />
+            </div>
+          )}
         </div>
 
         <div className="comment-controls">
@@ -32,7 +38,7 @@ function Comment({ tweet, comment }) {
           {comment.likeCount > 0 && (
             <div className="like-info">
               <span>·</span>
-              <span>{comment.likeCount} Comments</span>
+              <span>{comment.likeCount} Likes</span>
             </div>
           )}
         </div>
