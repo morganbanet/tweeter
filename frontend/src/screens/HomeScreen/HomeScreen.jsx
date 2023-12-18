@@ -9,7 +9,7 @@ import Tweet from '../../components/Tweet/Tweet';
 import Trending from '../../components/Trending/Trending';
 import Suggestions from '../../components/Suggestions/Suggestions';
 
-// @todo: make buttons on comments functional
+// @todo: make buttons on tweets and comments functional
 // @todo: construct urls on profile names
 
 function HomeScreen() {

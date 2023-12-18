@@ -668,6 +668,11 @@ button:disabled {
   display: none;
 }
 
+.tweet-controls .liked-tweet > span,
+.tweet-controls .liked-tweet > p {
+  color: #eb5757;
+}
+
 .comment-form {
   padding-bottom: 0.62rem;
   display: flex;
@@ -697,7 +702,6 @@ button:disabled {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* align-items: center; */
 }
 
 .comment-form > form > input {

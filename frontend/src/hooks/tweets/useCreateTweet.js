@@ -11,6 +11,7 @@ export const useCreateTweet = () => {
 
   const createTweet = async (text, file, isPrivate) => {
     setIsLoading(true);
+    setError(null);
 
     if (!userInfo) {
       setError({ error: 'User must be authenticated' });
