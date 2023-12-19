@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useGetComments } from '../../hooks/comments/useGetComments';
-import TweetLikeButton from '../TweetLikeButton/TweetLikeButton';
-import TweetRetweetButton from '../TweetRetweetButton/TweetRetweetButton';
-import TweetBookmarkButton from '../TweetBookmarkButton/TweetBookmarkButton';
+import TweetInteractionButton from '../TweetInteractionButton/TweetInteractionButton';
 import CommentForm from '../CommentForm/CommentForm';
 import Comment from '../Comment/Comment';
 import formatDate from '../../utils/formatDate';
@@ -17,7 +15,7 @@ function Tweet({ tweet }) {
   const [comments, setComments] = useState([]);
   const [formIsOpen, setFormIsOpen] = useState(false);
 
-  const retweet = tweet.retweeted ? tweet.retweeted : null;
+  const retweet = tweet.retweeted ? tweet : null;
   tweet = tweet.retweeted || tweet;
 
   const { userInfo } = useAuthContext();
@@ -84,22 +82,37 @@ function Tweet({ tweet }) {
             <p>Comment</p>
           </div>
 
-          <TweetRetweetButton
-            tweet={tweet}
-            retweetCount={retweetCount}
-            setRetweetCount={setRetweetCount}
+          <TweetInteractionButton
+            resource={tweet}
+            count={retweetCount}
+            setCount={setRetweetCount}
+            resType={'tweets'}
+            btnType={'retweet'}
+            targetOne={'retweets'}
+            targetTwo={'retweeted'}
+            symbol={'sync'}
           />
 
-          <TweetLikeButton
-            tweet={tweet}
-            likeCount={likeCount}
-            setLikeCount={setLikeCount}
+          <TweetInteractionButton
+            resource={tweet}
+            count={likeCount}
+            setCount={setLikeCount}
+            resType={'tweets'}
+            btnType={'like'}
+            targetOne={'likes'}
+            targetTwo={'liked'}
+            symbol={'favorite'}
           />
 
-          <TweetBookmarkButton
-            tweet={tweet}
-            bookmarkCount={bookmarkCount}
-            setBookmarkCount={setBookmarkCount}
+          <TweetInteractionButton
+            resource={tweet}
+            count={bookmarkCount}
+            setCount={setBookmarkCount}
+            resType={'tweets'}
+            btnType={'bookmark'}
+            targetOne={'bookmarks'}
+            targetTwo={'bookmarked'}
+            symbol={'bookmark'}
           />
         </div>
 

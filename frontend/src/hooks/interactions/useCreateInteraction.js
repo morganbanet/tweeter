@@ -1,14 +1,21 @@
 import { useState } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
 
-export const useBookmarkTweet = () => {
+export const useCreateInteraction = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const { userInfo } = useAuthContext();
 
-  const bookmarkTweet = async (tweetId) => {
+  // id - :tweetId / :commentId
+  // pointA - tweets / comments
+  // pointB = likes / retweets / bookmarks
+
+  // ie: /api/tweets/:tweetId/likes
+  // ie: /api/comments/:commentId/likes
+
+  const createInteraction = async (id, pointA, pointB) => {
     setIsLoading(true);
     setError(null);
 
@@ -19,7 +26,9 @@ export const useBookmarkTweet = () => {
     }
 
     const options = { method: 'POST' };
-    const response = await fetch(`/api/tweets/${tweetId}/bookmarks`, options);
+
+    const endpoint = `/api/${pointA}/${id}/${pointB}`;
+    const response = await fetch(endpoint, options);
     const data = await response.json();
 
     if (!response) {
@@ -33,5 +42,5 @@ export const useBookmarkTweet = () => {
     setIsLoading(false);
   };
 
-  return { bookmarkTweet, data, isLoading, error };
+  return { createInteraction, data, isLoading, error };
 };

@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
 
-export const useRemoveBookmark = () => {
+// collection - likes / retweets / bookmarks
+// resourceId - likeId / retweetId / bookmarkId
+
+// ie: /api/likes/:likeId
+
+export const useRemoveInteraction = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const { userInfo } = useAuthContext();
 
-  const removeBookmark = async (retweetId) => {
+  const removeInteraction = async (id, pointA) => {
     setIsLoading(true);
     setError(null);
 
@@ -18,7 +23,7 @@ export const useRemoveBookmark = () => {
     }
 
     const options = { method: 'DELETE' };
-    const response = await fetch(`/api/bookmarks/${retweetId}`, options);
+    const response = await fetch(`/api/${pointA}/${id}`, options);
     const data = await response.json();
 
     if (!response.ok) {
@@ -30,5 +35,5 @@ export const useRemoveBookmark = () => {
     setIsLoading(false);
   };
 
-  return { removeBookmark, isLoading, error };
+  return { removeInteraction, isLoading, error };
 };

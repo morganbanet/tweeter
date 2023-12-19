@@ -668,18 +668,18 @@ button:disabled {
   display: none;
 }
 
-.tweet-controls .liked-tweet > span,
-.tweet-controls .liked-tweet > p {
+.tweet-controls .liked > span,
+.tweet-controls .liked > p {
   color: #eb5757;
 }
 
-.tweet-controls .retweeted-tweet > span,
-.tweet-controls .retweeted-tweet > p {
+.tweet-controls .retweeted > span,
+.tweet-controls .retweeted > p {
   color: #27ae60;
 }
 
-.tweet-controls .saved-tweet > span,
-.tweet-controls .saved-tweet > p {
+.tweet-controls .bookmarked > span,
+.tweet-controls .bookmarked > p {
   color: #2d9cdb;
 }
 
