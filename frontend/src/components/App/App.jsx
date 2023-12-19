@@ -14,6 +14,7 @@ import AuthedLayout from '../../layout/AuthedLayout/AuthedLayout';
 
 import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import LoginScreen from '../../screens/LoginScreen/LoginScreen';
+import ProfileScreen from '../../screens/ProfileScreen/ProfileScreen';
 
 // prettier-ignore
 const router = createBrowserRouter(
@@ -28,6 +29,7 @@ const router = createBrowserRouter(
       {/* authed users */}
       <Route path="" element={<AuthedLayout />} >
         <Route path="/" index element={<HomeScreen />} />
+        <Route path="/users/:slug/:id" element={<ProfileScreen />} />
       </Route>
 
       <Route path="*" element={<h2>404 Not Found</h2>} />

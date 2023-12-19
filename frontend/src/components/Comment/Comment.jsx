@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import formatDate from '../../utils/formatDate';
 import TweetInteractionButton from '../TweetInteractionButton/TweetInteractionButton';
@@ -24,7 +25,9 @@ function Comment({ tweet, comment }) {
       <div className="comment-area">
         <div className="comment-container">
           <div className="comment-info">
-            <p>{comment.user.name || userInfo.name}</p>
+            <Link to={`/users/${tweet.user.slug}/${tweet.user._id}`}>
+              {comment.user.name || userInfo.name}
+            </Link>
             <span>{formatDate(comment.createdAt)}</span>
           </div>
 

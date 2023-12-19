@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useGetComments } from '../../hooks/comments/useGetComments';
 import TweetInteractionButton from '../TweetInteractionButton/TweetInteractionButton';
@@ -40,21 +41,27 @@ function Tweet({ tweet }) {
       {retweet && (
         <div className="retweet-info">
           <span className="material-symbols-outlined">sync</span>
-          <p>{retweet.user.name} Retweeted</p>
+          <Link to={`/users/${retweet.user.slug}/${retweet.user._id}`}>
+            {retweet.user.name} Retweeted
+          </Link>
         </div>
       )}
 
       <div className="tweet-container-inner">
         <div className="user-info">
           <div className="tweet-avatar">
-            <img
-              src={tweet.user.avatar?.url || userInfo.avatar.url}
-              alt="user avatar"
-            />
+            <Link to={`/users/${tweet.user.slug}/${tweet.user._id}`}>
+              <img
+                src={tweet.user.avatar?.url || userInfo.avatar.url}
+                alt="user avatar"
+              />
+            </Link>
           </div>
 
           <div className="tweet-user-date">
-            <p>{tweet.user.name}</p>
+            <Link to={`/users/${tweet.user.slug}/${tweet.user._id}`}>
+              {tweet.user.name}
+            </Link>
             <span>{formatDate(tweet.createdAt)}</span>
           </div>
         </div>

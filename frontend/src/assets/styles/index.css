@@ -517,7 +517,7 @@ button:disabled {
   align-items: center;
 }
 
-.retweet-info > p {
+.retweet-info > a {
   margin: 0 0 0 0.5rem;
   color: #828282;
   font-family: var(--secondary-font);
@@ -526,6 +526,7 @@ button:disabled {
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.03063rem;
+  text-decoration: none;
 }
 
 .retweet-info > span {
@@ -533,6 +534,7 @@ button:disabled {
   color: #828282;
   border-radius: 50%;
   transform: rotate(-45deg);
+  user-select: none;
 }
 
 .user-info {
@@ -546,9 +548,10 @@ button:disabled {
   height: 2.5rem;
   border-radius: 0.5rem;
   flex-shrink: 0;
+  user-select: none;
 }
 
-.tweet-avatar > img {
+.tweet-avatar > a > img {
   width: 100%;
   height: 100%;
   border-radius: 0.5rem;
@@ -562,7 +565,7 @@ button:disabled {
   flex-direction: column;
 }
 
-.tweet-user-date > p {
+.tweet-user-date > a {
   margin: 0 0 0.12rem 0;
   color: #000;
   font-family: var(--primary-font);
@@ -571,6 +574,7 @@ button:disabled {
   font-weight: 500;
   line-height: normal;
   letter-spacing: -0.035rem;
+  text-decoration: none;
 }
 
 .tweet-user-date > span {
@@ -657,6 +661,7 @@ button:disabled {
   justify-content: center;
   align-items: center;
   color: #4f4f4f;
+  user-select: none;
 }
 
 .tweet-controls .sync {
@@ -666,6 +671,7 @@ button:disabled {
 
 .tweet-controls > div > p {
   display: none;
+  user-select: none;
 }
 
 .tweet-controls .liked > span,
@@ -786,6 +792,7 @@ button:disabled {
   height: 2.5rem;
   border-radius: 0.5rem;
   background: #c4c4c4;
+  user-select: none;
 }
 
 .comment-avatar > img {
@@ -829,7 +836,7 @@ button:disabled {
   gap: 0.5rem;
 }
 
-.comment-info > p {
+.comment-info > a {
   margin: 0;
   color: #000;
   font-family: var(--primary-font);
@@ -838,6 +845,7 @@ button:disabled {
   font-weight: 500;
   line-height: normal;
   letter-spacing: -0.03063rem;
+  text-decoration: none;
 }
 
 .comment-info > span {
@@ -891,6 +899,7 @@ button:disabled {
   align-items: center;
   gap: 0.25rem;
   cursor: pointer;
+  user-select: none;
 }
 
 .comment-controls .like-info {
