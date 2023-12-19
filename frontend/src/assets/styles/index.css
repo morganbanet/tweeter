@@ -885,7 +885,8 @@ button:disabled {
   gap: 0.41rem;
 }
 
-.comment-controls .like-btn {
+.comment-controls .liked,
+.comment-controls .uninteracted {
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -898,7 +899,8 @@ button:disabled {
   gap: 0.65rem;
 }
 
-.comment-controls .like-btn > p,
+.comment-controls .uninteracted > p,
+.comment-controls .liked > p,
 .comment-controls .like-info > span {
   margin: 0;
   color: #bdbdbd;
@@ -910,10 +912,16 @@ button:disabled {
   letter-spacing: -0.02625rem;
 }
 
-.comment-controls .like-btn > span {
+.comment-controls .uninteracted > span,
+.comment-controls .liked > span {
   font-size: 0.9rem;
   color: #bdbdbd;
   display: flex;
+}
+
+.comment-controls .liked > p,
+.comment-controls .liked > span {
+  color: #eb5757;
 }
 
 @media (min-width: 1140px) {

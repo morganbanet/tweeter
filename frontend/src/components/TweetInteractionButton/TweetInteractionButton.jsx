@@ -4,16 +4,8 @@ import { useCreateInteraction } from '../../hooks/interactions/useCreateInteract
 import { useRemoveInteraction } from '../../hooks/interactions/useRemoveInteraction';
 
 function TweetInteractionButton(props) {
-  const {
-    resource,
-    count,
-    setCount,
-    resType,
-    btnType,
-    targetOne,
-    targetTwo,
-    symbol,
-  } = props;
+  // prettier-ignore
+  const { resource, count, setCount, resType, btnType, targetOne, targetTwo, symbol } = props;
   const id = resource._id;
 
   const [interaction, setInteraction] = useState(null);
@@ -59,7 +51,7 @@ function TweetInteractionButton(props) {
   return (
     <div
       onClick={() => handleInteraction()}
-      className={isInteracted ? targetTwo : ''}
+      className={isInteracted ? targetTwo : 'uninteracted'}
     >
       <span className={`material-symbols-outlined ${sync ? 'sync' : ''}`}>
         {symbol}

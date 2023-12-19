@@ -1,8 +1,16 @@
+import { useEffect, useState } from 'react';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import formatDate from '../../utils/formatDate';
+import TweetInteractionButton from '../TweetInteractionButton/TweetInteractionButton';
 
 function Comment({ tweet, comment }) {
+  const [likeCount, setLikeCount] = useState(0);
+
   const { userInfo } = useAuthContext();
+
+  useEffect(() => {
+    setLikeCount(comment.likeCount);
+  }, [comment._id]);
 
   return (
     <div className="tweet-comment">
@@ -30,15 +38,21 @@ function Comment({ tweet, comment }) {
         </div>
 
         <div className="comment-controls">
-          <div className="like-btn">
-            <span className="material-symbols-outlined">favorite</span>
-            <p>Like</p>
-          </div>
+          <TweetInteractionButton
+            resource={comment}
+            count={likeCount}
+            setCount={setLikeCount}
+            resType={'comments'}
+            btnType={'like'}
+            targetOne={'likes'}
+            targetTwo={'liked'}
+            symbol={'favorite'}
+          />
 
-          {comment.likeCount > 0 && (
+          {likeCount > 0 && (
             <div className="like-info">
               <span>·</span>
-              <span>{comment.likeCount} Likes</span>
+              <span>{likeCount} Likes</span>
             </div>
           )}
         </div>

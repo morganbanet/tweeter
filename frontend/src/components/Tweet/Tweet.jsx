@@ -8,8 +8,8 @@ import formatDate from '../../utils/formatDate';
 
 function Tweet({ tweet }) {
   const [commentCount, setCommentCount] = useState(0);
-  const [likeCount, setLikeCount] = useState(0);
   const [retweetCount, setRetweetCount] = useState(0);
+  const [likeCount, setLikeCount] = useState(0);
   const [bookmarkCount, setBookmarkCount] = useState(0);
 
   const [comments, setComments] = useState([]);
