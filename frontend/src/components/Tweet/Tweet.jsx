@@ -29,11 +29,25 @@ function Tweet({ tweet }) {
     setBookmarkCount(tweet.bookmarkCount);
 
     setComments(data);
+
+    // temp / debug
+    constructHashtags();
   }, [tweet._id, data]);
 
   const handleCreateComment = (comment) => {
     setComments((comments) => [comment, ...comments]);
     setCommentCount(commentCount + 1);
+  };
+
+  const constructHashtags = () => {
+    const hashtags = tweet.text.match(/#\w+/g);
+    if (hashtags) {
+      // debug
+      console.log(hashtags);
+    }
+
+    // const hashtags = tweetToCreate.text.match(/#\w+/g);
+    // if (hashtags) tweet = await createHashtags(hashtags, tweet);
   };
 
   return (

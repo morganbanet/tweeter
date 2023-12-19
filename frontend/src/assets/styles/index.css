@@ -817,6 +817,7 @@ button:disabled {
 
 .comment-area {
   width: 100%;
+  max-width: calc(100% - 3.18rem);
 }
 
 .comment-container {
@@ -860,7 +861,7 @@ button:disabled {
 
 .comment-container > p {
   width: 100%;
-  max-width: 34.00925rem;
+  max-width: 544.148px;
   margin: 0;
   color: #4f4f4f;
   font-family: var(--secondary-font);
@@ -869,6 +870,7 @@ button:disabled {
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.035rem;
+  word-wrap: break-word;
 }
 
 .comment-image {

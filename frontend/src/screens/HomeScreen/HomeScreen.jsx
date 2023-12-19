@@ -7,7 +7,6 @@ import Tweet from '../../components/Tweet/Tweet';
 import Trending from '../../components/Trending/Trending';
 import Suggestions from '../../components/Suggestions/Suggestions';
 
-// @todo: construct urls on profile names
 // @todo: detect hastags and construct links
 // @todo: ensure only one comment form appears at any one time
 

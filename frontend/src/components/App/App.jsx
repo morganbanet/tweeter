@@ -12,8 +12,9 @@ import RootLayout from '../../layout/RootLayout/RootLayout';
 import UnauthedLayout from '../../layout/UnauthedLayout/UnauthedLayout';
 import AuthedLayout from '../../layout/AuthedLayout/AuthedLayout';
 
-import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import LoginScreen from '../../screens/LoginScreen/LoginScreen';
+import HomeScreen from '../../screens/HomeScreen/HomeScreen';
+import ExploreScreen from '../../screens/ExploreScreen/ExploreScreen';
 import ProfileScreen from '../../screens/ProfileScreen/ProfileScreen';
 
 // prettier-ignore
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
       {/* authed users */}
       <Route path="" element={<AuthedLayout />} >
         <Route path="/" index element={<HomeScreen />} />
+        <Route path="/explore" element={<ExploreScreen />} />
         <Route path="/users/:slug/:id" element={<ProfileScreen />} />
       </Route>
 
