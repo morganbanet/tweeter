@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
-import formatDate from '../../utils/formatDate';
 import TweetInteractionButton from '../TweetInteractionButton/TweetInteractionButton';
+import processText from '../../utils/processText';
+import formatDate from '../../utils/formatDate';
 
 function Comment({ tweet, comment }) {
   const [likeCount, setLikeCount] = useState(0);
@@ -31,7 +32,7 @@ function Comment({ tweet, comment }) {
             <span>{formatDate(comment.createdAt)}</span>
           </div>
 
-          <p>{comment.text}</p>
+          <p>{processText(comment.text)}</p>
 
           {comment.image && (
             <div className="comment-image">

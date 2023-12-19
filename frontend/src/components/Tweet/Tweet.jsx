@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useGetComments } from '../../hooks/comments/useGetComments';
 import TweetInteractionButton from '../TweetInteractionButton/TweetInteractionButton';
 import CommentForm from '../CommentForm/CommentForm';
 import Comment from '../Comment/Comment';
+import processText from '../../utils/processText';
 import formatDate from '../../utils/formatDate';
 
 function Tweet({ tweet }) {
@@ -29,25 +30,11 @@ function Tweet({ tweet }) {
     setBookmarkCount(tweet.bookmarkCount);
 
     setComments(data);
-
-    // temp / debug
-    constructHashtags();
   }, [tweet._id, data]);
 
   const handleCreateComment = (comment) => {
     setComments((comments) => [comment, ...comments]);
     setCommentCount(commentCount + 1);
-  };
-
-  const constructHashtags = () => {
-    const hashtags = tweet.text.match(/#\w+/g);
-    if (hashtags) {
-      // debug
-      console.log(hashtags);
-    }
-
-    // const hashtags = tweetToCreate.text.match(/#\w+/g);
-    // if (hashtags) tweet = await createHashtags(hashtags, tweet);
   };
 
   return (
@@ -81,7 +68,7 @@ function Tweet({ tweet }) {
         </div>
 
         <div className="tweet-body">
-          <p>{tweet.text}</p>
+          <p>{processText(tweet.text)}</p>
 
           {tweet.image && (
             <div className="tweet-image">

@@ -587,7 +587,8 @@ button:disabled {
   letter-spacing: -0.02625rem;
 }
 
-.tweet-body > p {
+.tweet-body > p,
+.tweet-body .hashtag {
   margin: 0 0 0.87rem 0;
   color: #4f4f4f;
   font-family: var(--secondary-font);
@@ -596,6 +597,12 @@ button:disabled {
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.035rem;
+  text-decoration: none;
+}
+
+.tweet-body .hashtag {
+  color: var(--theme-color);
+  text-decoration: none;
 }
 
 .tweet-image {
@@ -859,7 +866,8 @@ button:disabled {
   letter-spacing: -0.02625rem;
 }
 
-.comment-container > p {
+.comment-container > p,
+.comment-container .hashtag {
   width: 100%;
   max-width: 544.148px;
   margin: 0;
@@ -871,6 +879,12 @@ button:disabled {
   line-height: normal;
   letter-spacing: -0.035rem;
   word-wrap: break-word;
+  text-decoration: none;
+}
+
+.comment-container .hashtag {
+  color: var(--theme-color);
+  text-decoration: none;
 }
 
 .comment-image {
