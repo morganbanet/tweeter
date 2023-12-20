@@ -641,10 +641,10 @@ button:disabled {
 .tweet-controls {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.59rem;
+  margin-bottom: 0rem;
   padding: 0.31rem 0;
   border-top: 1px solid #f2f2f2;
-  border-bottom: 1px solid #f2f2f2;
+  /* border-bottom: 1px solid #f2f2f2; */
 }
 
 .tweet-controls > div {
@@ -697,10 +697,8 @@ button:disabled {
 }
 
 .comment-form {
-  padding-bottom: 0.62rem;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #f2f2f2;
   gap: 1.09rem;
 }
 
@@ -717,6 +715,7 @@ button:disabled {
   border-radius: 0.75rem;
   object-fit: cover;
   object-position: center;
+  user-select: none;
 }
 
 .comment-form > form {
@@ -761,6 +760,7 @@ button:disabled {
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
 }
 
 .comment-form > form > input[type='file'] {

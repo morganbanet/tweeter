@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
@@ -20,6 +20,8 @@ function Tweet({ tweet }) {
   const [comments, setComments] = useState([]);
   const [formIsOpen, setFormIsOpen] = useState(false);
 
+  const controlsRef = useRef();
+
   const retweet = tweet.retweeted ? tweet : null;
   tweet = tweet.retweeted || tweet;
 
@@ -33,6 +35,14 @@ function Tweet({ tweet }) {
     setBookmarkCount(tweet.bookmarkCount);
     setComments(data);
   }, [tweet._id, data]);
+  useEffect(() => handleControlsBorder(), [formIsOpen]);
+
+  const handleControlsBorder = () => {
+    controlsRef.current.style.marginBottom =
+      formIsOpen || comments.length > 0 ? '0.59rem' : '0';
+    controlsRef.current.style.borderBottom =
+      formIsOpen || comments.length > 0 ? '1px solid #f2f2f2' : 'none';
+  };
 
   return (
     <div className="tweet-container">
@@ -81,7 +91,7 @@ function Tweet({ tweet }) {
           {bookmarkCount > 0 && <span>{bookmarkCount} Saved</span>}
         </div>
 
-        <div className="tweet-controls">
+        <div ref={controlsRef} className="tweet-controls">
           <div onClick={() => setFormIsOpen(!formIsOpen)}>
             <span className="material-symbols-outlined">mode_comment</span>
             <p>Comment</p>
@@ -127,6 +137,7 @@ function Tweet({ tweet }) {
             setComments={setComments}
             commentCount={commentCount}
             setCommentCount={setCommentCount}
+            formIsOpen={formIsOpen}
           />
         )}
 

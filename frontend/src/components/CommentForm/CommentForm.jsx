@@ -2,13 +2,20 @@ import { useState, useRef, useEffect } from 'react';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useCreateComment } from '../../hooks/comments/useCreateComment';
 
-function CommentForm({ tweet, setComments, commentCount, setCommentCount }) {
+function CommentForm({
+  tweet,
+  setComments,
+  commentCount,
+  setCommentCount,
+  formIsOpen,
+}) {
   const [text, setText] = useState('');
   const [file, setFile] = useState(null);
 
   const imageRef = useRef();
   const cancelRef = useRef();
   const uploadRef = useRef();
+  const formRef = useRef();
 
   const { userInfo } = useAuthContext();
   const { createComment, data, isLoading, error } = useCreateComment();
@@ -24,6 +31,13 @@ function CommentForm({ tweet, setComments, commentCount, setCommentCount }) {
     data && setComments((comments) => [data, ...comments]);
     data && setCommentCount(commentCount + 1);
   }, [data]);
+  useEffect(() => handleFormsBorder(), [formIsOpen, commentCount]);
+
+  const handleFormsBorder = () => {
+    formRef.current.style.paddingBottom = commentCount > 0 ? '0.62rem' : '0';
+    formRef.current.style.borderBottom =
+      commentCount > 0 ? '1px solid #f2f2f2' : 'none';
+  };
 
   const handleFile = (e) => {
     setFile(e.target.files[0]);
@@ -49,7 +63,7 @@ function CommentForm({ tweet, setComments, commentCount, setCommentCount }) {
   };
 
   return (
-    <div className="comment-form">
+    <div ref={formRef} className="comment-form">
       <div>
         <img src={userInfo.avatar.url} alt="user avatar" />
       </div>

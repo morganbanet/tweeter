@@ -7,7 +7,6 @@ import Suggestions from '../../components/Suggestions/Suggestions';
 import Trending from '../../components/Trending/Trending';
 
 // @todo: ensure only one comment form appears at any one time
-// @todo: if comments or comment form open, show tweet controls border
 // @todo: create modal for listing users who liked or saved a post
 
 function HomeScreen() {
