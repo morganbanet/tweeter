@@ -1,18 +1,15 @@
 import { useState } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
 import { useTweetContext } from '../tweet/useTweetContext';
+import { useCommentContext } from '../comment/useCommentContext';
 
-// collection - likes / retweets / bookmarks
-// resourceId - likeId / retweetId / bookmarkId
-
-// ie: /api/likes/:likeId
-
-export const useRemoveInteraction = () => {
+export const useRemoveInteraction = (resType) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const { dispatch } =
+    resType === 'tweets' ? useTweetContext() : useCommentContext();
   const { userInfo } = useAuthContext();
-  const { dispatch } = useTweetContext();
 
   const removeInteraction = async (id, pointA, type) => {
     setIsLoading(true);

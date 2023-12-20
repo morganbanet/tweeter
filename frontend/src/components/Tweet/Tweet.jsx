@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
+import { CommentProvider } from '../../context/comment/CommentContext';
+
 import { useTweetContext } from '../../hooks/tweet/useTweetContext';
 import { useCommentsContext } from '../../hooks/comments/useCommentsContext';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
@@ -113,7 +115,9 @@ function Tweet({ tweet }) {
         {isOpen && <CommentForm tweet={tweet} formIsOpen={isOpen} />}
 
         {comments.map((comment) => (
-          <Comment key={comment._id} tweet={tweet} comment={comment} />
+          <CommentProvider key={comment._id} comment={comment}>
+            <Comment key={comment._id} tweet={tweet} comment={comment} />
+          </CommentProvider>
         ))}
       </div>
     </div>

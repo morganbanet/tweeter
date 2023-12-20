@@ -12,8 +12,9 @@ function TweetInteractionButton(props) {
   const [isInteracted, setIsInteracted] = useState(false);
 
   const { data: interactedData } = useGetInteracted(id, targetOne, targetTwo);
-  const { createInteraction, data: interactionData } = useCreateInteraction();
-  const { removeInteraction } = useRemoveInteraction();
+  const { createInteraction, data: interactionData } =
+    useCreateInteraction(resType);
+  const { removeInteraction } = useRemoveInteraction(resType);
 
   useEffect(() => {
     interactedData && setInteraction(interactedData);

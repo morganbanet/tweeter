@@ -1,21 +1,16 @@
 import { useState } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
 import { useTweetContext } from '../tweet/useTweetContext';
+import { useCommentContext } from '../comment/useCommentContext';
 
-export const useCreateInteraction = () => {
+export const useCreateInteraction = (resType) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const { dispatch } =
+    resType === 'tweets' ? useTweetContext() : useCommentContext();
   const { userInfo } = useAuthContext();
-  const { dispatch } = useTweetContext();
-
-  // id - :tweetId / :commentId
-  // pointA - tweets / comments
-  // pointB = likes / retweets / bookmarks
-
-  // ie: /api/tweets/:tweetId/likes
-  // ie: /api/comments/:commentId/likes
 
   const createInteraction = async (id, pointA, pointB, type) => {
     setIsLoading(true);
