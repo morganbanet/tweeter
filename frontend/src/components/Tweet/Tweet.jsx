@@ -68,7 +68,7 @@ function Tweet({ tweet }) {
 
           <div className="tweet-user-date">
             <Link to={`/users/${tweet.user.slug}/${tweet.user._id}`}>
-              {tweet.user.name}
+              {tweet.user.name || userInfo.name}
             </Link>
             <span>{formatDate(tweet.createdAt)}</span>
           </div>
