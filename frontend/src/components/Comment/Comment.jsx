@@ -31,7 +31,7 @@ function Comment({ tweet, comment }) {
       <div className="comment-area">
         <div className="comment-container">
           <div className="comment-info">
-            <Link to={`/users/${tweet.user.slug}/${tweet.user._id}`}>
+            <Link to={`/users/${comment.user.slug}/${comment.user._id}`}>
               {comment.user.name || userInfo.name}
             </Link>
             <span>{formatDate(comment.createdAt)}</span>
