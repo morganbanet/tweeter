@@ -6,6 +6,7 @@ import { CommentProvider } from '../../context/comment/CommentContext';
 import { useTweetContext } from '../../hooks/tweet/useTweetContext';
 import { useCommentsContext } from '../../hooks/comments/useCommentsContext';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
+
 import { useGetComments } from '../../hooks/comments/useGetComments';
 
 import Comment from '../Comment/Comment';
@@ -28,7 +29,6 @@ function Tweet({ tweet }) {
   const { isLoading, error } = useGetComments(tweet._id);
 
   const controlsRef = useRef();
-
   useEffect(() => handleControlsBorder(controlsRef, isOpen, count), [isOpen]);
 
   return (
@@ -112,7 +112,7 @@ function Tweet({ tweet }) {
           />
         </div>
 
-        {isOpen && <CommentForm tweet={tweet} formIsOpen={isOpen} />}
+        {isOpen && <CommentForm tweet={tweet} isOpen={isOpen} />}
 
         {comments.map((comment) => (
           <CommentProvider key={comment._id} comment={comment}>

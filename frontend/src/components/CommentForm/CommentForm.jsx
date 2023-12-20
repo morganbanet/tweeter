@@ -1,27 +1,25 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useTweetContext } from '../../hooks/tweet/useTweetContext';
+
 import { useCreateComment } from '../../hooks/comments/useCreateComment';
 import { handleFormsBorder } from '../../utils/handleBorder';
 
-function CommentForm({
-  tweet,
-  setComments,
-  commentCount,
-  setCommentCount,
-  formIsOpen,
-}) {
+function CommentForm({ tweet, isOpen }) {
   const [text, setText] = useState('');
   const [file, setFile] = useState(null);
+
+  const { count } = useTweetContext();
+  const { userInfo } = useAuthContext();
+
+  const { createComment, isLoading, error } = useCreateComment();
 
   const imageRef = useRef();
   const cancelRef = useRef();
   const uploadRef = useRef();
   const formRef = useRef();
 
-  const { userInfo } = useAuthContext();
-  const { count } = useTweetContext();
-  const { createComment, data, isLoading, error } = useCreateComment();
+  useEffect(() => handleFormsBorder(formRef, count), [isOpen, count]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,12 +27,6 @@ function CommentForm({
     !error && setText('');
     !error && resetFile();
   };
-
-  useEffect(() => {
-    data && setComments((comments) => [data, ...comments]);
-    data && setCommentCount(commentCount + 1);
-  }, [data]);
-  useEffect(() => handleFormsBorder(formRef, count), [formIsOpen, count]);
 
   const handleFile = (e) => {
     setFile(e.target.files[0]);

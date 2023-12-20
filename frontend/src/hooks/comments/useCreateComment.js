@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
+import { useCommentsContext } from './useCommentsContext';
 
 export const useCreateComment = () => {
-  const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  const { dispatch } = useCommentsContext();
   const { userInfo } = useAuthContext();
 
   const createComment = async (text, file, tweetId) => {
@@ -37,11 +38,10 @@ export const useCreateComment = () => {
       return;
     }
 
-    setData(data.data);
+    dispatch({ type: 'CREATE_COMMENT', payload: data.data });
 
     setIsLoading(false);
-    setError(null);
   };
 
-  return { createComment, data, isLoading, error };
+  return { createComment, isLoading, error };
 };
