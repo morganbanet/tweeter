@@ -70,7 +70,7 @@ exports.createComment = asyncHandler(async (req, res, next) => {
   // Mark comment privacy same as parent tweet
   req.body.private = tweet.private;
 
-  const comment = await Comment.create(req.body);
+  let comment = await Comment.create(req.body);
 
   await tweet.modifyCount('commentCount', +1);
 

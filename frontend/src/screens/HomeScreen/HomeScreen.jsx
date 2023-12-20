@@ -6,8 +6,9 @@ import TweetForm from '../../components/TweetForm/TweetForm';
 import Suggestions from '../../components/Suggestions/Suggestions';
 import Trending from '../../components/Trending/Trending';
 
-// @todo: ensure only one comment form appears at any one time
+// @todo: create tweetsprovider & context
 // @todo: create modal for listing users who liked or saved a post
+// @todo: add delete tweet dropdown button
 
 function HomeScreen() {
   const { isLoading, error } = useGetTweets();
@@ -22,7 +23,13 @@ function HomeScreen() {
 
         <section className="tweets">
           {tweets &&
-            tweets.map((tweet) => <Tweet key={tweet._id} tweet={tweet} />)}
+            tweets.map((tweet) => (
+              // <TweetProvider>
+              // <commentsProvider>
+              <Tweet key={tweet._id} tweet={tweet} />
+              // </commentsProvider>
+              // </TweetProvider>
+            ))}
         </section>
       </main>
 

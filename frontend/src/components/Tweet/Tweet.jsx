@@ -35,13 +35,13 @@ function Tweet({ tweet }) {
     setBookmarkCount(tweet.bookmarkCount);
     setComments(data);
   }, [tweet._id, data]);
-  useEffect(() => handleControlsBorder(), [formIsOpen]);
+  useEffect(() => handleControlsBorder(), [formIsOpen, data]);
 
   const handleControlsBorder = () => {
     controlsRef.current.style.marginBottom =
-      formIsOpen || comments.length > 0 ? '0.59rem' : '0';
+      formIsOpen || commentCount > 0 ? '0.59rem' : '0';
     controlsRef.current.style.borderBottom =
-      formIsOpen || comments.length > 0 ? '1px solid #f2f2f2' : 'none';
+      formIsOpen || commentCount > 0 ? '1px solid #f2f2f2' : 'none';
   };
 
   return (
