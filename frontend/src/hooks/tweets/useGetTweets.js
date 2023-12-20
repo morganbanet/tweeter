@@ -12,7 +12,7 @@ export const useGetTweets = () => {
       setIsLoading(true);
       setError(null);
 
-      const response = await fetch('/api/tweets?limit=6');
+      const response = await fetch('/api/tweets?limit=10');
       const data = await response.json();
 
       if (!response.ok) {

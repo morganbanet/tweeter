@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useCreateComment } from '../../hooks/comments/useCreateComment';
 
-function CommentForm({ tweet, handleCreateComment }) {
+function CommentForm({ tweet, setComments, commentCount, setCommentCount }) {
   const [text, setText] = useState('');
   const [file, setFile] = useState(null);
 
@@ -10,22 +10,19 @@ function CommentForm({ tweet, handleCreateComment }) {
   const cancelRef = useRef();
   const uploadRef = useRef();
 
-  const { createComment, data, isLoading, error } = useCreateComment();
   const { userInfo } = useAuthContext();
+  const { createComment, data, isLoading, error } = useCreateComment();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    await createComment(text, file, tweet._id);
-
-    if (!error) {
-      setText('');
-      resetFile();
-    }
+    createComment(text, file, tweet._id);
+    !error && setText('');
+    !error && resetFile();
   };
 
   useEffect(() => {
-    if (data) handleCreateComment(data);
+    data && setComments((comments) => [data, ...comments]);
+    data && setCommentCount(commentCount + 1);
   }, [data]);
 
   const handleFile = (e) => {
@@ -33,21 +30,18 @@ function CommentForm({ tweet, handleCreateComment }) {
     readFile(e.target.files[0]);
   };
 
-  // reset file input
   const resetFile = () => {
     setFile(null);
     displayFile();
     uploadRef.current.value = null;
   };
 
-  // read file before preview
   const readFile = (file) => {
     const reader = new FileReader();
     reader.onload = (e) => displayFile(e);
     reader.readAsDataURL(file);
   };
 
-  // toggle file preview
   const displayFile = (file) => {
     imageRef.current.src = file ? file.target.result : '#';
     imageRef.current.style.display = file ? 'block' : 'none';

@@ -1,19 +1,18 @@
 import { useGetTweets } from '../../hooks/tweets/useGetTweets';
 import { useTweetsContext } from '../../hooks/tweets/useTweetsContext';
-import { useAuthContext } from '../../hooks/auth/useAuthContext';
 
-import TweetForm from '../../components/TweetForm/TweetForm';
 import Tweet from '../../components/Tweet/Tweet';
-import Trending from '../../components/Trending/Trending';
+import TweetForm from '../../components/TweetForm/TweetForm';
 import Suggestions from '../../components/Suggestions/Suggestions';
+import Trending from '../../components/Trending/Trending';
 
-// @todo: detect hastags and construct links
 // @todo: ensure only one comment form appears at any one time
+// @todo: if comments or comment form open, show tweet controls border
+// @todo: create modal for listing users who liked or saved a post
 
 function HomeScreen() {
   const { isLoading, error } = useGetTweets();
   const { tweets } = useTweetsContext();
-  const { userInfo } = useAuthContext();
 
   return (
     <>

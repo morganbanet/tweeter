@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
-import TweetInteractionButton from '../TweetInteractionButton/TweetInteractionButton';
-import processText from '../../utils/processText';
+
+import InteractionButton from '../InteractionButton/InteractionButton';
+
 import formatDate from '../../utils/formatDate';
+import processText from '../../utils/processText';
 
 function Comment({ tweet, comment }) {
   const [likeCount, setLikeCount] = useState(0);
@@ -17,10 +20,12 @@ function Comment({ tweet, comment }) {
   return (
     <div className="tweet-comment">
       <div className="comment-avatar">
-        <img
-          src={comment.user.avatar?.url || userInfo.avatar.url}
-          alt="user avatar"
-        />
+        <Link to={`/users/${comment.user.slug}/${comment.user._id}`}>
+          <img
+            src={comment.user.avatar?.url || userInfo.avatar.url}
+            alt="user avatar"
+          />
+        </Link>
       </div>
 
       <div className="comment-area">
@@ -42,7 +47,7 @@ function Comment({ tweet, comment }) {
         </div>
 
         <div className="comment-controls">
-          <TweetInteractionButton
+          <InteractionButton
             resource={comment}
             count={likeCount}
             setCount={setLikeCount}

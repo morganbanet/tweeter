@@ -622,13 +622,13 @@ button:disabled {
 }
 
 .tweet-stats {
-  margin-bottom: 0.41rem;
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
 }
 
 .tweet-stats > span {
+  margin-bottom: 0.41rem;
   color: #bdbdbd;
   font-family: var(--primary-font);
   font-size: 0.75rem;
@@ -802,7 +802,7 @@ button:disabled {
   user-select: none;
 }
 
-.comment-avatar > img {
+.comment-avatar > a > img {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 0.5rem;
@@ -1089,7 +1089,7 @@ button:disabled {
     margin-bottom: 0.75rem;
   }
 
-  .tweet-stats {
+  .tweet-stats > span {
     margin-bottom: 0.5rem;
   }
 

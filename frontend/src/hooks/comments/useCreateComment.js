@@ -10,6 +10,7 @@ export const useCreateComment = () => {
 
   const createComment = async (text, file, tweetId) => {
     setIsLoading(true);
+    setError(null);
 
     if (!userInfo) {
       setError({ error: `User must be authenticated` });

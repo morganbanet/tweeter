@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useGetComments } from '../../hooks/comments/useGetComments';
-import TweetInteractionButton from '../TweetInteractionButton/TweetInteractionButton';
-import CommentForm from '../CommentForm/CommentForm';
+
 import Comment from '../Comment/Comment';
-import processText from '../../utils/processText';
+import CommentForm from '../CommentForm/CommentForm';
+import InteractionButton from '../InteractionButton/InteractionButton';
+
 import formatDate from '../../utils/formatDate';
+import processText from '../../utils/processText';
 
 function Tweet({ tweet }) {
   const [commentCount, setCommentCount] = useState(0);
@@ -28,14 +31,8 @@ function Tweet({ tweet }) {
     setLikeCount(tweet.likeCount);
     setRetweetCount(tweet.retweetCount);
     setBookmarkCount(tweet.bookmarkCount);
-
     setComments(data);
   }, [tweet._id, data]);
-
-  const handleCreateComment = (comment) => {
-    setComments((comments) => [comment, ...comments]);
-    setCommentCount(commentCount + 1);
-  };
 
   return (
     <div className="tweet-container">
@@ -90,7 +87,7 @@ function Tweet({ tweet }) {
             <p>Comment</p>
           </div>
 
-          <TweetInteractionButton
+          <InteractionButton
             resource={tweet}
             count={retweetCount}
             setCount={setRetweetCount}
@@ -101,7 +98,7 @@ function Tweet({ tweet }) {
             symbol={'sync'}
           />
 
-          <TweetInteractionButton
+          <InteractionButton
             resource={tweet}
             count={likeCount}
             setCount={setLikeCount}
@@ -112,7 +109,7 @@ function Tweet({ tweet }) {
             symbol={'favorite'}
           />
 
-          <TweetInteractionButton
+          <InteractionButton
             resource={tweet}
             count={bookmarkCount}
             setCount={setBookmarkCount}
@@ -127,7 +124,9 @@ function Tweet({ tweet }) {
         {formIsOpen && (
           <CommentForm
             tweet={tweet}
-            handleCreateComment={handleCreateComment}
+            setComments={setComments}
+            commentCount={commentCount}
+            setCommentCount={setCommentCount}
           />
         )}
 
