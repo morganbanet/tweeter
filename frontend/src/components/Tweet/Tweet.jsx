@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
+import { useTweetContext } from '../../hooks/tweet/useTweetContext';
+import { useCommentsContext } from '../../hooks/comments/useCommentsContext';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useGetComments } from '../../hooks/comments/useGetComments';
 
@@ -10,39 +12,22 @@ import InteractionButton from '../InteractionButton/InteractionButton';
 
 import formatDate from '../../utils/formatDate';
 import processText from '../../utils/processText';
+import { handleControlsBorder } from '../../utils/handleBorder';
 
 function Tweet({ tweet }) {
-  const [commentCount, setCommentCount] = useState(0);
-  const [retweetCount, setRetweetCount] = useState(0);
-  const [likeCount, setLikeCount] = useState(0);
-  const [bookmarkCount, setBookmarkCount] = useState(0);
-
-  const [comments, setComments] = useState([]);
-  const [formIsOpen, setFormIsOpen] = useState(false);
-
-  const controlsRef = useRef();
+  const [isOpen, setIsOpen] = useState(false);
 
   const retweet = tweet.retweeted ? tweet : null;
   tweet = tweet.retweeted || tweet;
 
+  const { count } = useTweetContext();
   const { userInfo } = useAuthContext();
-  const { data, isLoading, error } = useGetComments(tweet._id);
+  const { comments } = useCommentsContext();
+  const { isLoading, error } = useGetComments(tweet._id);
 
-  useEffect(() => {
-    setCommentCount(tweet.commentCount);
-    setLikeCount(tweet.likeCount);
-    setRetweetCount(tweet.retweetCount);
-    setBookmarkCount(tweet.bookmarkCount);
-    setComments(data);
-  }, [tweet._id, data]);
-  useEffect(() => handleControlsBorder(), [formIsOpen, data]);
+  const controlsRef = useRef();
 
-  const handleControlsBorder = () => {
-    controlsRef.current.style.marginBottom =
-      formIsOpen || commentCount > 0 ? '0.59rem' : '0';
-    controlsRef.current.style.borderBottom =
-      formIsOpen || commentCount > 0 ? '1px solid #f2f2f2' : 'none';
-  };
+  useEffect(() => handleControlsBorder(controlsRef, isOpen, count), [isOpen]);
 
   return (
     <div className="tweet-container">
@@ -85,22 +70,20 @@ function Tweet({ tweet }) {
         </div>
 
         <div className="tweet-stats">
-          {commentCount > 0 && <span>{commentCount} Comments</span>}
-          {retweetCount > 0 && <span>{retweetCount} Retweets</span>}
-          {likeCount > 0 && <span>{likeCount} Likes</span>}
-          {bookmarkCount > 0 && <span>{bookmarkCount} Saved</span>}
+          {count.commentCount > 0 && <span>{count.commentCount} Comments</span>}
+          {count.retweetCount > 0 && <span>{count.retweetCount} Retweets</span>}
+          {count.likeCount > 0 && <span>{count.likeCount} Likes</span>}
+          {count.bookmarkCount > 0 && <span>{count.bookmarkCount} Saved</span>}
         </div>
 
         <div ref={controlsRef} className="tweet-controls">
-          <div onClick={() => setFormIsOpen(!formIsOpen)}>
+          <div onClick={() => setIsOpen(!isOpen)}>
             <span className="material-symbols-outlined">mode_comment</span>
             <p>Comment</p>
           </div>
 
           <InteractionButton
             resource={tweet}
-            count={retweetCount}
-            setCount={setRetweetCount}
             resType={'tweets'}
             btnType={'retweet'}
             targetOne={'retweets'}
@@ -110,8 +93,6 @@ function Tweet({ tweet }) {
 
           <InteractionButton
             resource={tweet}
-            count={likeCount}
-            setCount={setLikeCount}
             resType={'tweets'}
             btnType={'like'}
             targetOne={'likes'}
@@ -121,8 +102,6 @@ function Tweet({ tweet }) {
 
           <InteractionButton
             resource={tweet}
-            count={bookmarkCount}
-            setCount={setBookmarkCount}
             resType={'tweets'}
             btnType={'bookmark'}
             targetOne={'bookmarks'}
@@ -131,15 +110,7 @@ function Tweet({ tweet }) {
           />
         </div>
 
-        {formIsOpen && (
-          <CommentForm
-            tweet={tweet}
-            setComments={setComments}
-            commentCount={commentCount}
-            setCommentCount={setCommentCount}
-            formIsOpen={formIsOpen}
-          />
-        )}
+        {isOpen && <CommentForm tweet={tweet} formIsOpen={isOpen} />}
 
         {comments.map((comment) => (
           <Comment key={comment._id} tweet={tweet} comment={comment} />

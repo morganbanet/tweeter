@@ -8,7 +8,7 @@ const commentsReducer = (state, action) => {
       return {
         comments: [action.payload, ...state.comments],
       };
-    case 'DELETE_COMMENTS':
+    case 'DELETE_COMMENT':
       return {
         comments: state.comments.filter(
           (comment) => comment._id !== action.payload._id

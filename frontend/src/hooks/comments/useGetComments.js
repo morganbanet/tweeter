@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useCommentsContext } from './useCommentsContext';
 
 export const useGetComments = (tweetId) => {
-  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const { dispatch } = useCommentsContext();
 
   useEffect(() => {
     const getComments = async () => {
@@ -19,12 +21,13 @@ export const useGetComments = (tweetId) => {
         return;
       }
 
-      setData(data.data);
+      dispatch({ type: 'GET_COMMENTS', payload: data.data });
+
       setIsLoading(false);
     };
 
     getComments();
-  }, [tweetId]);
+  }, []);
 
-  return { data, isLoading, error };
+  return { isLoading, error };
 };

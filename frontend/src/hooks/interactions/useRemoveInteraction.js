@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
+import { useTweetContext } from '../tweet/useTweetContext';
 
 // collection - likes / retweets / bookmarks
 // resourceId - likeId / retweetId / bookmarkId
@@ -11,8 +12,9 @@ export const useRemoveInteraction = () => {
   const [error, setError] = useState(null);
 
   const { userInfo } = useAuthContext();
+  const { dispatch } = useTweetContext();
 
-  const removeInteraction = async (id, pointA) => {
+  const removeInteraction = async (id, pointA, type) => {
     setIsLoading(true);
     setError(null);
 
@@ -31,6 +33,8 @@ export const useRemoveInteraction = () => {
       setIsLoading(false);
       return;
     }
+
+    dispatch({ type: `DECREMENT`, payload: type });
 
     setIsLoading(false);
   };

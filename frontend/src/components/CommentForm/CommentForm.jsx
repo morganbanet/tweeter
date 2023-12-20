@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
+import { useTweetContext } from '../../hooks/tweet/useTweetContext';
 import { useCreateComment } from '../../hooks/comments/useCreateComment';
+import { handleFormsBorder } from '../../utils/handleBorder';
 
 function CommentForm({
   tweet,
@@ -18,6 +20,7 @@ function CommentForm({
   const formRef = useRef();
 
   const { userInfo } = useAuthContext();
+  const { count } = useTweetContext();
   const { createComment, data, isLoading, error } = useCreateComment();
 
   const handleSubmit = async (e) => {
@@ -31,13 +34,7 @@ function CommentForm({
     data && setComments((comments) => [data, ...comments]);
     data && setCommentCount(commentCount + 1);
   }, [data]);
-  useEffect(() => handleFormsBorder(), [formIsOpen, commentCount]);
-
-  const handleFormsBorder = () => {
-    formRef.current.style.paddingBottom = commentCount > 0 ? '0.62rem' : '0';
-    formRef.current.style.borderBottom =
-      commentCount > 0 ? '1px solid #f2f2f2' : 'none';
-  };
+  useEffect(() => handleFormsBorder(formRef, count), [formIsOpen, count]);
 
   const handleFile = (e) => {
     setFile(e.target.files[0]);

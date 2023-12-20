@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
+import { useTweetContext } from '../tweet/useTweetContext';
 
 export const useCreateInteraction = () => {
   const [data, setData] = useState(null);
@@ -7,6 +8,7 @@ export const useCreateInteraction = () => {
   const [error, setError] = useState(null);
 
   const { userInfo } = useAuthContext();
+  const { dispatch } = useTweetContext();
 
   // id - :tweetId / :commentId
   // pointA - tweets / comments
@@ -15,7 +17,7 @@ export const useCreateInteraction = () => {
   // ie: /api/tweets/:tweetId/likes
   // ie: /api/comments/:commentId/likes
 
-  const createInteraction = async (id, pointA, pointB) => {
+  const createInteraction = async (id, pointA, pointB, type) => {
     setIsLoading(true);
     setError(null);
 
@@ -38,6 +40,8 @@ export const useCreateInteraction = () => {
     }
 
     setData(data.data);
+
+    dispatch({ type: `INCREMENT`, payload: type });
 
     setIsLoading(false);
   };

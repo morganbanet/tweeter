@@ -5,7 +5,7 @@ import { useRemoveInteraction } from '../../hooks/interactions/useRemoveInteract
 
 function TweetInteractionButton(props) {
   // prettier-ignore
-  const { resource, count, setCount, resType, btnType, targetOne, targetTwo, symbol } = props;
+  const { resource, resType, btnType, targetOne, targetTwo, symbol } = props;
   const id = resource._id;
 
   const [interaction, setInteraction] = useState(null);
@@ -20,21 +20,18 @@ function TweetInteractionButton(props) {
     interactionData && setInteraction(interactionData);
     interactedData && setIsInteracted(true);
   }, [interactedData, interactionData]);
-  useEffect(() => setCount(resource[`${btnType}Count`]), [id]);
 
   const handleInteraction = () => {
     if (isInteracted) {
-      removeInteraction(interaction._id, targetOne);
+      removeInteraction(interaction._id, targetOne, btnType);
       setInteraction(null);
       setIsInteracted(false);
-      setCount(count - 1);
     }
 
     if (!isInteracted) {
-      createInteraction(id, resType, targetOne);
+      createInteraction(id, resType, targetOne, btnType);
       setInteraction(interactionData);
       setIsInteracted(true);
-      setCount(count + 1);
     }
   };
 
