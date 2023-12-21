@@ -22,15 +22,15 @@ function TweetInteractionButton(props) {
     interactedData && setIsInteracted(true);
   }, [interactedData, interactionData]);
 
-  const handleInteraction = () => {
+  const handleInteraction = async () => {
     if (isInteracted) {
-      removeInteraction(interaction._id, targetOne, btnType);
+      await removeInteraction(interaction._id, targetOne, btnType);
       setInteraction(null);
       setIsInteracted(false);
     }
 
     if (!isInteracted) {
-      createInteraction(id, resType, targetOne, btnType);
+      await createInteraction(id, resType, targetOne, btnType);
       setInteraction(interactionData);
       setIsInteracted(true);
     }

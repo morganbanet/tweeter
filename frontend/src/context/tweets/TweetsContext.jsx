@@ -5,7 +5,7 @@ const TweetsContext = createContext();
 
 function TweetsProvider({ children }) {
   const initialState = {
-    tweets: null,
+    tweets: [],
   };
 
   const [state, dispatch] = useReducer(tweetsReducer, initialState);

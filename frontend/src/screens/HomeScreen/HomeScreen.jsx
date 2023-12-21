@@ -9,9 +9,8 @@ import TweetForm from '../../components/TweetForm/TweetForm';
 import Suggestions from '../../components/Suggestions/Suggestions';
 import Trending from '../../components/Trending/Trending';
 
-// @todo: seperate image preview logic into utils helper function
-// @todo: create modal for listing users who liked or saved a post
 // @todo: add dropdown button on tweets and comment for deleting
+// @todo: create modal for listing users who liked or saved a post
 
 function HomeScreen() {
   const { isLoading, error } = useGetTweets();
@@ -24,16 +23,15 @@ function HomeScreen() {
           <TweetForm />
         </section>
 
-        {tweets &&
-          tweets.map((tweet) => (
-            <section key={tweet._id} className="tweets">
-              <TweetProvider tweet={tweet}>
-                <CommentsProvider>
-                  <Tweet tweet={tweet} />
-                </CommentsProvider>
-              </TweetProvider>
-            </section>
-          ))}
+        {tweets.map((tweet) => (
+          <section key={tweet._id} className="tweets">
+            <TweetProvider tweet={tweet}>
+              <CommentsProvider>
+                <Tweet tweet={tweet} />
+              </CommentsProvider>
+            </TweetProvider>
+          </section>
+        ))}
       </main>
 
       <section>

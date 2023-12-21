@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
 import { CommentProvider } from '../../context/comment/CommentContext';
 
@@ -16,9 +17,11 @@ import InteractionButton from '../InteractionButton/InteractionButton';
 import formatDate from '../../utils/formatDate';
 import processText from '../../utils/processText';
 import { handleControlsBorder } from '../../utils/handleBorder';
+import TweetDropdown from '../TweetDropdown/TweetDropdown';
 
 function Tweet({ tweet }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const [formIsOpen, setFormIsOpen] = useState(false);
 
   const retweet = tweet.retweeted ? tweet : null;
   tweet = tweet.retweeted || tweet;
@@ -29,7 +32,15 @@ function Tweet({ tweet }) {
   const { isLoading, error } = useGetComments(tweet._id);
 
   const controlsRef = useRef();
-  useEffect(() => handleControlsBorder(controlsRef, isOpen, count), [isOpen]);
+  useEffect(
+    () => handleControlsBorder(controlsRef, formIsOpen, count),
+    [formIsOpen]
+  );
+
+  const handleClick = (e) => {
+    if (e.target.classList.contains('tweet-dropdown')) return;
+    setMenuIsOpen(!menuIsOpen);
+  };
 
   return (
     <div className="tweet-container">
@@ -43,22 +54,33 @@ function Tweet({ tweet }) {
       )}
 
       <div className="tweet-container-inner">
-        <div className="user-info">
-          <div className="tweet-avatar">
-            <Link to={`/users/${tweet.user.slug}/${tweet.user._id}`}>
-              <img
-                src={tweet.user.avatar?.url || userInfo.avatar.url}
-                alt="user avatar"
-              />
-            </Link>
+        <div className="tweet-header">
+          <div className="user-info">
+            <div className="tweet-avatar">
+              <Link to={`/users/${tweet.user.slug}/${tweet.user._id}`}>
+                <img
+                  src={tweet.user.avatar?.url || userInfo.avatar.url}
+                  alt="user avatar"
+                />
+              </Link>
+            </div>
+
+            <div className="tweet-user-date">
+              <Link to={`/users/${tweet.user.slug}/${tweet.user._id}`}>
+                {tweet.user.name || userInfo.name}
+              </Link>
+              <span>{formatDate(tweet.createdAt)}</span>
+            </div>
           </div>
 
-          <div className="tweet-user-date">
-            <Link to={`/users/${tweet.user.slug}/${tweet.user._id}`}>
-              {tweet.user.name || userInfo.name}
-            </Link>
-            <span>{formatDate(tweet.createdAt)}</span>
-          </div>
+          {(tweet.user._id === userInfo._id || !tweet.user._id) && (
+            <ClickAwayListener onClickAway={() => setMenuIsOpen(false)}>
+              <div className="tweet-menu" onClick={(e) => handleClick(e)}>
+                <span className="material-symbols-outlined">more_horiz</span>
+                {menuIsOpen && <TweetDropdown tweet={tweet} />}
+              </div>
+            </ClickAwayListener>
+          )}
         </div>
 
         <div className="tweet-body">
@@ -79,7 +101,7 @@ function Tweet({ tweet }) {
         </div>
 
         <div ref={controlsRef} className="tweet-controls">
-          <div onClick={() => setIsOpen(!isOpen)}>
+          <div onClick={() => setFormIsOpen(!formIsOpen)}>
             <span className="material-symbols-outlined">mode_comment</span>
             <p>Comment</p>
           </div>
@@ -112,7 +134,7 @@ function Tweet({ tweet }) {
           />
         </div>
 
-        {isOpen && <CommentForm tweet={tweet} isOpen={isOpen} />}
+        {formIsOpen && <CommentForm tweet={tweet} formIsOpen={formIsOpen} />}
 
         {comments.map((comment) => (
           <CommentProvider key={comment._id} comment={comment}>

@@ -3,6 +3,7 @@ import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useCreateTweet } from '../../hooks/tweets/useCreateTweet';
 import TweetFormDropdown from '../TweetFormDropdown/TweetFormDropdown';
+import { selectFile, deselectFile } from '../../utils/processFiles';
 import expandTextarea from '../../utils/expandTextarea';
 
 function PostTweet() {
@@ -21,14 +22,13 @@ function PostTweet() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     await createTweet(text, file, isPrivate);
+    !error && (setText(''), processFile(), setIsPrivate(false));
+  };
 
-    if (!error) {
-      setText('');
-      resetFile();
-      setIsPrivate(false);
-    }
+  const processFile = (e, action) => {
+    const payload = { e, file, setFile, imageRef, cancelRef, uploadRef };
+    action === 'select' ? selectFile(payload) : deselectFile(payload);
   };
 
   const handleClick = (e) => {
@@ -39,32 +39,6 @@ function PostTweet() {
   const handleText = (e) => {
     setText(e.target.value);
     expandTextarea(e, 200);
-  };
-
-  const handleFile = (e) => {
-    setFile(e.target.files[0]);
-    readFile(e.target.files[0]);
-  };
-
-  // reset file input
-  const resetFile = () => {
-    setFile(null);
-    displayFile();
-    uploadRef.current.value = null;
-  };
-
-  // read file before preview
-  const readFile = (file) => {
-    const reader = new FileReader();
-    reader.onload = (e) => displayFile(e);
-    reader.readAsDataURL(file);
-  };
-
-  // toggle file preview
-  const displayFile = (file) => {
-    imageRef.current.src = file ? file.target.result : '#';
-    imageRef.current.style.display = file ? 'block' : 'none';
-    cancelRef.current.style.display = file ? 'inline' : 'none';
   };
 
   return (
@@ -95,7 +69,7 @@ function PostTweet() {
               <span
                 ref={cancelRef}
                 className="material-symbols-outlined cancel"
-                onClick={() => resetFile()}
+                onClick={() => processFile()}
               >
                 cancel
               </span>
@@ -114,7 +88,7 @@ function PostTweet() {
               id="file-upload"
               name="file-upload"
               ref={uploadRef}
-              onChange={(e) => handleFile(e)}
+              onChange={(e) => processFile(e, 'select')}
             />
 
             <ClickAwayListener onClickAway={() => setIsOpen(false)}>

@@ -10,9 +10,7 @@ const tweetsReducer = (state, action) => {
       };
     case 'DELETE_TWEET':
       return {
-        tweets: state.tweets.filter(
-          (tweet) => tweet._id !== action.payload._id
-        ),
+        tweets: state.tweets.filter((tweet) => tweet._id !== action.payload),
       };
     default:
       return state;
