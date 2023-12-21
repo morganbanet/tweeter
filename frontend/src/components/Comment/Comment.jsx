@@ -1,17 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useCommentContext } from '../../hooks/comment/useCommentContext';
 
+import CommentDropdown from '../CommentDropdown/CommentDropdown';
 import InteractionButton from '../InteractionButton/InteractionButton';
 
 import formatDate from '../../utils/formatDate';
 import processText from '../../utils/processText';
 
 function Comment({ comment }) {
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+
   const { count } = useCommentContext();
   const { userInfo } = useAuthContext();
+
+  const handleClick = (e) => {
+    if (e.target.classList.contains('comment-dropdown')) return;
+    setMenuIsOpen(!menuIsOpen);
+  };
 
   return (
     <div className="tweet-comment">
@@ -26,11 +35,22 @@ function Comment({ comment }) {
 
       <div className="comment-area">
         <div className="comment-container">
-          <div className="comment-info">
-            <Link to={`/users/${comment.user.slug}/${comment.user._id}`}>
-              {comment.user.name || userInfo.name}
-            </Link>
-            <span>{formatDate(comment.createdAt)}</span>
+          <div className="comment-header">
+            <div className="comment-info">
+              <Link to={`/users/${comment.user.slug}/${comment.user._id}`}>
+                {comment.user.name || userInfo.name}
+              </Link>
+              <span>{formatDate(comment.createdAt)}</span>
+            </div>
+
+            {(comment.user._id === userInfo._id || !comment.user._id) && (
+              <ClickAwayListener onClickAway={() => setMenuIsOpen(false)}>
+                <div className="comment-menu" onClick={(e) => handleClick(e)}>
+                  <span className="material-symbols-outlined">more_horiz</span>
+                  {menuIsOpen && <CommentDropdown comment={comment} />}
+                </div>
+              </ClickAwayListener>
+            )}
           </div>
 
           <p>{processText(comment.text)}</p>

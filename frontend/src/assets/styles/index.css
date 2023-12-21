@@ -592,12 +592,6 @@ button:disabled {
   letter-spacing: -0.02625rem;
 }
 
-.tweet-menu > span {
-  color: #bdbdbd;
-  cursor: pointer;
-  user-select: none;
-}
-
 .tweet-body > p,
 .tweet-body .hashtag {
   margin: 0 0 0.87rem 0;
@@ -850,8 +844,13 @@ button:disabled {
   background: #fafafa;
 }
 
-.comment-info {
+.comment-header {
   margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.comment-info {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -962,12 +961,21 @@ button:disabled {
   color: #eb5757;
 }
 
-/* --------------------------------------------------- tweet dropdown */
-.tweet-menu {
+/* ----------------------------------------- tweet & comment dropdown */
+.tweet-menu,
+.comment-menu {
   position: relative;
 }
 
-.tweet-dropdown {
+.tweet-menu > span,
+.comment-menu > span {
+  color: #bdbdbd;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tweet-dropdown,
+.comment-dropdown {
   padding: 0.57rem 0.75rem;
   border-radius: 0.75rem;
   border: 1px solid #e0e0e0;
@@ -979,7 +987,8 @@ button:disabled {
   right: 0;
 }
 
-.tweet-dropdown > div {
+.tweet-dropdown > div,
+.comment-dropdown > div {
   max-width: 10.7469rem;
   height: 2.44694rem;
   padding: 0 0.73rem;
@@ -990,11 +999,13 @@ button:disabled {
   gap: 0.5rem;
 }
 
-.tweet-dropdown > div:hover {
+.tweet-dropdown > div:hover,
+.comment-dropdown > div:hover {
   background: #f2f2f2;
 }
 
-.tweet-dropdown > div > p {
+.tweet-dropdown > div > p,
+.comment-dropdown > div > p {
   width: 5.9375rem;
   height: 1rem;
   color: #4f4f4f;
@@ -1006,7 +1017,8 @@ button:disabled {
   letter-spacing: -0.02625rem;
 }
 
-.tweet-dropdown > div > div {
+.tweet-dropdown > div > div,
+.comment-dropdown > div > div {
   width: 1.25rem;
   height: 1.25rem;
   display: flex;
@@ -1014,7 +1026,8 @@ button:disabled {
   align-items: center;
 }
 
-.tweet-dropdown span {
+.tweet-dropdown span,
+.comment-dropdown span {
   color: var(--font-color);
   font-size: 1.25rem;
   display: flex;

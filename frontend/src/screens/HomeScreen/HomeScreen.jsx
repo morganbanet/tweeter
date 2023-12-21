@@ -9,7 +9,7 @@ import TweetForm from '../../components/TweetForm/TweetForm';
 import Suggestions from '../../components/Suggestions/Suggestions';
 import Trending from '../../components/Trending/Trending';
 
-// @todo: add dropdown button on tweets and comment for deleting
+// @todo: add pagination for scrolling tweets and expanding comments
 // @todo: create modal for listing users who liked or saved a post
 
 function HomeScreen() {
