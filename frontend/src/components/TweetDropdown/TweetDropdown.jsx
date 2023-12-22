@@ -1,23 +1,28 @@
 import { useDeleteTweet } from '../../hooks/tweets/useDeleteTweet';
 
-function TweetDropdown(tweet) {
+function TweetDropdown({ tweet, handlePagination }) {
   const { deleteTweet, isLoading, error } = useDeleteTweet();
+
+  const handleDeleteTweet = async () => {
+    await deleteTweet(tweet._id);
+    handlePagination(true);
+  };
 
   return (
     <div className="tweet-dropdown">
-      <div onClick={async () => await deleteTweet(tweet.tweet._id)}>
+      <div onClick={() => handleDeleteTweet()}>
         <div>
           <span className="material-symbols-outlined">delete</span>
         </div>
         <p>Delete</p>
       </div>
 
-      <div>
+      {/* <div>
         <div>
           <span className="material-symbols-outlined">edit</span>
         </div>
         <p>Edit</p>
-      </div>
+      </div> */}
     </div>
   );
 }

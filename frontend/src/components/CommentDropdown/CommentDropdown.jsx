@@ -12,12 +12,12 @@ function CommentDropdown(comment) {
         <p>Delete</p>
       </div>
 
-      <div>
+      {/* <div>
         <div>
           <span className="material-symbols-outlined">edit</span>
         </div>
         <p>Edit</p>
-      </div>
+      </div> */}
     </div>
   );
 }

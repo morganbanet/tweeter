@@ -19,7 +19,7 @@ import processText from '../../utils/processText';
 import { handleControlsBorder } from '../../utils/handleBorder';
 import TweetDropdown from '../TweetDropdown/TweetDropdown';
 
-function Tweet({ tweet }) {
+function Tweet({ tweet, handlePagination }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [formIsOpen, setFormIsOpen] = useState(false);
 
@@ -77,7 +77,12 @@ function Tweet({ tweet }) {
             <ClickAwayListener onClickAway={() => setMenuIsOpen(false)}>
               <div className="tweet-menu" onClick={(e) => handleClick(e)}>
                 <span className="material-symbols-outlined">more_horiz</span>
-                {menuIsOpen && <TweetDropdown tweet={tweet} />}
+                {menuIsOpen && (
+                  <TweetDropdown
+                    tweet={tweet}
+                    handlePagination={handlePagination}
+                  />
+                )}
               </div>
             </ClickAwayListener>
           )}
