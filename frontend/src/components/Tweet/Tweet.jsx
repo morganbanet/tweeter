@@ -77,12 +77,7 @@ function Tweet({ tweet, handlePagination }) {
             <ClickAwayListener onClickAway={() => setMenuIsOpen(false)}>
               <div className="tweet-menu" onClick={(e) => handleClick(e)}>
                 <span className="material-symbols-outlined">more_horiz</span>
-                {menuIsOpen && (
-                  <TweetDropdown
-                    tweet={tweet}
-                    handlePagination={handlePagination}
-                  />
-                )}
+                {menuIsOpen && <TweetDropdown tweet={tweet} />}
               </div>
             </ClickAwayListener>
           )}

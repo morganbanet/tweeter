@@ -11,7 +11,8 @@ export const useGetTweets = () => {
     setIsLoading(true);
     setError(null);
 
-    const response = await fetch(`/api/tweets?page=${page}}&limit=${limit}`);
+    const endpoint = `/api/tweets?page=${page}&limit=${limit}`;
+    const response = await fetch(endpoint);
     const data = await response.json();
 
     if (!response.ok) {
@@ -20,6 +21,9 @@ export const useGetTweets = () => {
       return;
     }
 
+    console.log('hook:', page);
+
+    // issue with this?
     dispatch({
       type: page < 2 ? 'GET_TWEETS' : 'GET_TWEETS_NEXT',
       payload: data,

@@ -1,11 +1,10 @@
 import { useDeleteTweet } from '../../hooks/tweets/useDeleteTweet';
 
-function TweetDropdown({ tweet, handlePagination }) {
+function TweetDropdown({ tweet }) {
   const { deleteTweet, isLoading, error } = useDeleteTweet();
 
   const handleDeleteTweet = async () => {
     await deleteTweet(tweet._id);
-    handlePagination(true);
   };
 
   return (

@@ -37,8 +37,9 @@ const advancedResults = async (req, model, options = {}) => {
   // Include next and prev pages in response
   const pagination = {};
   const total = await model.countDocuments(query);
-  if (endIndex < total) pagination.next = { page: page + 1, limit };
   if (startIndex > 0) pagination.prev = { page: page - 1, limit };
+  pagination.current = { page, limit };
+  if (endIndex < total) pagination.next = { page: page + 1, limit };
 
   let queryChain;
 
