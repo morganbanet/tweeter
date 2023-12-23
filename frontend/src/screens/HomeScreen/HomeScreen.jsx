@@ -18,6 +18,7 @@ import Trending from '../../components/Trending/Trending';
 // @todo: create modal for listing users who liked or saved a post/cmnt
 
 function HomeScreen() {
+  const [togglePage, setTogglePage] = useState(false);
   const [page, setPage] = useState(1);
 
   const { getTweets, isLoading, error } = useGetTweets();
@@ -26,10 +27,11 @@ function HomeScreen() {
   useEffect(() => {
     const fetchTweets = async () => getTweets(page);
     fetchTweets();
-  }, [page]);
+  }, [page, togglePage]);
 
   const handlePagination = () => {
     setPage(pagination.next.page);
+    setTogglePage(!togglePage);
   };
 
   return (

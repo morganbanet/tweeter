@@ -34,6 +34,7 @@ const commentsReducer = (state, action) => {
           ? state.pagination.current.page - 1
           : state.pagination.current.page;
 
+      // adjust page offset caused by delete
       const nextPageAtDelete =
         state.comments.length % 5 === 0
           ? state.pagination.current.page + 1

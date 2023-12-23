@@ -14,24 +14,30 @@ const tweetsReducer = (state, action) => {
 
     case 'CREATE_TWEET':
       let tweetsAtCreate;
-      let nextPage;
+      let nextPageAtCreate;
 
       if (state.tweets.length % 10 === 0) {
         tweetsAtCreate = [action.payload, ...state.tweets.slice(0, -1)];
-        nextPage = state.pagination.current.page + 1;
+        nextPageAtCreate = state.pagination.current.page + 1;
       } else {
         tweetsAtCreate = [action.payload, ...state.tweets];
       }
 
       return {
         tweets: tweetsAtCreate,
-        pagination: { ...state.pagination, next: { page: nextPage } },
+        pagination: { ...state.pagination, next: { page: nextPageAtCreate } },
       };
 
     case 'DELETE_TWEET':
       const currPage =
         state.tweets.length % 10 === 1
           ? state.pagination.current.page - 1
+          : state.pagination.current.page;
+
+      // adjust page offset caused by delete
+      const nextPageAtDelete =
+        state.tweets.length % 10 === 0
+          ? state.pagination.current.page + 1
           : state.pagination.current.page;
 
       const tweetsAtDelete = [
@@ -41,17 +47,11 @@ const tweetsReducer = (state, action) => {
 
       return {
         tweets: tweetsAtDelete,
-        pagination: { ...state.pagination, current: { page: currPage } },
-      };
-
-      return {
-        ...state,
-        tweets: [
-          ...state.tweets.filter(
-            (tweet) => tweet._id !== action.payload.tweetId
-          ),
-          ...action.payload.toAppend,
-        ],
+        pagination: {
+          ...state.pagination,
+          current: { page: currPage },
+          next: { page: nextPageAtDelete },
+        },
       };
 
     default:
