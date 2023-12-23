@@ -5,23 +5,30 @@ const tweetsReducer = (state, action) => {
         tweets: action.payload.data,
         pagination: action.payload.pagination,
       };
+
     case 'GET_TWEETS_NEXT':
       return {
         tweets: [...state.tweets, ...action.payload.data],
         pagination: action.payload.pagination,
       };
+
     case 'CREATE_TWEET':
       return {
         ...state,
         tweets: [action.payload, ...state.tweets.slice(0, -1)],
       };
+
     case 'DELETE_TWEET':
-      // fetch the first item on the next page and append it as the last
-      // item on the current page to fill in the gap
       return {
         ...state,
-        tweets: state.tweets.filter((tweet) => tweet._id !== action.payload),
+        tweets: [
+          ...state.tweets.filter(
+            (tweet) => tweet._id !== action.payload.tweetId
+          ),
+          ...action.payload.toAppend,
+        ],
       };
+
     default:
       return state;
   }

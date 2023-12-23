@@ -21,7 +21,7 @@ export const useGetTweets = () => {
       return;
     }
 
-    console.log('hook:', page);
+    // console.log('get tweets hook:', page);
 
     // issue with this?
     dispatch({

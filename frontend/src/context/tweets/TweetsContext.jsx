@@ -24,7 +24,7 @@ function TweetsProvider({ children }) {
 
   const [state, dispatch] = useReducer(tweetsReducer, initialState);
 
-  console.log('state:', state.pagination.current.page);
+  console.log('context state:', state.pagination.current.page);
 
   return (
     <TweetsContext.Provider value={{ ...state, dispatch }}>
