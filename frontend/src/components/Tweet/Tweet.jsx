@@ -19,23 +19,36 @@ import processText from '../../utils/processText';
 import { handleControlsBorder } from '../../utils/handleBorder';
 import TweetDropdown from '../TweetDropdown/TweetDropdown';
 
-function Tweet({ tweet, handlePagination }) {
+function Tweet({ tweet }) {
+  const [togglePage, setTogglePage] = useState(false);
+  const [commentsPage, setCommentsPage] = useState(1);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [formIsOpen, setFormIsOpen] = useState(false);
 
   const retweet = tweet.retweeted ? tweet : null;
   tweet = tweet.retweeted || tweet;
 
-  const { count } = useTweetContext();
+  const { getComments, isLoading, error } = useGetComments(tweet._id);
+  const { comments, pagination } = useCommentsContext();
   const { userInfo } = useAuthContext();
-  const { comments } = useCommentsContext();
-  const { isLoading, error } = useGetComments(tweet._id);
+  const { count } = useTweetContext();
 
   const controlsRef = useRef();
+
   useEffect(
     () => handleControlsBorder(controlsRef, formIsOpen, count),
     [formIsOpen]
   );
+
+  useEffect(() => {
+    const fetchComments = async () => getComments(commentsPage);
+    fetchComments();
+  }, [commentsPage, togglePage]);
+
+  const handlePagination = () => {
+    setCommentsPage(pagination.next.page);
+    setTogglePage(!togglePage);
+  };
 
   const handleClick = (e) => {
     if (e.target.classList.contains('tweet-dropdown')) return;
@@ -137,9 +150,16 @@ function Tweet({ tweet, handlePagination }) {
         {formIsOpen && <CommentForm tweet={tweet} formIsOpen={formIsOpen} />}
 
         {comments.map((comment) => (
-          <CommentProvider key={comment._id} comment={comment}>
-            <Comment key={comment._id} tweet={tweet} comment={comment} />
-          </CommentProvider>
+          <div className="comments" key={comment._id}>
+            <CommentProvider comment={comment}>
+              <Comment
+                tweet={tweet}
+                tweetStats={count}
+                comment={comment}
+                handlePagination={handlePagination}
+              />
+            </CommentProvider>
+          </div>
         ))}
       </div>
     </div>

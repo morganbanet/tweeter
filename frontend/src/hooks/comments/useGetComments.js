@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useCommentsContext } from './useCommentsContext';
 
 export const useGetComments = (tweetId) => {
@@ -7,27 +7,27 @@ export const useGetComments = (tweetId) => {
 
   const { dispatch } = useCommentsContext();
 
-  useEffect(() => {
-    const getComments = async () => {
-      setIsLoading(true);
-      setError(null);
+  const getComments = async (page = 1) => {
+    setIsLoading(true);
+    setError(null);
 
-      const response = await fetch(`/api/tweets/${tweetId}/comments?limit=5`);
-      const data = await response.json();
+    const endpoint = `/api/tweets/${tweetId}/comments?page=${page}&limit=5`;
+    const response = await fetch(endpoint);
+    const data = await response.json();
 
-      if (!response.ok) {
-        setIsLoading(false);
-        setError(data.error);
-        return;
-      }
-
-      dispatch({ type: 'GET_COMMENTS', payload: data.data });
-
+    if (!response.ok) {
       setIsLoading(false);
-    };
+      setError(data.error);
+      return;
+    }
 
-    getComments();
-  }, []);
+    dispatch({
+      type: page < 2 ? 'GET_COMMENTS' : 'GET_COMMENTS_NEXT',
+      payload: data,
+    });
 
-  return { isLoading, error };
+    setIsLoading(false);
+  };
+
+  return { getComments, isLoading, error };
 };

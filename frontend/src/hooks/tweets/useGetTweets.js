@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTweetsContext } from './useTweetsContext';
 
 export const useGetTweets = () => {
@@ -7,11 +7,11 @@ export const useGetTweets = () => {
 
   const { dispatch } = useTweetsContext();
 
-  const getTweets = async (page = 1, limit = 10) => {
+  const getTweets = async (page = 1) => {
     setIsLoading(true);
     setError(null);
 
-    const endpoint = `/api/tweets?page=${page}&limit=${limit}`;
+    const endpoint = `/api/tweets?page=${page}&limit=10`;
     const response = await fetch(endpoint);
     const data = await response.json();
 
@@ -23,7 +23,6 @@ export const useGetTweets = () => {
 
     // console.log('get tweets hook:', page);
 
-    // issue with this?
     dispatch({
       type: page < 2 ? 'GET_TWEETS' : 'GET_TWEETS_NEXT',
       payload: data,

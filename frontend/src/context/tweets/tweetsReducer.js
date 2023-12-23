@@ -13,12 +13,37 @@ const tweetsReducer = (state, action) => {
       };
 
     case 'CREATE_TWEET':
+      let tweetsAtCreate;
+      let nextPage;
+
+      if (state.tweets.length % 10 === 0) {
+        tweetsAtCreate = [action.payload, ...state.tweets.slice(0, -1)];
+        nextPage = state.pagination.current.page + 1;
+      } else {
+        tweetsAtCreate = [action.payload, ...state.tweets];
+      }
+
       return {
-        ...state,
-        tweets: [action.payload, ...state.tweets.slice(0, -1)],
+        tweets: tweetsAtCreate,
+        pagination: { ...state.pagination, next: { page: nextPage } },
       };
 
     case 'DELETE_TWEET':
+      const currPage =
+        state.tweets.length % 10 === 1
+          ? state.pagination.current.page - 1
+          : state.pagination.current.page;
+
+      const tweetsAtDelete = [
+        ...state.tweets.filter((tweet) => tweet._id !== action.payload.tweetId),
+        ...action.payload.toAppend,
+      ];
+
+      return {
+        tweets: tweetsAtDelete,
+        pagination: { ...state.pagination, current: { page: currPage } },
+      };
+
       return {
         ...state,
         tweets: [

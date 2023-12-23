@@ -852,12 +852,12 @@ button:disabled {
 
 .comment-info {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .comment-info > a {
-  margin: 0;
+  margin: 0 0 0.12rem 0;
   color: #000;
   font-family: var(--primary-font);
   font-size: 0.875rem;
@@ -917,12 +917,17 @@ button:disabled {
 
 .comment-controls {
   display: flex;
+  justify-content: space-between;
+}
+
+.comment-controls-left {
+  display: flex;
   align-items: center;
   gap: 0.41rem;
 }
 
-.comment-controls .liked,
-.comment-controls .uninteracted {
+.comment-controls-left .liked,
+.comment-controls-left .uninteracted {
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -930,15 +935,16 @@ button:disabled {
   user-select: none;
 }
 
-.comment-controls .like-info {
+.comment-controls-left .like-info {
   display: flex;
   align-items: center;
   gap: 0.65rem;
 }
 
-.comment-controls .uninteracted > p,
-.comment-controls .liked > p,
-.comment-controls .like-info > span {
+.comment-controls > span,
+.comment-controls-left .uninteracted > p,
+.comment-controls-left .liked > p,
+.comment-controls-left .like-info > span {
   margin: 0;
   color: #bdbdbd;
   font-family: var(--secondary-font);
@@ -947,18 +953,27 @@ button:disabled {
   font-weight: 600;
   line-height: normal;
   letter-spacing: -0.02625rem;
+  cursor: pointer;
 }
 
-.comment-controls .uninteracted > span,
-.comment-controls .liked > span {
+.comment-controls-left .uninteracted > span,
+.comment-controls-left .liked > span {
   font-size: 0.9rem;
   color: #bdbdbd;
   display: flex;
 }
 
-.comment-controls .liked > p,
-.comment-controls .liked > span {
+.comment-controls-left .liked > p,
+.comment-controls-left .liked > span {
   color: #eb5757;
+}
+
+.comments .comment-controls > span {
+  display: none;
+}
+
+.comments:last-of-type .comment-controls > span {
+  display: inline;
 }
 
 /* ----------------------------------------- tweet & comment dropdown */
@@ -1200,5 +1215,16 @@ button:disabled {
 
   .comment-container {
     padding: 0.54rem 0.94rem 1.43rem 0.94rem;
+  }
+
+  .comment-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .comment-info > a {
+    margin: 0;
   }
 }

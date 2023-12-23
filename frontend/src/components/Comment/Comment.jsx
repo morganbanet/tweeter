@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useCommentContext } from '../../hooks/comment/useCommentContext';
+import { useCommentsContext } from '../../hooks/comments/useCommentsContext';
 
 import CommentDropdown from '../CommentDropdown/CommentDropdown';
 import InteractionButton from '../InteractionButton/InteractionButton';
@@ -11,11 +12,14 @@ import InteractionButton from '../InteractionButton/InteractionButton';
 import formatDate from '../../utils/formatDate';
 import processText from '../../utils/processText';
 
-function Comment({ comment }) {
+function Comment({ tweet, tweetStats, comment, handlePagination }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
+  const { comments, pagination } = useCommentsContext();
   const { count } = useCommentContext();
   const { userInfo } = useAuthContext();
+
+  const expandRef = useRef();
 
   const handleClick = (e) => {
     if (e.target.classList.contains('comment-dropdown')) return;
@@ -47,7 +51,9 @@ function Comment({ comment }) {
               <ClickAwayListener onClickAway={() => setMenuIsOpen(false)}>
                 <div className="comment-menu" onClick={(e) => handleClick(e)}>
                   <span className="material-symbols-outlined">more_horiz</span>
-                  {menuIsOpen && <CommentDropdown comment={comment} />}
+                  {menuIsOpen && (
+                    <CommentDropdown tweet={tweet} comment={comment} />
+                  )}
                 </div>
               </ClickAwayListener>
             )}
@@ -63,21 +69,30 @@ function Comment({ comment }) {
         </div>
 
         <div className="comment-controls">
-          <InteractionButton
-            resource={comment}
-            resType={'comments'}
-            btnType={'like'}
-            targetOne={'likes'}
-            targetTwo={'liked'}
-            symbol={'favorite'}
-          />
+          <div className="comment-controls-left">
+            <InteractionButton
+              resource={comment}
+              resType={'comments'}
+              btnType={'like'}
+              targetOne={'likes'}
+              targetTwo={'liked'}
+              symbol={'favorite'}
+            />
 
-          {count.likeCount > 0 && (
-            <div className="like-info">
-              <span>·</span>
-              <span>{count.likeCount} Likes</span>
-            </div>
-          )}
+            {count.likeCount > 0 && (
+              <div className="like-info">
+                <span>·</span>
+                <span>{count.likeCount} Likes</span>
+              </div>
+            )}
+          </div>
+
+          {tweetStats.commentCount !== comments.length &&
+            pagination?.next?.page && (
+              <span ref={expandRef} onClick={() => handlePagination()}>
+                Expand more...
+              </span>
+            )}
         </div>
       </div>
     </div>

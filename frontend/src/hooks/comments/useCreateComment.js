@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
+import { useTweetContext } from '../tweet/useTweetContext';
 import { useCommentsContext } from './useCommentsContext';
 
 export const useCreateComment = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  const { dispatch: tweetDispatch } = useTweetContext();
   const { dispatch } = useCommentsContext();
   const { userInfo } = useAuthContext();
 
@@ -39,6 +41,7 @@ export const useCreateComment = () => {
     }
 
     dispatch({ type: 'CREATE_COMMENT', payload: data.data });
+    tweetDispatch({ type: 'INCREMENT', payload: 'comment' });
 
     setIsLoading(false);
   };

@@ -12,13 +12,13 @@ import Suggestions from '../../components/Suggestions/Suggestions';
 import Trending from '../../components/Trending/Trending';
 
 // @todo: add pagination for scrolling tweets and expanding comments
-//          - add infinite scroll
+//          - patch tweet pagination
+//          - add infinite scroll to scrolling tweets
 
 // @todo: create modal for listing users who liked or saved a post/cmnt
 
 function HomeScreen() {
   const [page, setPage] = useState(1);
-  // console.log('homescreen state:', page);
 
   const { getTweets, isLoading, error } = useGetTweets();
   const { tweets, pagination, dispatch } = useTweetsContext();
