@@ -35,6 +35,10 @@ function Tweet({ tweet }) {
 
   const controlsRef = useRef();
 
+  useEffect(() => {
+    // if (index === tweets.length - 1) console.log('test');
+  }, []);
+
   useEffect(
     () => handleControlsBorder(controlsRef, formIsOpen, count),
     [formIsOpen]

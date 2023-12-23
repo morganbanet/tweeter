@@ -497,7 +497,8 @@ button:disabled {
 }
 
 /* ------------------------------------------------------------ tweet */
-.tweets {
+/* infiniteScroll component (library) has two divs */
+.tweets > div > div {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;

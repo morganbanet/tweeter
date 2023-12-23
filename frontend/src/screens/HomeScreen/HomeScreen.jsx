@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { useGetTweets } from '../../hooks/tweets/useGetTweets';
 import { useTweetsContext } from '../../hooks/tweets/useTweetsContext';
@@ -12,7 +13,6 @@ import Suggestions from '../../components/Suggestions/Suggestions';
 import Trending from '../../components/Trending/Trending';
 
 // @todo: add pagination for scrolling tweets and expanding comments
-//          - patch tweet pagination
 //          - add infinite scroll to scrolling tweets
 
 // @todo: create modal for listing users who liked or saved a post/cmnt
@@ -22,15 +22,17 @@ function HomeScreen() {
   const [page, setPage] = useState(1);
 
   const { getTweets, isLoading, error } = useGetTweets();
-  const { tweets, pagination, dispatch } = useTweetsContext();
+  const { tweets, pagination } = useTweetsContext();
+
+  const loaderRef = useRef();
 
   useEffect(() => {
     const fetchTweets = async () => getTweets(page);
     fetchTweets();
   }, [page, togglePage]);
 
-  const handlePagination = () => {
-    setPage(pagination.next.page);
+  const handlePagination = (refresh = false) => {
+    refresh ? setPage(1) : setPage(pagination.next.page);
     setTogglePage(!togglePage);
   };
 
@@ -41,17 +43,30 @@ function HomeScreen() {
           <TweetForm />
         </section>
 
-        {tweets.map((tweet) => (
-          <section key={tweet._id} className="tweets">
-            <TweetProvider tweet={tweet}>
-              <CommentsProvider>
-                <Tweet tweet={tweet} />
-              </CommentsProvider>
-            </TweetProvider>
-          </section>
-        ))}
-
-        <button onClick={() => handlePagination()}>MORE</button>
+        <section className="tweets">
+          <InfiniteScroll
+            dataLength={tweets.length}
+            next={handlePagination}
+            hasMore={pagination?.next?.page ? true : false}
+            loader={<h4>Loading...</h4>}
+            endMessage={<p>You reached the end</p>}
+            refreshFunction={() => handlePagination(true)}
+            pullDownToRefresh
+            pullDownToRefreshThreshold={50}
+            pullDownToRefreshContent={<h3> </h3>}
+            releaseToRefreshContent={<h3> </h3>}
+          >
+            {tweets.map((tweet) => (
+              <React.Fragment key={tweet._id}>
+                <TweetProvider tweet={tweet}>
+                  <CommentsProvider>
+                    <Tweet tweet={tweet} />
+                  </CommentsProvider>
+                </TweetProvider>
+              </React.Fragment>
+            ))}
+          </InfiniteScroll>
+        </section>
       </main>
 
       <section>
