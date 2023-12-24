@@ -82,6 +82,8 @@ exports.createComment = asyncHandler(async (req, res, next) => {
     await uploadFile(file, comment, 'image', 'comments');
   }
 
+  comment = await Comment.findById(comment.id).populate('user');
+
   res.status(201).json({ success: true, data: comment });
 });
 

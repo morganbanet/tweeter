@@ -1,5 +1,6 @@
 require('dotenv').config({ path: './secrets/.env' });
 
+const path = require('path');
 const mongoose = require('mongoose');
 const express = require('express');
 const morgan = require('morgan');
@@ -32,6 +33,7 @@ const PORT = process.env.PORT || 5000;
 // Body & cookie parsers, and express-fileupload
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
 app.use(cookieParser());
 

@@ -31,14 +31,8 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user',
     },
-    avatar: {
-      url: String,
-      filename: String,
-    },
-    banner: {
-      url: String,
-      filename: String,
-    },
+    avatar: { url: String, fileName: String },
+    banner: { url: String, fileName: String },
     bio: {
       type: String,
       maxLength: [160, 'Bio cannot exceed 160 characters.'],

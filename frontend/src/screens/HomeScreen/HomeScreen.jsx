@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { useGetTweets } from '../../hooks/tweets/useGetTweets';
@@ -12,9 +12,7 @@ import TweetForm from '../../components/TweetForm/TweetForm';
 import Suggestions from '../../components/Suggestions/Suggestions';
 import Trending from '../../components/Trending/Trending';
 
-// @todo: add pagination for scrolling tweets and expanding comments
-//          - add infinite scroll to scrolling tweets
-
+// @todo: set default profile picture from the backend for new users
 // @todo: create modal for listing users who liked or saved a post/cmnt
 
 function HomeScreen() {
@@ -24,10 +22,8 @@ function HomeScreen() {
   const { getTweets, isLoading, error } = useGetTweets();
   const { tweets, pagination } = useTweetsContext();
 
-  const loaderRef = useRef();
-
   useEffect(() => {
-    const fetchTweets = async () => getTweets(page);
+    const fetchTweets = async () => await getTweets(page);
     fetchTweets();
   }, [page, togglePage]);
 

@@ -47,6 +47,8 @@ exports.createTweet = asyncHandler(async (req, res, next) => {
     await uploadFile(file, tweet, 'image', 'tweets');
   }
 
+  tweet = await Tweet.findById(tweet.id).populate('user');
+
   res.status(201).json({ success: true, data: tweet });
 });
 

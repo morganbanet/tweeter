@@ -11,6 +11,7 @@ import InteractionButton from '../InteractionButton/InteractionButton';
 
 import formatDate from '../../utils/formatDate';
 import processText from '../../utils/processText';
+import { defaultAvatar } from '../../utils/defaults';
 
 function Comment({ tweet, tweetStats, comment, handlePagination }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -31,7 +32,7 @@ function Comment({ tweet, tweetStats, comment, handlePagination }) {
       <div className="comment-avatar">
         <Link to={`/users/${comment.user.slug}/${comment.user._id}`}>
           <img
-            src={comment.user.avatar?.url || userInfo.avatar.url}
+            src={comment.user.avatar?.url || defaultAvatar}
             alt="user avatar"
           />
         </Link>

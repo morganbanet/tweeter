@@ -1,23 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
-
 import { CommentProvider } from '../../context/comment/CommentContext';
-
 import { useTweetContext } from '../../hooks/tweet/useTweetContext';
 import { useCommentsContext } from '../../hooks/comments/useCommentsContext';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
-
 import { useGetComments } from '../../hooks/comments/useGetComments';
-
 import Comment from '../Comment/Comment';
 import CommentForm from '../CommentForm/CommentForm';
+import TweetDropdown from '../TweetDropdown/TweetDropdown';
 import InteractionButton from '../InteractionButton/InteractionButton';
-
 import formatDate from '../../utils/formatDate';
 import processText from '../../utils/processText';
 import { handleControlsBorder } from '../../utils/handleBorder';
-import TweetDropdown from '../TweetDropdown/TweetDropdown';
+import { defaultAvatar } from '../../utils/defaults';
 
 function Tweet({ tweet }) {
   const [togglePage, setTogglePage] = useState(false);
@@ -34,10 +30,6 @@ function Tweet({ tweet }) {
   const { count } = useTweetContext();
 
   const controlsRef = useRef();
-
-  useEffect(() => {
-    // if (index === tweets.length - 1) console.log('test');
-  }, []);
 
   useEffect(
     () => handleControlsBorder(controlsRef, formIsOpen, count),
@@ -76,7 +68,7 @@ function Tweet({ tweet }) {
             <div className="tweet-avatar">
               <Link to={`/users/${tweet.user.slug}/${tweet.user._id}`}>
                 <img
-                  src={tweet.user.avatar?.url || userInfo.avatar.url}
+                  src={tweet.user.avatar?.url || defaultAvatar}
                   alt="user avatar"
                 />
               </Link>
