@@ -12,7 +12,6 @@ import TweetForm from '../../components/TweetForm/TweetForm';
 import Suggestions from '../../components/Suggestions/Suggestions';
 import Trending from '../../components/Trending/Trending';
 
-// @todo: set default profile picture from the backend for new users
 // @todo: create modal for listing users who liked or saved a post/cmnt
 
 function HomeScreen() {
@@ -27,8 +26,8 @@ function HomeScreen() {
     fetchTweets();
   }, [page, togglePage]);
 
-  const handlePagination = (refresh = false) => {
-    refresh ? setPage(1) : setPage(pagination.next.page);
+  const handlePagination = () => {
+    setPage(pagination.next.page);
     setTogglePage(!togglePage);
   };
 
@@ -46,11 +45,6 @@ function HomeScreen() {
             hasMore={pagination?.next?.page ? true : false}
             loader={<h4>Loading...</h4>}
             endMessage={<p>You reached the end</p>}
-            refreshFunction={() => handlePagination(true)}
-            pullDownToRefresh
-            pullDownToRefreshThreshold={50}
-            pullDownToRefreshContent={<h3> </h3>}
-            releaseToRefreshContent={<h3> </h3>}
           >
             {tweets.map((tweet) => (
               <React.Fragment key={tweet._id}>

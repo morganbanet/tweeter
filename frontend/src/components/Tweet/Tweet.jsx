@@ -6,6 +6,7 @@ import { useTweetContext } from '../../hooks/tweet/useTweetContext';
 import { useCommentsContext } from '../../hooks/comments/useCommentsContext';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useGetComments } from '../../hooks/comments/useGetComments';
+import Modal from '../Modal/Modal';
 import Comment from '../Comment/Comment';
 import CommentForm from '../CommentForm/CommentForm';
 import TweetDropdown from '../TweetDropdown/TweetDropdown';
@@ -20,6 +21,7 @@ function Tweet({ tweet }) {
   const [commentsPage, setCommentsPage] = useState(1);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [formIsOpen, setFormIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const retweet = tweet.retweeted ? tweet : null;
   tweet = tweet.retweeted || tweet;
@@ -37,18 +39,29 @@ function Tweet({ tweet }) {
   );
 
   useEffect(() => {
-    const fetchComments = async () => getComments(commentsPage);
+    const fetchComments = async () => await getComments(commentsPage);
     fetchComments();
   }, [commentsPage, togglePage]);
+
+  useEffect(() => {
+    modalIsOpen
+      ? (document.body.style.overflow = 'hidden')
+      : (document.body.style.overflow = 'visible');
+  }, [modalIsOpen]);
 
   const handlePagination = () => {
     setCommentsPage(pagination.next.page);
     setTogglePage(!togglePage);
   };
 
-  const handleClick = (e) => {
+  const handleDropdown = (e) => {
     if (e.target.classList.contains('tweet-dropdown')) return;
     setMenuIsOpen(!menuIsOpen);
+  };
+
+  const handleModal = (e) => {
+    if (e.target.classList.contains('modal-container')) return;
+    setModalIsOpen(!modalIsOpen);
   };
 
   return (
@@ -84,7 +97,7 @@ function Tweet({ tweet }) {
 
           {(tweet.user._id === userInfo._id || !tweet.user._id) && (
             <ClickAwayListener onClickAway={() => setMenuIsOpen(false)}>
-              <div className="tweet-menu" onClick={(e) => handleClick(e)}>
+              <div className="tweet-menu" onClick={(e) => handleDropdown(e)}>
                 <span className="material-symbols-outlined">more_horiz</span>
                 {menuIsOpen && <TweetDropdown tweet={tweet} />}
               </div>
@@ -103,10 +116,17 @@ function Tweet({ tweet }) {
         </div>
 
         <div className="tweet-stats">
-          {count.commentCount > 0 && <span>{count.commentCount} Comments</span>}
+          {count.commentCount > 0 && (
+            <span onClick={(e) => handleModal(e)}>
+              {count.commentCount} Comments
+            </span>
+          )}
+
           {count.retweetCount > 0 && <span>{count.retweetCount} Retweets</span>}
           {count.likeCount > 0 && <span>{count.likeCount} Likes</span>}
           {count.bookmarkCount > 0 && <span>{count.bookmarkCount} Saved</span>}
+
+          {modalIsOpen && <Modal setModalIsOpen={setModalIsOpen} />}
         </div>
 
         <div ref={controlsRef} className="tweet-controls">
