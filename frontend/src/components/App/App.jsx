@@ -7,6 +7,7 @@ import {
 
 import { AuthProvider } from '../../context/auth/AuthContext';
 import { TweetsProvider } from '../../context/tweets/TweetsContext';
+import { InteractionsProvider } from '../../context/interactions/InteractionsContext';
 
 import RootLayout from '../../layout/RootLayout/RootLayout';
 import UnauthedLayout from '../../layout/UnauthedLayout/UnauthedLayout';
@@ -43,7 +44,9 @@ function App() {
   return (
     <AuthProvider>
       <TweetsProvider>
-        <RouterProvider router={router} />
+        <InteractionsProvider>
+          <RouterProvider router={router} />
+        </InteractionsProvider>
       </TweetsProvider>
     </AuthProvider>
   );

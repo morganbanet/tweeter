@@ -1,10 +1,11 @@
+const User = require('../models/userModel');
 const Tweet = require('../models/tweetModel');
 const Follow = require('../models/followModel');
 const Comment = require('../models/commentModel');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/ErrorResponse');
 const advancedResults = require('../utils/advancedResults');
-const { uploadFile, deleteFile } = require('../utils/storageBucket');
+const { uploadFile } = require('../utils/storageBucket');
 const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
 
 // @desc        Get comments for a tweet
@@ -32,6 +33,40 @@ exports.getComments = asyncHandler(async (req, res, next) => {
     count: comments.length,
     pagination,
     data: comments,
+  });
+});
+
+// @desc        Get comment users
+// @route       GET /api/tweets/:tweetId/comments/users
+// @access      Public
+exports.getCommentUsers = asyncHandler(async (req, res, next) => {
+  const tweet = await Tweet.findById(req.params.tweetId);
+
+  if (!tweet) {
+    return next(
+      new ErrorResponse(`Tweet not found with id ${req.params.tweetId}`, 404)
+    );
+  }
+
+  const comments = await Comment.find({ tweet: req.params.tweetId });
+
+  // show a user only once in this list
+  let userIdsSet = new Set();
+  comments.forEach((comment) => userIdsSet.add(comment.user._id));
+  const userIds = Array.from(userIdsSet);
+
+  const options = {
+    altQuery: { _id: { in: userIds } },
+  };
+
+  const result = await advancedResults(req, User, options);
+  const { pagination, results: users } = result;
+
+  res.status(200).json({
+    success: true,
+    count: users.length,
+    pagination,
+    data: users,
   });
 });
 

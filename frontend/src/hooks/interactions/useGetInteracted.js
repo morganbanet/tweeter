@@ -1,13 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
 
-// id - :tweetId | :commentId
-// pointA (collection) - likes | retweets | bookmarks
-// pointB - liked | retweeted | bookmarked
-
-// ie: /api/retweets?user[eq]=:userId&retweeted[eq]=:tweetId
-// ie: /api/retweets?user[eq]=:userId&retweeted[eq]=:commentId
-
 export const useGetInteracted = (id, pointA, pointB) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);

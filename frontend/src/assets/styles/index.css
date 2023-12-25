@@ -644,6 +644,7 @@ button:disabled {
   font-weight: 500;
   line-height: normal;
   letter-spacing: -0.02625rem;
+  cursor: pointer;
 }
 
 .tweet-controls {
@@ -652,7 +653,6 @@ button:disabled {
   margin-bottom: 0rem;
   padding: 0.31rem 0;
   border-top: 1px solid #f2f2f2;
-  /* border-bottom: 1px solid #f2f2f2; */
 }
 
 .tweet-controls > div {
@@ -808,7 +808,6 @@ button:disabled {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 0.5rem;
-  background: #c4c4c4;
   user-select: none;
 }
 
@@ -1123,12 +1122,28 @@ button:disabled {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  user-select: none;
 }
 
 .modal-container .items {
   width: 100%;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+}
+
+.items::-webkit-scrollbar {
+  width: 0.2188rem;
+}
+
+.items::-webkit-scrollbar-thumb {
+  border-radius: 0.75rem;
+  background-color: #959595;
+}
+
+.items > div > div {
+  padding-right: 0.625rem;
 }
 
 .modal-container .item {
@@ -1143,23 +1158,27 @@ button:disabled {
   margin-bottom: 1.2rem;
 }
 
-.modal-container .item-header .user-info {
+.modal-container .item-header .user-details {
   display: flex;
+  gap: 1.09rem;
 }
 
-.modal-container .item-header .user-info .avatar {
+.modal-container .item-header .user-details .avatar {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 0.5rem;
+  cursor: pointer;
+  user-select: none;
 }
 
-.modal-container .item-header .user-info .avatar > img {
+.modal-container .item-header .user-details .avatar > img {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 0.5rem;
   background: #c4c4c4;
   object-position: center;
   object-fit: cover;
+  user-select: none;
 }
 
 .modal-container .item-header .username-followers {
@@ -1176,6 +1195,7 @@ button:disabled {
   font-weight: 500;
   line-height: normal;
   letter-spacing: -0.035rem;
+  cursor: pointer;
 }
 
 .modal-container .item-header .username-followers > p {
@@ -1205,11 +1225,13 @@ button:disabled {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
-.modal-container .item .bio {
+/* design mistake? */
+/* .modal-container .item .bio {
   width: 12.65706rem;
-}
+} */
 
 .modal-container .item .bio > p {
   margin: 0;
@@ -1398,5 +1420,17 @@ button:disabled {
 
   .comment-info > a {
     margin: 0;
+  }
+
+  .modal-container .modal-header {
+    margin-bottom: 0.73rem;
+  }
+
+  .modal-container {
+    padding: 1.31rem 1.39rem;
+  }
+
+  .modal-container .item .bio {
+    width: 100%;
   }
 }

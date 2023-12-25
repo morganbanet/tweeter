@@ -13,6 +13,8 @@ import Suggestions from '../../components/Suggestions/Suggestions';
 import Trending from '../../components/Trending/Trending';
 
 // @todo: create modal for listing users who liked or saved a post/cmnt
+//          - create interactions context for pagination in model
+//          - maybe split model jsx for .item into its own component
 
 function HomeScreen() {
   const [togglePage, setTogglePage] = useState(false);

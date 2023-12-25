@@ -22,6 +22,7 @@ function Tweet({ tweet }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [formIsOpen, setFormIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [targetOne, setType] = useState('');
 
   const retweet = tweet.retweeted ? tweet : null;
   tweet = tweet.retweeted || tweet;
@@ -59,8 +60,9 @@ function Tweet({ tweet }) {
     setMenuIsOpen(!menuIsOpen);
   };
 
-  const handleModal = (e) => {
+  const handleModal = (e, targetOne) => {
     if (e.target.classList.contains('modal-container')) return;
+    setType(targetOne);
     setModalIsOpen(!modalIsOpen);
   };
 
@@ -117,16 +119,37 @@ function Tweet({ tweet }) {
 
         <div className="tweet-stats">
           {count.commentCount > 0 && (
-            <span onClick={(e) => handleModal(e)}>
+            <span onClick={(e) => handleModal(e, 'comments')}>
               {count.commentCount} Comments
             </span>
           )}
 
-          {count.retweetCount > 0 && <span>{count.retweetCount} Retweets</span>}
-          {count.likeCount > 0 && <span>{count.likeCount} Likes</span>}
-          {count.bookmarkCount > 0 && <span>{count.bookmarkCount} Saved</span>}
+          {count.retweetCount > 0 && (
+            <span onClick={(e) => handleModal(e, 'retweets')}>
+              {count.retweetCount} Retweets
+            </span>
+          )}
 
-          {modalIsOpen && <Modal setModalIsOpen={setModalIsOpen} />}
+          {count.likeCount > 0 && (
+            <span onClick={(e) => handleModal(e, 'likes')}>
+              {count.likeCount} Likes
+            </span>
+          )}
+
+          {count.bookmarkCount > 0 && (
+            <span onClick={(e) => handleModal(e, 'bookmarks')}>
+              {count.bookmarkCount} Saved
+            </span>
+          )}
+
+          {modalIsOpen && (
+            <Modal
+              setModalIsOpen={setModalIsOpen}
+              id={tweet._id}
+              resType={'tweets'}
+              targetOne={targetOne}
+            />
+          )}
         </div>
 
         <div ref={controlsRef} className="tweet-controls">

@@ -1,10 +1,34 @@
-function Modal({ text, setModalIsOpen }) {
+import { useState, useEffect } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useGetInteractions } from '../../hooks/interactions/useGetInteractions';
+import { useInteractionsContext } from '../../hooks/interactions/useInteractionsContext';
+import { defaultAvatar } from '../../utils/defaults';
+
+function Modal({ setModalIsOpen, id, resType, targetOne }) {
+  const [togglePage, setTogglePage] = useState(false);
+  const [page, setPage] = useState(1);
+
+  const { getInteractions, isLoading, error } = useGetInteractions();
+  const { interactions: users, pagination } = useInteractionsContext();
+
+  useEffect(() => {
+    const fetchInteractions = async () => {
+      await getInteractions(id, resType, targetOne, page);
+    };
+    fetchInteractions();
+  }, [page, togglePage]);
+
+  const handlePagination = () => {
+    setPage(pagination.next.page);
+    setTogglePage(!togglePage);
+  };
+
   return (
     <>
       <div className="modal-screen">
         <div className="modal-container">
           <div className="modal-header">
-            <h2>Daniel Jesnsen is following</h2>
+            <h2>Users who left a {targetOne} on this Tweet</h2>
             <span
               onClick={() => setModalIsOpen(false)}
               className="material-symbols-outlined"
@@ -13,35 +37,41 @@ function Modal({ text, setModalIsOpen }) {
             </span>
           </div>
 
-          <div className="items">
-            <div className="item">
-              <div className="item-header">
-                <div className="user-info">
-                  <div className="avatar">
-                    <img
-                      src="https://firebasestorage.googleapis.com/v0/b/tweeter-90ee8.appspot.com/o/defaults%2Ftweeter_defaults_avatar.jpg?alt=media&token=a0283e0a-3511-458a-8f8b-ae80d37b2ac1"
-                      alt="user avatar"
-                    />
+          <div id="items" className="items">
+            <InfiniteScroll
+              dataLength={users.length}
+              next={handlePagination}
+              hasMore={pagination?.next?.page ? true : false}
+              loader={<h4>Loading...</h4>}
+              scrollableTarget="items"
+            >
+              {!isLoading &&
+                users.map((user) => (
+                  <div className="item" key={user._id}>
+                    <div className="item-header">
+                      <div className="user-details">
+                        <div className="avatar">
+                          <img
+                            src={user.avatar?.url || defaultAvatar}
+                            alt="user avatar"
+                          />
+                        </div>
+
+                        <div className="username-followers">
+                          <h3>{user.name}</h3>
+                          <p>120k followers</p>
+                        </div>
+                      </div>
+
+                      <span>Follow</span>
+                    </div>
+
+                    <div className="bio">
+                      <p>{user.bio}</p>
+                    </div>
                   </div>
-
-                  <div className="username-followers">
-                    <h3>Austin Neill</h3>
-                    <p>120k followers</p>
-                  </div>
-                </div>
-
-                <span>Follow</span>
-              </div>
-
-              <div className="bio">
-                <p>
-                  @jjonthan on Instagram **Over a decade as a lifestyle,
-                  adventure, and studio photographer. Traveling with my wife
-                  @travelfoodlove on instagram. PLEASE LINK ALL PHOTOS TO
-                  jonathangallegos.com -- not required but much appreciated!
-                </p>
-              </div>
-            </div>
+                ))}
+            </InfiniteScroll>
           </div>
         </div>
       </div>

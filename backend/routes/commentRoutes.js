@@ -6,6 +6,7 @@ const { protect, checkOwnership } = require('../middleware/authMiddleware');
 
 const {
   getComments,
+  getCommentUsers,
   createComment,
   updateComment,
   deleteComment,
@@ -17,6 +18,10 @@ router.use('/:commentId/likes', likeRouter);
 router.route('/')
   .get(getComments)
   .post(protect, createComment);
+
+// prettier-ignore
+router.route('/users')
+  .get(getCommentUsers)
 
 // prettier-ignore
 router.route('/:id')

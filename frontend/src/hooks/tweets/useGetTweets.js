@@ -21,8 +21,6 @@ export const useGetTweets = () => {
       return;
     }
 
-    // console.log('get tweets hook:', page);
-
     dispatch({
       type: page < 2 ? 'GET_TWEETS' : 'GET_TWEETS_NEXT',
       payload: data,
