@@ -23,12 +23,26 @@ function Modal({ setModalIsOpen, id, resType, targetOne }) {
     setTogglePage(!togglePage);
   };
 
+  let interactedText;
+  if (targetOne === 'comments') interactedText = 'commented on';
+  if (targetOne === 'likes') interactedText = 'liked';
+  if (targetOne === 'retweets') interactedText = 'retweeted';
+  if (targetOne === 'bookmarks') interactedText = 'saved';
+
+  const interactedType =
+    resType === 'tweets'
+      ? `${resType[0].toUpperCase()}${resType.slice(1, -1)}`
+      : resType.toLowerCase().slice(0, -1);
+
   return (
     <>
       <div className="modal-screen">
         <div className="modal-container">
           <div className="modal-header">
-            <h2>Users who left a {targetOne} on this Tweet</h2>
+            <h2>
+              Users who {interactedText} this {interactedType}
+            </h2>
+
             <span
               onClick={() => setModalIsOpen(false)}
               className="material-symbols-outlined"

@@ -1,3 +1,4 @@
+const User = require('../models/userModel');
 const Tweet = require('../models/tweetModel');
 const Bookmark = require('../models/bookmarkModel');
 const asyncHandler = require('../utils/asyncHandler');
@@ -21,6 +22,40 @@ exports.getBookmarks = asyncHandler(async (req, res, next) => {
     count: bookmarks.length,
     pagination,
     data: bookmarks,
+  });
+});
+
+// @desc        Get bookmark users
+// @route       GET /api/tweets/:tweetId/bookmarks/users
+// @access      Public
+exports.getBookmarkUsers = asyncHandler(async (req, res, next) => {
+  const tweet = await Tweet.findById(req.params.tweetId);
+
+  if (!tweet) {
+    return next(
+      new ErrorResponse(`Tweet not found with id ${req.params.tweetId}`, 404)
+    );
+  }
+
+  const bookmarks = await Bookmark.find({ bookmarked: req.params.tweetId });
+
+  // show a user only once in this list
+  let userIdsSet = new Set();
+  bookmarks.forEach((bookmark) => userIdsSet.add(bookmark.user._id));
+  const userIds = Array.from(userIdsSet);
+
+  const options = {
+    altQuery: { _id: { in: userIds } },
+  };
+
+  const result = await advancedResults(req, User, options);
+  const { pagination, results: users } = result;
+
+  res.status(200).json({
+    success: true,
+    count: users.length,
+    pagination,
+    data: users,
   });
 });
 

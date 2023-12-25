@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
@@ -6,6 +6,7 @@ import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useCommentContext } from '../../hooks/comment/useCommentContext';
 import { useCommentsContext } from '../../hooks/comments/useCommentsContext';
 
+import Modal from '../Modal/Modal';
 import CommentDropdown from '../CommentDropdown/CommentDropdown';
 import InteractionButton from '../InteractionButton/InteractionButton';
 
@@ -15,6 +16,8 @@ import { defaultAvatar } from '../../utils/defaults';
 
 function Comment({ tweet, tweetStats, comment, handlePagination }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [targetOne, setType] = useState('');
 
   const { comments, pagination } = useCommentsContext();
   const { count } = useCommentContext();
@@ -22,9 +25,21 @@ function Comment({ tweet, tweetStats, comment, handlePagination }) {
 
   const expandRef = useRef();
 
+  useEffect(() => {
+    modalIsOpen
+      ? (document.body.style.overflow = 'hidden')
+      : (document.body.style.overflow = 'visible');
+  }, [modalIsOpen]);
+
   const handleClick = (e) => {
     if (e.target.classList.contains('comment-dropdown')) return;
     setMenuIsOpen(!menuIsOpen);
+  };
+
+  const handleModal = (e, targetOne) => {
+    if (e.target.classList.contains('modal-container')) return;
+    setType(targetOne);
+    setModalIsOpen(!modalIsOpen);
   };
 
   return (
@@ -83,8 +98,19 @@ function Comment({ tweet, tweetStats, comment, handlePagination }) {
             {count.likeCount > 0 && (
               <div className="like-info">
                 <span>·</span>
-                <span>{count.likeCount} Likes</span>
+                <span onClick={(e) => handleModal(e, 'likes')}>
+                  {count.likeCount} Likes
+                </span>
               </div>
+            )}
+
+            {modalIsOpen && (
+              <Modal
+                setModalIsOpen={setModalIsOpen}
+                id={comment._id}
+                resType={'comments'}
+                targetOne={targetOne}
+              />
             )}
           </div>
 

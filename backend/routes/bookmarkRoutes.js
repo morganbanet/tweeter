@@ -5,6 +5,7 @@ const { protect, checkOwnership } = require('../middleware/authMiddleware');
 
 const {
   getBookmarks,
+  getBookmarkUsers,
   createBookmark,
   deleteBookmark,
 } = require('../controllers/bookmarkController');
@@ -13,6 +14,10 @@ const {
 router.route('/')
   .get(getBookmarks)
   .post(protect, createBookmark)
+
+// prettier-ignore
+router.route('/users')
+  .get(getBookmarkUsers)
 
 // prettier-ignore
 router.route('/:id')

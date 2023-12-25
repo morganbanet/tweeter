@@ -5,6 +5,7 @@ const { protect, checkOwnership } = require('../middleware/authMiddleware');
 
 const {
   getLikes,
+  getLikeUsers,
   createLike,
   deleteLike,
 } = require('../controllers/likeController');
@@ -13,6 +14,10 @@ const {
 router.route('/')
   .get(getLikes)
   .post(protect, createLike)
+
+// prettier-ignore
+router.route('/users')
+  .get(getLikeUsers)
 
 // prettier-ignore
 router.route('/:id')

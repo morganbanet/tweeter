@@ -5,6 +5,7 @@ const { protect, checkOwnership } = require('../middleware/authMiddleware');
 
 const {
   getRetweets,
+  getRetweetUsers,
   createRetweet,
   deleteRetweet,
 } = require('../controllers/retweetController');
@@ -13,6 +14,10 @@ const {
 router.route('/')
   .get(getRetweets)
   .post(protect, createRetweet)
+
+// prettier-ignore
+router.route('/users')
+  .get(getRetweetUsers)
 
 // prettier-ignore
 router.route('/:id')

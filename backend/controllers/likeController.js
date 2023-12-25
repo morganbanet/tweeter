@@ -1,3 +1,4 @@
+const User = require('../models/userModel');
 const Like = require('../models/likeModel');
 const Tweet = require('../models/tweetModel');
 const Comment = require('../models/commentModel');
@@ -29,6 +30,43 @@ exports.getLikes = asyncHandler(async (req, res, next) => {
   res
     .status(200)
     .json({ success: true, count: likes.length, pagination, data: likes });
+});
+
+// @desc        Get like users
+// @route       GET /api/tweets/:tweetId/likes/users
+// @route       GET /api/comments/:commentId/likes/users
+// @access      Public
+exports.getLikeUsers = asyncHandler(async (req, res, next) => {
+  let query;
+
+  if (req.params.tweetId) {
+    query = { liked: req.params.tweetId };
+  }
+
+  if (req.params.commentId) {
+    query = { liked: req.params.commentId };
+  }
+
+  const likes = await Like.find(query);
+
+  // show a user only once in this list
+  let userIdsSet = new Set();
+  likes.forEach((like) => userIdsSet.add(like.user._id));
+  const userIds = Array.from(userIdsSet);
+
+  const options = {
+    altQuery: { _id: { in: userIds } },
+  };
+
+  const result = await advancedResults(req, User, options);
+  const { pagination, results: users } = result;
+
+  res.status(200).json({
+    success: true,
+    count: users.length,
+    pagination,
+    data: users,
+  });
 });
 
 // @desc        Add like

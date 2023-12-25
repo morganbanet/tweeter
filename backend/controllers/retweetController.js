@@ -1,3 +1,4 @@
+const User = require('../models/userModel');
 const Tweet = require('../models/tweetModel');
 const Retweet = require('../models/retweetModel');
 const asyncHandler = require('../utils/asyncHandler');
@@ -21,6 +22,40 @@ exports.getRetweets = asyncHandler(async (req, res, next) => {
     count: retweets.length,
     pagination,
     data: retweets,
+  });
+});
+
+// @desc        Get retweet users
+// @route       GET /api/tweets/:tweetId/retweets/users
+// @access      Public
+exports.getRetweetUsers = asyncHandler(async (req, res, next) => {
+  const tweet = await Tweet.findById(req.params.tweetId);
+
+  if (!tweet) {
+    return next(
+      new ErrorResponse(`Tweet not found with id ${req.params.tweetId}`, 404)
+    );
+  }
+
+  const retweets = await Retweet.find({ retweeted: req.params.tweetId });
+
+  // show a user only once in this list
+  let userIdsSet = new Set();
+  retweets.forEach((retweet) => userIdsSet.add(retweet.user._id));
+  const userIds = Array.from(userIdsSet);
+
+  const options = {
+    altQuery: { _id: { in: userIds } },
+  };
+
+  const result = await advancedResults(req, User, options);
+  const { pagination, results: users } = result;
+
+  res.status(200).json({
+    success: true,
+    count: users.length,
+    pagination,
+    data: users,
   });
 });
 
