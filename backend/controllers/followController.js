@@ -45,6 +45,14 @@ exports.getFollowing = asyncHandler(async (req, res, next) => {
 // @route       POST /api/users/:userId/follows
 // @access      Private
 exports.followUser = asyncHandler(async (req, res, next) => {
+  const userToFollow = await User.findById(req.params.userId);
+
+  if (!userToFollow) {
+    return next(
+      new ErrorResponse(`User not found with id ${req.params.userId}`, 404)
+    );
+  }
+
   const followToCreate = {
     user: req.user.id,
     following: req.params.userId,
@@ -65,6 +73,9 @@ exports.followUser = asyncHandler(async (req, res, next) => {
     );
   }
 
+  await userToFollow.modifyCount('followerCount', +1);
+  await req.user.modifyCount('followingCount', +1);
+
   const follow = await Follow.create(followToCreate);
 
   res.status(201).json({ success: true, data: follow });
@@ -81,6 +92,11 @@ exports.unfollowUser = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`Follow not found with id ${req.params.id}`, 404)
     );
   }
+
+  const followedUser = await User.findById(follow.following);
+
+  await followedUser.modifyCount('followerCount', -1);
+  await req.user.modifyCount('followingCount', -1);
 
   await follow.deleteOne();
 

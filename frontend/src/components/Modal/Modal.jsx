@@ -73,7 +73,7 @@ function Modal({ setModalIsOpen, id, resType, targetOne }) {
 
                         <div className="username-followers">
                           <h3>{user.name}</h3>
-                          <p>120k followers</p>
+                          <p>{user.followerCount} followers</p>
                         </div>
                       </div>
 

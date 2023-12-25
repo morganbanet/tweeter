@@ -31,12 +31,28 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user',
     },
-    avatar: { url: String, fileName: String },
-    banner: { url: String, fileName: String },
+    avatar: {
+      url: String,
+      filename: String,
+    },
+    banner: {
+      url: String,
+      filename: String,
+    },
     bio: {
       type: String,
       maxLength: [160, 'Bio cannot exceed 160 characters.'],
       default: `Say Hi, I'm new to Tweeter! 👋`,
+    },
+    followerCount: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+    followingCount: {
+      type: Number,
+      min: 0,
+      default: 0,
     },
     password: {
       type: String,
@@ -93,6 +109,18 @@ userSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
+
+userSchema.methods.modifyCount = async function (field, val) {
+  if (val === +1) {
+    this[field] += 1;
+    await this.save();
+  }
+
+  if (val === -1) {
+    this[field] -= 1;
+    await this.save();
+  }
+};
 
 // Match passwords
 userSchema.methods.matchPassword = async function (enteredPassword) {
