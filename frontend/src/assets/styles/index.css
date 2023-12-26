@@ -1359,8 +1359,7 @@ button:disabled {
 
   .trending-container {
     width: 100%;
-    /* height: 30.98094rem; */
-    padding: 0.68rem 1.25rem 2.42rem 1.25rem;
+    padding: 0.87rem 1.25rem 2.42rem 1.25rem;
     border-radius: 0.75rem;
     background: #fff;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
@@ -1419,10 +1418,145 @@ button:disabled {
 
   .suggestions-container {
     width: 100%;
-    height: 32.35619rem;
+    padding: 0.87rem 1.25rem 1.88em 1.25rem;
     border-radius: 0.75rem;
     background: #fff;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+  }
+
+  .suggestions-container h2 {
+    padding-bottom: 0.5rem;
+    margin: 0 0 1.5rem 0;
+    color: #4f4f4f;
+    font-family: var(--primary-font);
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.02625rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .suggestions-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .suggestions-container ul li {
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.37rem;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .suggestions-container ul li:last-of-type {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: 0px solid #00000000;
+  }
+
+  .suggestion-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.2rem;
+  }
+
+  .suggestion-header .user-info {
+    display: flex;
+    gap: 1.09rem;
+  }
+
+  .suggestion-header .user-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+  }
+
+  .suggestion-header .user-avatar img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+  }
+
+  .suggestion-header .user-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .suggestion-header .user-details h3 {
+    margin: 0 0 0.3rem 0;
+    color: #000;
+    font-family: var(--primary-font);
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.035rem;
+  }
+
+  .suggestion-header .user-details span {
+    color: #828282;
+    font-family: var(--secondary-font);
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.02625rem;
+  }
+
+  .suggestion-header button {
+    width: 4.9375rem;
+    height: 1.5rem;
+    border-radius: 0.25rem;
+    background: var(--theme-color);
+    color: #fff;
+    font-family: var(--secondary-font);
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.02625rem;
+    display: flex;
+    gap: 0.25rem;
+    justify-content: center;
+    align-items: center;
+    border: none;
+  }
+
+  .suggestion-header > button > span {
+    font-size: 1rem;
+  }
+
+  .suggestions-container .user-bio {
+    width: 100%;
+  }
+
+  .suggestions-container .user-bio > p {
+    margin: 0 0 1.32rem 0;
+    color: #828282;
+    font-family: var(--secondary-font);
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.03063rem;
+  }
+
+  .suggestions-container .user-banner {
+    width: 100%;
+    height: 4.86069rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .suggestions-container .user-banner img {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+    object-fit: cover;
+    object-position: center;
   }
 
   .tweet-form .image-container img {

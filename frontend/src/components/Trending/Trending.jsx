@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useGetTrending } from '../../hooks/hashtags/useGetTrending';
 
@@ -11,7 +10,7 @@ function Trending() {
 
       <ul>
         {data &&
-          data.slice(0, 6).map((item) => (
+          data.map((item) => (
             <li key={item._id}>
               <Link to="/explore">{item.hashtag}</Link>
               <span>{item.count} Tweets</span>
