@@ -65,12 +65,20 @@ function ModalItem({ user }) {
               </div>
             </div>
 
-            {userInfo._id !== user._id && (
+            {userInfo._id !== user._id && isFollowing ? (
               <button
                 disabled={followLoading || unfollowLoading}
                 onClick={() => handleFollow()}
               >
-                {isFollowing ? 'Unfollow' : 'Follow'}
+                Follow
+              </button>
+            ) : (
+              <button
+                disabled={followLoading || unfollowLoading}
+                onClick={() => handleFollow()}
+              >
+                <span className="material-symbols-outlined">person_add</span>{' '}
+                Follow
               </button>
             )}
           </div>

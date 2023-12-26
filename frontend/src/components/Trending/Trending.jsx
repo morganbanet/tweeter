@@ -13,7 +13,7 @@ function Trending() {
         {data &&
           data.slice(0, 6).map((item) => (
             <li key={item._id}>
-              <Link>{item.hashtag}</Link>
+              <Link to="/explore">{item.hashtag}</Link>
               <span>{item.count} Tweets</span>
             </li>
           ))}
