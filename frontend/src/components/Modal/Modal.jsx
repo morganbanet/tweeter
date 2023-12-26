@@ -3,6 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useGetInteractions } from '../../hooks/interactions/useGetInteractions';
 import { useInteractionsContext } from '../../hooks/interactions/useInteractionsContext';
 import { defaultAvatar } from '../../utils/defaults';
+import ModalItem from '../ModalItem/ModalItem';
 
 function Modal({ setModalIsOpen, id, resType, targetOne }) {
   const [togglePage, setTogglePage] = useState(false);
@@ -59,32 +60,15 @@ function Modal({ setModalIsOpen, id, resType, targetOne }) {
               loader={<h4>Loading...</h4>}
               scrollableTarget="items"
             >
+              {/* @todo: create item component and seperate the below
+            out into it. the following logic can then be placed inside
+            
+            for each user item, fetch all their followers and check
+            whether the currently logged in user is included. this way
+            the follow button can be conditionally rendered */}
+
               {!isLoading &&
-                users.map((user) => (
-                  <div className="item" key={user._id}>
-                    <div className="item-header">
-                      <div className="user-details">
-                        <div className="avatar">
-                          <img
-                            src={user.avatar?.url || defaultAvatar}
-                            alt="user avatar"
-                          />
-                        </div>
-
-                        <div className="username-followers">
-                          <h3>{user.name}</h3>
-                          <p>{user.followerCount} followers</p>
-                        </div>
-                      </div>
-
-                      <span>Follow</span>
-                    </div>
-
-                    <div className="bio">
-                      <p>{user.bio}</p>
-                    </div>
-                  </div>
-                ))}
+                users.map((user) => <ModalItem key={user._id} user={user} />)}
             </InfiniteScroll>
           </div>
         </div>

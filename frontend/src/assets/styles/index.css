@@ -1152,6 +1152,10 @@ button:disabled {
   border-bottom: 1px solid #e0e0e0;
 }
 
+.modal-container .item:last-of-type {
+  border-bottom: 0px solid #00000000;
+}
+
 .modal-container .item-header {
   display: flex;
   justify-content: space-between;
@@ -1209,7 +1213,7 @@ button:disabled {
   letter-spacing: -0.02625rem;
 }
 
-.modal-container .item-header > span {
+.modal-container .item-header > button {
   margin: 0;
   width: 4.9375rem;
   height: 1.5rem;
@@ -1226,6 +1230,8 @@ button:disabled {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  border: none;
+  user-select: none;
 }
 
 /* design mistake? */

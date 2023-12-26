@@ -136,6 +136,10 @@ const genUserFollowers = async (user, sampleUsers) => {
     const following = sampleUsers[userToFollow].id;
 
     await Follow.create({ user, following });
+
+    const userToModifyFollowCount = await User.findById(following);
+    await userToModifyFollowCount.modifyCount('followerCount', +1);
+    await user.modifyCount('followingCount', +1);
   }
 };
 
