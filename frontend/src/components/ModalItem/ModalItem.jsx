@@ -62,12 +62,14 @@ function ModalItem({ user }) {
               </div>
             </div>
 
-            <button
-              disabled={followLoading || unfollowLoading}
-              onClick={() => handleFollow()}
-            >
-              {isFollowing ? 'Unfollow' : 'Follow'}
-            </button>
+            {userInfo._id !== user._id && (
+              <button
+                disabled={followLoading || unfollowLoading}
+                onClick={() => handleFollow()}
+              >
+                {isFollowing ? 'Unfollow' : 'Follow'}
+              </button>
+            )}
           </div>
 
           <div className="bio">

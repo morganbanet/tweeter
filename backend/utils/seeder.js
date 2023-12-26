@@ -165,7 +165,7 @@ const insertSampleTweets = async () => {
       }
 
       const hashtags = text.match(/#\w+/g);
-      if (hashtags) await createHashtags(hashtags, tweet);
+      if (hashtags) await createHashtags(hashtags, tweet, 'Tweet');
 
       tweetIndex = tweetIndex + 1;
     }
@@ -201,7 +201,7 @@ const insertSampleComments = async () => {
       await tweetToModify.modifyCount('commentCount', +1);
 
       const hashtags = text.match(/#\w+/g);
-      if (hashtags) await createHashtags(hashtags, comment);
+      if (hashtags) await createHashtags(hashtags, comment, 'Comment');
 
       commentIndex = commentIndex + 1;
     }

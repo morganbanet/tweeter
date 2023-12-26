@@ -1,10 +1,10 @@
 const Hashtag = require('../models/hashtagModel');
 
-exports.createHashtags = async (hashtags, document) => {
+exports.createHashtags = async (hashtags, document, type) => {
   let finalDocument;
 
   for (const hashtag of hashtags) {
-    const tagExists = await Hashtag.findOne({ hashtag });
+    const tagExists = await Hashtag.findOne({ hashtag, targetType: type });
 
     // Increase count if hashtag already exists
     if (tagExists) {
@@ -14,7 +14,12 @@ exports.createHashtags = async (hashtags, document) => {
 
     // Create new hashtag document if it doesn't exist
     if (!tagExists) {
-      const newHashtag = await Hashtag.create({ hashtag, count: +1 });
+      const newHashtag = await Hashtag.create({
+        hashtag,
+        count: +1,
+        targetType: type,
+      });
+
       document.hashtags.push(newHashtag.id);
     }
 

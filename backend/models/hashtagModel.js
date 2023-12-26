@@ -12,6 +12,11 @@ const hashtagSchema = new mongoose.Schema(
       min: 0,
       default: 0,
     },
+    targetType: {
+      type: String,
+      required: true,
+      enum: ['Tweet', 'Comment'],
+    },
   },
   {
     timestamps: true,

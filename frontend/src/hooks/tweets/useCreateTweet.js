@@ -33,8 +33,6 @@ export const useCreateTweet = () => {
     const response = await fetch('/api/tweets', options);
     const data = await response.json();
 
-    console.log(data.data);
-
     if (!response.ok) {
       setIsLoading(false);
       setError(data.error);

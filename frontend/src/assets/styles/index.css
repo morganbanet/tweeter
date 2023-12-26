@@ -1353,10 +1353,62 @@ button:disabled {
 
   .trending-container {
     width: 100%;
-    height: 30.98094rem;
+    /* height: 30.98094rem; */
+    padding: 0.68rem 1.25rem 2.42rem 1.25rem;
     border-radius: 0.75rem;
     background: #fff;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+  }
+
+  .trending-container h2 {
+    padding-bottom: 0.5rem;
+    margin: 0 0 1.5rem 0;
+    color: #4f4f4f;
+    font-family: var(--primary-font);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.42px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .trending-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .trending-container ul li {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .trending-container ul li:last-of-type {
+    margin-bottom: 0rem;
+  }
+
+  .trending-container ul li a {
+    color: #333;
+    font-family: var(--secondary-font);
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.035rem;
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+  }
+
+  .trending-container ul li span {
+    color: #828282;
+    font-family: var(--secondary-font);
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.02625rem;
   }
 
   .suggestions-container {

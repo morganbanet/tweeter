@@ -110,7 +110,7 @@ exports.createComment = asyncHandler(async (req, res, next) => {
   await tweet.modifyCount('commentCount', +1);
 
   const hashtags = req.body.text.match(/#\w+/g);
-  if (hashtags) comment = await createHashtags(hashtags, comment);
+  if (hashtags) comment = await createHashtags(hashtags, comment, 'Comment');
 
   if (req.files) {
     file = req.files.file;
@@ -145,7 +145,7 @@ exports.updateComment = asyncHandler(async (req, res, next) => {
 
   comment = await removeHashtags(comment);
   const hashtags = fieldsToUpdate.text.match(/#\w+/g);
-  if (hashtags) comment = await createHashtags(hashtags, comment);
+  if (hashtags) comment = await createHashtags(hashtags, comment, 'Comment');
 
   if (req.files) {
     file = req.files.file;

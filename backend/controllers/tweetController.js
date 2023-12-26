@@ -40,7 +40,7 @@ exports.createTweet = asyncHandler(async (req, res, next) => {
 
   // Create array of hashtags from req.body.text and process them
   const hashtags = tweetToCreate.text.match(/#\w+/g);
-  if (hashtags) tweet = await createHashtags(hashtags, tweet);
+  if (hashtags) tweet = await createHashtags(hashtags, tweet, 'Tweet');
 
   if (req.files) {
     file = req.files.file;
@@ -77,7 +77,7 @@ exports.updateTweet = asyncHandler(async (req, res, next) => {
   // Remove existing hashtags and process any new ones
   tweet = await removeHashtags(tweet);
   const hashtags = fieldsToUpdate.text.match(/#\w+/g);
-  if (hashtags) tweet = await createHashtags(hashtags, tweet);
+  if (hashtags) tweet = await createHashtags(hashtags, tweet, 'Tweet');
 
   if (req.files) {
     file = req.files.file;
