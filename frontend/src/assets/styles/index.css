@@ -1190,7 +1190,7 @@ button:disabled {
   flex-direction: column;
 }
 
-.modal-container .item-header .username-followers > h3 {
+.modal-container .item-header .username-followers > a {
   margin: 0;
   color: #000;
   font-family: var(--primary-font);
@@ -1200,6 +1200,7 @@ button:disabled {
   line-height: normal;
   letter-spacing: -0.035rem;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .modal-container .item-header .username-followers > p {

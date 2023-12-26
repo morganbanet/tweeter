@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useGetFollows } from '../../hooks/follows/useGetFollows';
 import { useFollowUser } from '../../hooks/follows/useFollowUser';
@@ -49,15 +50,17 @@ function ModalItem({ user }) {
         <div className="item" key={user._id}>
           <div className="item-header">
             <div className="user-details">
-              <div className="avatar">
-                <img
-                  src={user.avatar?.url || defaultAvatar}
-                  alt="user avatar"
-                />
-              </div>
+              <Link to={`/users/${user.slug}/${user._id}`}>
+                <div className="avatar">
+                  <img
+                    src={user.avatar?.url || defaultAvatar}
+                    alt="user avatar"
+                  />
+                </div>
+              </Link>
 
               <div className="username-followers">
-                <h3>{user.name}</h3>
+                <Link to={`/users/${user.slug}/${user._id}`}>{user.name}</Link>
                 <p>{followerCount} followers</p>
               </div>
             </div>
