@@ -138,7 +138,7 @@ function Tweet({ tweet }) {
 
           {count.bookmarkCount > 0 && (
             <span onClick={(e) => handleModal(e, 'bookmarks')}>
-              {count.bookmarkCount} Saved
+              {count.bookmarkCount} Saves
             </span>
           )}
 

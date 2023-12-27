@@ -36,13 +36,12 @@ function TweetInteractionButton(props) {
     }
   };
 
-  let btnInteractedText;
   let btnText = `${btnType.charAt(0).toUpperCase()}${btnType.slice(1)}`;
-  if (btnText.charAt(btnText.length - 1) === 'e') {
-    btnInteractedText = `${btnText.slice(0, -1)}ed`;
-  } else {
-    btnInteractedText = `${btnText}ed`;
-  }
+
+  let btnInteractedText;
+  if (btnType === 'retweet') btnInteractedText = 'Retweeted';
+  if (btnType === 'like') btnInteractedText = 'Liked';
+  if (btnType === 'bookmark') btnInteractedText = 'Saved';
 
   const sync = symbol === 'sync' ? true : false;
 

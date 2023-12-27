@@ -416,6 +416,7 @@ main > section {
 button:disabled {
   opacity: 0.8;
   pointer-events: none;
+  user-select: none;
 }
 
 /* ---------------------------------------------- tweet form dropdown */

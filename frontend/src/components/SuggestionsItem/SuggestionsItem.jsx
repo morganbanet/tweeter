@@ -47,48 +47,54 @@ function SuggestionsItem({ user }) {
   };
 
   return (
-    <li>
-      <div className="suggestion-header">
-        <div className="user-info">
-          <div className="user-avatar">
-            <Link to={`/users/${user.slug}/${user._id}`}>
-              <img src={user.avatar?.url || defaultAvatar} alt="user avatar" />
-            </Link>
+    <>
+      <li>
+        <div className="suggestion-header">
+          <div className="user-info">
+            <div className="user-avatar">
+              <Link to={`/users/${user.slug}/${user._id}`}>
+                <img
+                  src={user.avatar?.url || defaultAvatar}
+                  alt="user avatar"
+                />
+              </Link>
+            </div>
+
+            <div className="user-details">
+              <Link to={`/users/${user.slug}/${user._id}`}>{user.name}</Link>
+              <span>{followerCount} followers</span>
+            </div>
           </div>
 
-          <div className="user-details">
-            <Link to={`/users/${user.slug}/${user._id}`}>{user.name}</Link>
-            <span>{followerCount} followers</span>
-          </div>
+          {userInfo._id !== user._id && isFollowing && (
+            <button
+              disabled={followLoading || unfollowLoading}
+              onClick={() => handleFollow()}
+            >
+              Unfollow
+            </button>
+          )}
+
+          {userInfo._id !== user._id && !isFollowing && (
+            <button
+              disabled={followLoading || unfollowLoading}
+              onClick={() => handleFollow()}
+            >
+              <span className="material-symbols-outlined">person_add</span>{' '}
+              Follow
+            </button>
+          )}
         </div>
 
-        {userInfo._id !== user._id && isFollowing && (
-          <button
-            disabled={followLoading || unfollowLoading}
-            onClick={() => handleFollow()}
-          >
-            Unfollow
-          </button>
-        )}
+        <div className="user-bio">
+          <p>{user.bio}</p>
+        </div>
 
-        {userInfo._id !== user._id && !isFollowing && (
-          <button
-            disabled={followLoading || unfollowLoading}
-            onClick={() => handleFollow()}
-          >
-            <span className="material-symbols-outlined">person_add</span> Follow
-          </button>
-        )}
-      </div>
-
-      <div className="user-bio">
-        <p>{user.bio}</p>
-      </div>
-
-      <div className="user-banner">
-        <img src={user.banner?.url || defaultBanner} alt="user banner" />
-      </div>
-    </li>
+        <div className="user-banner">
+          <img src={user.banner?.url || defaultBanner} alt="user banner" />
+        </div>
+      </li>
+    </>
   );
 }
 

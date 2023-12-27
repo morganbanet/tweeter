@@ -15,7 +15,7 @@ function Suggestions() {
       <ul>
         {suggestions
           .filter((suggestion) => suggestion._id !== userInfo._id)
-          .slice(0, 2)
+          .slice(0, 3)
           .map((suggestion) => (
             <SuggestionsItem key={suggestion._id} user={suggestion} />
           ))}

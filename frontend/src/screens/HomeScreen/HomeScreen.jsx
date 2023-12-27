@@ -12,10 +12,6 @@ import TweetForm from '../../components/TweetForm/TweetForm';
 import Suggestions from '../../components/Suggestions/Suggestions';
 import Trending from '../../components/Trending/Trending';
 
-// @todo: add functionality to the suggestions component
-// @todo: fix tweet showing "saved" and not "saves"
-// @todo: add context for trending & suggestions to prevent empty loading
-
 function HomeScreen() {
   const [togglePage, setTogglePage] = useState(false);
   const [page, setPage] = useState(1);
