@@ -20,9 +20,9 @@ function PostTweet() {
   const { createTweet, isLoading, error } = useCreateTweet();
   const { userInfo } = useAuthContext();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await createTweet(text, file, isPrivate);
+    createTweet(text, file, isPrivate);
     !error && (setText(''), processFile(), setIsPrivate(false));
   };
 

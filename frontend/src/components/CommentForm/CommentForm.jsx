@@ -20,9 +20,9 @@ function CommentForm({ tweet, formIsOpen }) {
   const { createComment, isLoading, error } = useCreateComment();
   useEffect(() => handleFormsBorder(formRef, count), [formIsOpen, count]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await createComment(text, file, tweet._id);
+    createComment(text, file, tweet._id);
     !error && (setText(''), processFile());
   };
 

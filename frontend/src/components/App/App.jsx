@@ -8,6 +8,8 @@ import {
 import { AuthProvider } from '../../context/auth/AuthContext';
 import { TweetsProvider } from '../../context/tweets/TweetsContext';
 import { InteractionsProvider } from '../../context/interactions/InteractionsContext';
+import { HashtagsProvider } from '../../context/hashtags/HashtagsContext';
+import { SuggestionsProvider } from '../../context/suggestions/SuggestionsContext';
 
 import RootLayout from '../../layout/RootLayout/RootLayout';
 import UnauthedLayout from '../../layout/UnauthedLayout/UnauthedLayout';
@@ -45,7 +47,11 @@ function App() {
     <AuthProvider>
       <TweetsProvider>
         <InteractionsProvider>
-          <RouterProvider router={router} />
+          <HashtagsProvider>
+            <SuggestionsProvider>
+              <RouterProvider router={router} />
+            </SuggestionsProvider>
+          </HashtagsProvider>
         </InteractionsProvider>
       </TweetsProvider>
     </AuthProvider>

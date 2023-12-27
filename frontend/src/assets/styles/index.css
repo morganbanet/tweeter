@@ -1359,6 +1359,7 @@ button:disabled {
 
   .trending-container {
     width: 100%;
+    min-height: 30.98094rem;
     padding: 0.87rem 1.25rem 2.42rem 1.25rem;
     border-radius: 0.75rem;
     background: #fff;
@@ -1418,6 +1419,7 @@ button:disabled {
 
   .suggestions-container {
     width: 100%;
+    min-height: 32.35619rem;
     padding: 0.87rem 1.25rem 1.88em 1.25rem;
     border-radius: 0.75rem;
     background: #fff;
@@ -1478,6 +1480,7 @@ button:disabled {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 0.5rem;
+    user-select: none;
   }
 
   .suggestion-header .user-details {
@@ -1485,7 +1488,7 @@ button:disabled {
     flex-direction: column;
   }
 
-  .suggestion-header .user-details h3 {
+  .suggestion-header .user-details a {
     margin: 0 0 0.3rem 0;
     color: #000;
     font-family: var(--primary-font);
@@ -1494,6 +1497,8 @@ button:disabled {
     font-weight: 500;
     line-height: normal;
     letter-spacing: -0.035rem;
+    cursor: pointer;
+    text-decoration: none;
   }
 
   .suggestion-header .user-details span {
@@ -1523,6 +1528,8 @@ button:disabled {
     justify-content: center;
     align-items: center;
     border: none;
+    cursor: pointer;
+    user-select: none;
   }
 
   .suggestion-header > button > span {

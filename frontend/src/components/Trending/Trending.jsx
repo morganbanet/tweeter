@@ -1,19 +1,21 @@
 import { Link } from 'react-router-dom';
 import { useGetTrending } from '../../hooks/hashtags/useGetTrending';
+import { useHashtagsContext } from '../../hooks/hashtags/useHashtagsContext';
 
 function Trending() {
-  const { data, isLoading, error } = useGetTrending();
+  const { isLoading, error } = useGetTrending();
+  const { hashtags } = useHashtagsContext();
 
   return (
     <div className="trending-container">
       <h2>Trends for you</h2>
 
       <ul>
-        {data &&
-          data.map((item) => (
-            <li key={item._id}>
-              <Link to="/explore">{item.hashtag}</Link>
-              <span>{item.count} Tweets</span>
+        {hashtags &&
+          hashtags.map((hashtag) => (
+            <li key={hashtag._id}>
+              <Link to="/explore">{hashtag.hashtag}</Link>
+              <span>{hashtag.count} Tweets</span>
             </li>
           ))}
       </ul>

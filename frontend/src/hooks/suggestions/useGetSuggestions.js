@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useAuthContext } from '../auth/useAuthContext';
-import { useHashtagsContext } from '../hashtags/useHashtagsContext';
+import { useSuggestionsContext } from '../suggestions/useSuggestionsContext';
 
-export const useGetTrending = () => {
+export const useGetSuggestions = (sort = '-createdAt') => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const { userInfo } = useAuthContext();
-  const { dispatch } = useHashtagsContext();
+  const { dispatch } = useSuggestionsContext();
 
   useEffect(() => {
-    const getTrending = async () => {
+    const getSuggestions = async () => {
       setIsLoading(true);
       setError(null);
 
@@ -20,7 +20,7 @@ export const useGetTrending = () => {
         return;
       }
 
-      const endpoint = `/api/hashtags?targetType[eq]=Tweet&sort=-count&limit=6`;
+      const endpoint = `/api/users?sort=${sort}`;
       const response = await fetch(endpoint);
       const data = await response.json();
 
@@ -30,12 +30,12 @@ export const useGetTrending = () => {
         return;
       }
 
-      dispatch({ type: 'GET_HASHTAGS', payload: data.data });
+      dispatch({ type: 'GET_SUGGESTIONS', payload: data.data });
 
       setIsLoading(false);
     };
 
-    getTrending();
+    getSuggestions();
   }, []);
 
   return { isLoading, error };
