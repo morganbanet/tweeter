@@ -10,6 +10,7 @@ export const useGetFollows = (userId, returnIdsOnly = false) => {
 
   useEffect(() => {
     const getFollows = async () => {
+      setIsLoading(true);
       setError(null);
 
       if (!userInfo) {

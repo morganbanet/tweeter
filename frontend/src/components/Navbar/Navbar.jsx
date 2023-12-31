@@ -28,7 +28,7 @@ function Navbar() {
               Home <div />
             </NavLink>
 
-            <NavLink to="/explore">
+            <NavLink to="explore?q=tweets&sort=top">
               Explore <div />
             </NavLink>
 

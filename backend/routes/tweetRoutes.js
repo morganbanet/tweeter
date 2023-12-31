@@ -9,6 +9,7 @@ const { protect, checkOwnership } = require('../middleware/authMiddleware');
 
 const {
   getTweets,
+  getFilteredTweets,
   createTweet,
   updateTweet,
   deleteTweet,
@@ -23,6 +24,10 @@ router.use('/:tweetId/bookmarks', bookmarkRouter);
 router.route('/')
   .get(protect, getTweets)
   .post(protect, createTweet);
+
+// prettier-ignore
+router.route('/filter')
+  .get(protect, getFilteredTweets)
 
 // prettier-ignore
 router.route('/:id')

@@ -14,7 +14,9 @@ function Trending() {
         {hashtags &&
           hashtags.map((hashtag) => (
             <li key={hashtag._id}>
-              <Link to="/explore">{hashtag.hashtag}</Link>
+              <Link to={`/explore?top&hashtag=${hashtag.hashtag}`}>
+                {hashtag.hashtag}
+              </Link>
               <span>{hashtag.count} Tweets</span>
             </li>
           ))}

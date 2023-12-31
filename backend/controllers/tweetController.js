@@ -5,6 +5,7 @@ const advancedResults = require('../utils/advancedResults');
 const tweetsAndRetweets = require('../utils/tweetsAndRetweets');
 const { uploadFile } = require('../utils/storageBucket');
 const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
+const { SchemaTypeOptions } = require('mongoose');
 
 // @desc        Get all tweets
 // @route       GET /api/tweets
@@ -12,6 +13,22 @@ const { createHashtags, removeHashtags } = require('../utils/hashtagHelper');
 exports.getTweets = asyncHandler(async (req, res, next) => {
   const options = {
     aggregate: tweetsAndRetweets(),
+  };
+
+  const result = await advancedResults(req, Tweet, options);
+  const { pagination, results: tweets } = result;
+
+  res
+    .status(200)
+    .json({ success: true, count: tweets.length, pagination, data: tweets });
+});
+
+// @desc        Get tweets by filter
+// @route       GET /api/tweets/filter
+// @access      Public
+exports.getFilteredTweets = asyncHandler(async (req, res, next) => {
+  const options = {
+    populate: 'user',
   };
 
   const result = await advancedResults(req, Tweet, options);

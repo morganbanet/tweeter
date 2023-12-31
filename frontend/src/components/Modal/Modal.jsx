@@ -59,7 +59,7 @@ function Modal({ setModalIsOpen, id, resType, targetOne }) {
                 dataLength={users.length}
                 next={handlePagination}
                 hasMore={pagination?.next?.page ? true : false}
-                loader={<h4>Loading...</h4>}
+                loader={''}
                 scrollableTarget="items"
               >
                 {!isLoading &&

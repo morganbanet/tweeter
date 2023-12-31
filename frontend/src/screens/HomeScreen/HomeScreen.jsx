@@ -14,9 +14,8 @@ import Trending from '../../components/Trending/Trending';
 
 import Spinner from '../../components/Spinner/Spinner';
 
-// @todo: add loading spinners across the front page
 // @todo: build explore page
-//        - plug in tweet component
+//        - plug in tweet component ✅
 //        - filter component
 //        - search box
 
@@ -28,8 +27,7 @@ function HomeScreen() {
   const { tweets, pagination } = useTweetsContext();
 
   useEffect(() => {
-    const fetchTweets = async () => await getTweets(page);
-    fetchTweets();
+    getTweets(page);
   }, [page, togglePage]);
 
   const handlePagination = () => {
@@ -51,7 +49,7 @@ function HomeScreen() {
               dataLength={tweets.length}
               next={handlePagination}
               hasMore={pagination?.next?.page ? true : false}
-              loader={<h4>Loading...</h4>}
+              loader={<Spinner />}
               endMessage={<p>You reached the end</p>}
             >
               {tweets.map((tweet) => (

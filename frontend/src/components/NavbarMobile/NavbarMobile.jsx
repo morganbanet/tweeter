@@ -14,7 +14,7 @@ function NavbarMobile() {
               <div />
             </NavLink>
 
-            <NavLink to="/explore">
+            <NavLink to="explore?q=tweets&sort=top">
               <i className="fa-solid fa-compass" data-testid="fa-compass" />
               <div />
             </NavLink>

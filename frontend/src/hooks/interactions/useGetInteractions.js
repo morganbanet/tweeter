@@ -8,6 +8,9 @@ export const useGetInteractions = () => {
   const { dispatch } = useInteractionsContext();
 
   const getInteractions = async (id, pointA, pointB, page = 1) => {
+    setIsLoading(true);
+    setError(null);
+
     const endpoint = `/api/${pointA}/${id}/${pointB}/users?page=${page}&limit=10&sort=name`;
     const response = await fetch(endpoint);
     const data = await response.json();
@@ -26,7 +29,6 @@ export const useGetInteractions = () => {
       payload: data,
     });
 
-    setError(null);
     setIsLoading(false);
   };
 
