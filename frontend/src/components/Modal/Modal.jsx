@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useGetInteractions } from '../../hooks/interactions/useGetInteractions';
 import { useInteractionsContext } from '../../hooks/interactions/useInteractionsContext';
-import { defaultAvatar } from '../../utils/defaults';
 import ModalItem from '../ModalItem/ModalItem';
+import Spinner from '../Spinner/Spinner';
 
 function Modal({ setModalIsOpen, id, resType, targetOne }) {
   const [togglePage, setTogglePage] = useState(false);
@@ -52,18 +52,21 @@ function Modal({ setModalIsOpen, id, resType, targetOne }) {
             </span>
           </div>
 
-          <div id="items" className="items">
-            <InfiniteScroll
-              dataLength={users.length}
-              next={handlePagination}
-              hasMore={pagination?.next?.page ? true : false}
-              loader={<h4>Loading...</h4>}
-              scrollableTarget="items"
-            >
-              {!isLoading &&
-                users.map((user) => <ModalItem key={user._id} user={user} />)}
-            </InfiniteScroll>
-          </div>
+          {isLoading && <Spinner />}
+          {!isLoading && (
+            <div id="items" className="items">
+              <InfiniteScroll
+                dataLength={users.length}
+                next={handlePagination}
+                hasMore={pagination?.next?.page ? true : false}
+                loader={<h4>Loading...</h4>}
+                scrollableTarget="items"
+              >
+                {!isLoading &&
+                  users.map((user) => <ModalItem key={user._id} user={user} />)}
+              </InfiniteScroll>
+            </div>
+          )}
         </div>
       </div>
 

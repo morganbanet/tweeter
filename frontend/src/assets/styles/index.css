@@ -1257,6 +1257,12 @@ button:disabled {
   letter-spacing: -0.03063rem;
 }
 
+/* ---------------------------------------------------------- spinner */
+.spinner {
+  width: 2rem;
+  height: 2rem;
+}
+
 /* ---------------------------------------------------- media queries */
 @media (min-width: 1140px) {
   .nav-tabs {
@@ -1531,6 +1537,17 @@ button:disabled {
     border: none;
     cursor: pointer;
     user-select: none;
+  }
+
+  .suggestion-header .spinner-container {
+    width: 4.9375rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .suggestion-header .spinner {
+    width: 1rem;
+    height: 1rem;
   }
 
   .suggestion-header > button > span {

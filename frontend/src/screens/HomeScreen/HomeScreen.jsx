@@ -12,6 +12,14 @@ import TweetForm from '../../components/TweetForm/TweetForm';
 import Suggestions from '../../components/Suggestions/Suggestions';
 import Trending from '../../components/Trending/Trending';
 
+import Spinner from '../../components/Spinner/Spinner';
+
+// @todo: add loading spinners across the front page
+// @todo: build explore page
+//        - plug in tweet component
+//        - filter component
+//        - search box
+
 function HomeScreen() {
   const [togglePage, setTogglePage] = useState(false);
   const [page, setPage] = useState(1);
@@ -36,25 +44,28 @@ function HomeScreen() {
           <TweetForm />
         </section>
 
-        <section className="tweets">
-          <InfiniteScroll
-            dataLength={tweets.length}
-            next={handlePagination}
-            hasMore={pagination?.next?.page ? true : false}
-            loader={<h4>Loading...</h4>}
-            endMessage={<p>You reached the end</p>}
-          >
-            {tweets.map((tweet) => (
-              <React.Fragment key={tweet._id}>
-                <TweetProvider tweet={tweet}>
-                  <CommentsProvider>
-                    <Tweet tweet={tweet} />
-                  </CommentsProvider>
-                </TweetProvider>
-              </React.Fragment>
-            ))}
-          </InfiniteScroll>
-        </section>
+        {isLoading && <Spinner />}
+        {!isLoading && (
+          <section className="tweets">
+            <InfiniteScroll
+              dataLength={tweets.length}
+              next={handlePagination}
+              hasMore={pagination?.next?.page ? true : false}
+              loader={<h4>Loading...</h4>}
+              endMessage={<p>You reached the end</p>}
+            >
+              {tweets.map((tweet) => (
+                <React.Fragment key={tweet._id}>
+                  <TweetProvider tweet={tweet}>
+                    <CommentsProvider>
+                      <Tweet tweet={tweet} />
+                    </CommentsProvider>
+                  </TweetProvider>
+                </React.Fragment>
+              ))}
+            </InfiniteScroll>
+          </section>
+        )}
       </main>
 
       <section>

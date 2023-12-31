@@ -36,12 +36,23 @@ function TweetInteractionButton(props) {
     }
   };
 
-  let btnText = `${btnType.charAt(0).toUpperCase()}${btnType.slice(1)}`;
-
+  let btnText;
   let btnInteractedText;
-  if (btnType === 'retweet') btnInteractedText = 'Retweeted';
-  if (btnType === 'like') btnInteractedText = 'Liked';
-  if (btnType === 'bookmark') btnInteractedText = 'Saved';
+
+  if (btnType === 'retweet') {
+    btnText = 'Retweet';
+    btnInteractedText = 'Retweeted';
+  }
+
+  if (btnType === 'like') {
+    btnText = 'Like';
+    btnInteractedText = 'Liked';
+  }
+
+  if (btnType === 'bookmark') {
+    btnText = 'Save';
+    btnInteractedText = 'Saved';
+  }
 
   const sync = symbol === 'sync' ? true : false;
 

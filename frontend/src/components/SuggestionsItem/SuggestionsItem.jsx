@@ -5,6 +5,7 @@ import { useAuthContext } from '../../hooks/auth/useAuthContext';
 import { useGetFollows } from '../../hooks/follows/useGetFollows';
 import { useFollowUser } from '../../hooks/follows/useFollowUser';
 import { useUnfollowUser } from '../../hooks/follows/useUnfollowUser';
+import Spinner from '../Spinner/Spinner';
 
 function SuggestionsItem({ user }) {
   const [follow, setFollow] = useState(null);
@@ -66,23 +67,32 @@ function SuggestionsItem({ user }) {
             </div>
           </div>
 
-          {userInfo._id !== user._id && isFollowing && (
-            <button
-              disabled={followLoading || unfollowLoading}
-              onClick={() => handleFollow()}
-            >
-              Unfollow
-            </button>
+          {followsLoading && (
+            <div className="spinner-container">
+              <Spinner className="spinner" />
+            </div>
           )}
+          {!followsLoading && (
+            <>
+              {userInfo._id !== user._id && isFollowing && (
+                <button
+                  disabled={followLoading || unfollowLoading}
+                  onClick={() => handleFollow()}
+                >
+                  Unfollow
+                </button>
+              )}
 
-          {userInfo._id !== user._id && !isFollowing && (
-            <button
-              disabled={followLoading || unfollowLoading}
-              onClick={() => handleFollow()}
-            >
-              <span className="material-symbols-outlined">person_add</span>{' '}
-              Follow
-            </button>
+              {userInfo._id !== user._id && !isFollowing && (
+                <button
+                  disabled={followLoading || unfollowLoading}
+                  onClick={() => handleFollow()}
+                >
+                  <span className="material-symbols-outlined">person_add</span>{' '}
+                  Follow
+                </button>
+              )}
+            </>
           )}
         </div>
 
