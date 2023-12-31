@@ -53,7 +53,7 @@ function FilterExplore({ handleFilters }) {
             className={isActive(['tweets', 'media']) ? 'active-bar' : ''}
           ></div>
           <Link
-            to="/explore?q=tweets&select=media"
+            to="/explore?q=tweets&eq=media"
             className={isActive(['tweets', 'media']) ? 'active' : ''}
           >
             Media

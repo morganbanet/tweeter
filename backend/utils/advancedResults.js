@@ -17,7 +17,7 @@ const advancedResults = async (req, model, options = {}) => {
   // Include query operators (ie, $gt, $lt, $lte)
   query = JSON.parse(
     JSON.stringify(query).replace(
-      /\b(gt|lt|gte|lte|ne|in|eq)\b/g,
+      /\b(gt|lt|gte|lte|ne|in|eq|exists)\b/g,
       (match) => `$${match}`
     )
   );

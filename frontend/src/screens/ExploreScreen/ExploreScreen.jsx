@@ -13,12 +13,17 @@ import FilterExplore from '../../components/FilterExplore/FilterExplore';
 import Spinner from '../../components/Spinner/Spinner';
 
 function ExploreScreen() {
+  const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState(false);
   const [page, setPage] = useState(1);
   const [togglePage, setTogglePage] = useState(false);
 
-  const { filterTweets, isLoading, error } = useFilterTweets();
+  const { filterTweets, isLoading: filtersLoading, error } = useFilterTweets();
   const { tweets, pagination } = useTweetsContext();
+
+  useEffect(() => {
+    if (filtersLoading === false) setIsLoading(false);
+  }, [filtersLoading]);
 
   useEffect(() => {
     filters.type === 'tweets' && filterTweets(filters, page);
@@ -30,14 +35,17 @@ function ExploreScreen() {
   };
 
   const handleFilters = (query) => {
+    setIsLoading(true);
+
     const searchParams = new URLSearchParams(query.search);
 
     const filters = {
       type: searchParams.get('q'),
       sort: searchParams.get('sort'),
-      select: searchParams.get('select'),
+      eq: searchParams.get('eq'),
     };
 
+    setPage(1);
     setFilters(filters);
   };
 

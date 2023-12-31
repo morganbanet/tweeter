@@ -501,11 +501,19 @@ button:disabled {
 
 /* ------------------------------------------------------------ tweet */
 /* infiniteScroll component (library) has two divs */
+.tweets {
+  width: 100%;
+}
+
+.tweets > div {
+  width: 100%;
+}
+
 .tweets > div > div {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  align-items: center;
 }
 
 .tweet-container-inner {
@@ -1265,12 +1273,15 @@ button:disabled {
 }
 
 /* --------------------------------------------------- filter explore */
+.mobile-filters {
+  position: relative;
+}
+
 .filter-explore-container {
   padding: 1.63rem 1.25rem 1.95rem 1.25rem;
   border-radius: 0.5rem;
   background: #fff;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
-  position: relative;
 }
 
 .filter-explore-container ul {
@@ -1707,5 +1718,12 @@ button:disabled {
 
   .mobile-filters {
     display: none;
+  }
+
+  .filter-explore-container {
+    width: 100%;
+    max-width: 19.125rem;
+    position: fixed;
+    top: 2.07;
   }
 }

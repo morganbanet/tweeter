@@ -11,12 +11,16 @@ export const useFilterTweets = () => {
     setIsLoading(true);
     setError(null);
 
-    const { sort, select } = filters;
+    const { sort, eq } = filters;
 
     let endpoint = `/api/tweets/filter?page=${page}&limit=10`;
 
     if (sort === 'top') {
       endpoint = `${endpoint}&sort=-likeCount,-createdAt`;
+    }
+
+    if (eq === 'media') {
+      endpoint = `${endpoint}&image[exists]=true&sort=-createdAt`;
     }
 
     // const endpoint = `/api/tweets?page=${page}&limit=10&sort=${sort}`;
