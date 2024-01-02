@@ -12,6 +12,8 @@ import FilterExplore from '../../components/FilterExplore/FilterExplore';
 
 import Spinner from '../../components/Spinner/Spinner';
 
+// @todo: make a user component, fetch all users and map through them
+
 function ExploreScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState(false);
